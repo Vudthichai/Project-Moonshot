@@ -626,18 +626,33 @@
   renderArchive();
   renderMissionProgress();
 
-  const OPERATOR_MISSION_KEY = 'projectMoonshotOperatorMissionKenny';
-  const OPERATOR_ENTRIES_KEY = 'projectMoonshotOperatorEntriesKenny';
-  const defaultOperatorMission = {
-    missionName: '50 Mile Ultra',
-    raceDate: 'July 4, 2026',
-    status: 'Active',
-    why: 'Finish the 50, learn what breaks, and carry the evidence forward into bigger endurance targets.',
-    targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
-    currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
-    nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.'
+  const OPERATOR_MISSION_KEYS = {
+    kenny: 'projectMoonshotOperatorMissionKenny',
+    vudi: 'projectMoonshotOperatorMissionVudi'
   };
-
+  const OPERATOR_ENTRIES_KEY = 'projectMoonshotOperatorEntriesKenny';
+  const defaultOperatorMissions = {
+    kenny: {
+      missionName: '50 Mile Ultra',
+      raceDate: 'July 4, 2026',
+      status: 'Active',
+      why: 'Finish the 50, learn what breaks, and carry the evidence forward into bigger race targets.',
+      targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
+      currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
+      nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.'
+    },
+    vudi: {
+      missionName: 'ULTRA 1',
+      subtitle: '30 Mile Mountain Run',
+      status: 'In Progress',
+      route: '5x Cove Run Loop + Emerging Extension',
+      elevation: '4,000+ ft gain',
+      why: 'Complete a self-supported 30-mile mountain effort.',
+      targetOutcome: 'Finish under own power. No pace requirement. No time requirement.',
+      currentRisk: 'Route management, mountain footing, fueling discipline, and keeping the effort self-supported.',
+      nextCheck: 'Confirm Cove Run Loop repetition count, Emerging Extension access, and water/fuel carry plan before the next long effort.'
+    }
+  };
   const safeParseOperatorEntries = (value) => {
     try {
       const parsed = JSON.parse(value || '[]');
@@ -647,17 +662,25 @@
     }
   };
 
-  const readOperatorMission = () => {
+  const normalizeOperatorId = (operatorId) => OPERATOR_MISSION_KEYS[operatorId] ? operatorId : 'kenny';
+
+  const readOperatorMission = (operatorId = 'kenny') => {
+    const normalizedOperatorId = normalizeOperatorId(operatorId);
+    const defaultMission = defaultOperatorMissions[normalizedOperatorId];
     try {
-      const parsed = JSON.parse(localStorage.getItem(OPERATOR_MISSION_KEY) || '{}');
-      return { ...defaultOperatorMission, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
+      const parsed = JSON.parse(localStorage.getItem(OPERATOR_MISSION_KEYS[normalizedOperatorId]) || '{}');
+      return { ...defaultMission, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
     } catch (error) {
-      return { ...defaultOperatorMission };
+      return { ...defaultMission };
     }
   };
 
-  const writeOperatorMission = (mission) => {
-    localStorage.setItem(OPERATOR_MISSION_KEY, JSON.stringify({ ...defaultOperatorMission, ...mission }));
+  const writeOperatorMission = (operatorId = 'kenny', mission) => {
+    const normalizedOperatorId = normalizeOperatorId(operatorId);
+    localStorage.setItem(
+      OPERATOR_MISSION_KEYS[normalizedOperatorId],
+      JSON.stringify({ ...defaultOperatorMissions[normalizedOperatorId], ...mission })
+    );
   };
 
   const normalizeOperatorEntry = (entry = {}) => ({
@@ -711,7 +734,7 @@
   const renderOperatorSummary = () => {
     const summary = document.querySelector('[data-operator-summary]');
     if (!summary) return;
-    const mission = readOperatorMission();
+    const mission = readOperatorMission('kenny');
     const entries = readOperatorEntries();
     const totalMiles = entries.reduce((sum, entry) => sum + parseOperatorNumber(entry.mileage), 0);
     const peak = entries.reduce((best, entry) => parseOperatorNumber(entry.mileage) > parseOperatorNumber(best.mileage) ? entry : best, { mileage: 0, weekDate: '' });
@@ -809,21 +832,22 @@
   };
 
   const initializeOperatorPage = () => {
-    const missionForm = document.querySelector('[data-operator-mission-form]');
+    const missionForms = document.querySelectorAll('[data-operator-mission-form]');
     const entryForm = document.querySelector('[data-operator-entry-form]');
-    if (!missionForm && !entryForm) return;
+    if (!missionForms.length && !entryForm) return;
 
-    if (missionForm) {
-      fillOperatorMissionForm(missionForm, readOperatorMission());
+    missionForms.forEach((missionForm) => {
+      const operatorId = normalizeOperatorId(missionForm.dataset.operatorId);
+      fillOperatorMissionForm(missionForm, readOperatorMission(operatorId));
       missionForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const mission = Object.fromEntries(new FormData(missionForm).entries());
-        writeOperatorMission(mission);
+        writeOperatorMission(operatorId, mission);
         renderOperatorSummary();
-        const note = document.querySelector('[data-operator-mission-note]');
-        if (note) note.textContent = 'Mission card saved locally.';
+        const note = missionForm.querySelector('[data-operator-mission-note]');
+        if (note) note.textContent = `${operatorId === 'vudi' ? 'Vudi' : 'Kenny'} mission card saved locally.`;
       });
-    }
+    });
 
     if (entryForm) {
       entryForm.addEventListener('submit', (event) => {
@@ -851,9 +875,12 @@
     const clear = document.querySelector('[data-operator-clear]');
     if (clear) {
       clear.addEventListener('click', () => {
-        localStorage.removeItem(OPERATOR_MISSION_KEY);
+        Object.values(OPERATOR_MISSION_KEYS).forEach((key) => localStorage.removeItem(key));
         localStorage.removeItem(OPERATOR_ENTRIES_KEY);
-        if (missionForm) fillOperatorMissionForm(missionForm, readOperatorMission());
+        missionForms.forEach((missionForm) => {
+          const operatorId = normalizeOperatorId(missionForm.dataset.operatorId);
+          fillOperatorMissionForm(missionForm, readOperatorMission(operatorId));
+        });
         if (entryForm) fillOperatorEntryForm(entryForm, null);
         renderOperatorEntries();
         const note = document.querySelector('[data-operator-entry-note]');

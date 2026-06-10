@@ -25,74 +25,149 @@
     <h1>OPERATORS</h1>
     <div class="subtitle">Individual athlete missions for goals, evidence, lessons, and future targets. Strava keeps the raw work; this page keeps the operational story.</div>
     <div class="meta">
-      <div class="meta-card"><div class="label">Operator</div><div class="value">Kenny Schrader</div></div>
+      <div class="meta-card"><div class="label">Operators</div><div class="value">Kenny Schrader / Vudi</div></div>
       <div class="meta-card"><div class="label">Status</div><div class="value">Active</div></div>
-      <div class="meta-card"><div class="label">Current Mission</div><div class="value">50 Mile Ultra</div></div>
-      <div class="meta-card"><div class="label">Race Date</div><div class="value">July 4, 2026</div></div>
+      <div class="meta-card"><div class="label">Kenny Mission</div><div class="value">50 Mile Ultra</div></div>
+      <div class="meta-card"><div class="label">Vudi Mission</div><div class="value">ULTRA 1</div></div>
     </div>
   </section>
 
   <section class="section operator-profile-section">
-    <div class="operator-card premium-card">
-      <div class="operator-card-header">
-        <div>
-          <div class="eyebrow">Operator File // Active</div>
-          <h2>Kenny Schrader</h2>
+    <div class="section-header operator-section-header"><h2>Operator Profiles</h2><span class="tag">Active files</span></div>
+    <div class="operator-card-grid">
+      <article class="operator-card premium-card">
+        <div class="operator-card-header">
+          <div>
+            <div class="eyebrow">Operator File // Active</div>
+            <h2>Kenny Schrader</h2>
+          </div>
+          <span class="report-status">Active</span>
         </div>
-        <span class="report-status">Active</span>
-      </div>
-      <div class="operator-stat-grid">
-        <div><span class="label">Role</span><strong>Endurance Operator</strong></div>
-        <div><span class="label">Current Mission</span><strong>50 Mile Ultra</strong></div>
-        <div><span class="label">Race Date</span><strong>July 4, 2026</strong></div>
-        <div><span class="label">Future Missions</span><strong>70.3 / Full Ironman / Moab</strong></div>
-      </div>
-      <p class="operator-brief"><span>Mission Brief:</span> “The current mission is simple: finish the 50, learn what breaks, and carry the evidence forward.”</p>
+        <div class="operator-stat-grid kenny-stat-grid">
+          <div><span class="label">Current Mission</span><strong>50 Mile Ultra</strong></div>
+          <div><span class="label">Race Date</span><strong>July 4, 2026</strong></div>
+          <div><span class="label">Future Missions</span><strong>70.3 / Full Ironman / Moab</strong></div>
+        </div>
+        <p class="operator-brief"><span>Mission Brief:</span> “The current mission is simple: finish the 50, learn what breaks, and carry the evidence forward.”</p>
+      </article>
+
+      <article class="operator-card premium-card vudi-card">
+        <div class="operator-card-header">
+          <div>
+            <div class="eyebrow">Operator File // Active Mission</div>
+            <h2>Vudi</h2>
+          </div>
+          <span class="report-status pending">In Progress</span>
+        </div>
+        <div class="operator-stat-grid vudi-stat-grid">
+          <div><span class="label">Title</span><strong>ULTRA 1</strong></div>
+          <div><span class="label">Subtitle</span><strong>30 Mile Mountain Run</strong></div>
+          <div><span class="label">Route</span><strong>5x Cove Run Loop + Emerging Extension</strong></div>
+          <div><span class="label">Elevation</span><strong>4,000+ ft gain</strong></div>
+        </div>
+        <p class="operator-brief"><span>Objective:</span> Complete a self-supported 30-mile mountain effort.</p>
+        <p class="operator-brief operator-brief-secondary"><span>Success Criteria:</span> Finish under own power. No pace requirement. No time requirement.</p>
+      </article>
     </div>
   </section>
 
   <section class="section light operator-edit-section" data-operator-app>
-    <div class="section-header"><h2>Active Mission Card</h2><span class="tag">Editable localStorage</span></div>
-    <form class="command-form operator-mission-form" data-operator-mission-form>
-      <div class="metadata-bar form-metadata operator-metadata">
-        <div>
-          <label for="operatorMissionName">Mission name</label>
-          <input id="operatorMissionName" name="missionName" />
+    <div class="section-header"><h2>Active Mission Cards</h2><span class="tag">Editable localStorage</span></div>
+    <div class="operator-mission-grid">
+      <form class="command-form operator-mission-form" data-operator-mission-form data-operator-id="kenny">
+        <div class="operator-form-title">
+          <div><span class="eyebrow">Kenny // Active Mission</span><h3>50 Mile Ultra</h3></div>
+          <span class="report-status">Editable</span>
         </div>
-        <div>
-          <label for="operatorRaceDate">Race date</label>
-          <input id="operatorRaceDate" name="raceDate" />
+        <div class="metadata-bar form-metadata operator-metadata">
+          <div>
+            <label for="kennyMissionName">Mission name</label>
+            <input id="kennyMissionName" name="missionName" />
+          </div>
+          <div>
+            <label for="kennyRaceDate">Race date</label>
+            <input id="kennyRaceDate" name="raceDate" />
+          </div>
+          <div>
+            <label for="kennyStatus">Status</label>
+            <input id="kennyStatus" name="status" />
+          </div>
         </div>
-        <div>
-          <label for="operatorStatus">Status</label>
-          <input id="operatorStatus" name="status" />
+        <div class="form-grid report-layout">
+          <div class="upload-card form-box report-box">
+            <h3>Intent</h3>
+            <label for="kennyWhy">Why</label>
+            <textarea id="kennyWhy" name="why"></textarea>
+            <label for="kennyTargetOutcome">Target outcome</label>
+            <textarea id="kennyTargetOutcome" name="targetOutcome"></textarea>
+          </div>
+          <div class="upload-card form-box report-box">
+            <h3>Risk Control</h3>
+            <label for="kennyCurrentRisk">Current risk</label>
+            <textarea id="kennyCurrentRisk" name="currentRisk"></textarea>
+            <label for="kennyNextCheck">Next check</label>
+            <textarea id="kennyNextCheck" name="nextCheck"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-grid report-layout">
-        <div class="upload-card form-box report-box">
-          <h3>Intent</h3>
-          <label for="operatorWhy">Why</label>
-          <textarea id="operatorWhy" name="why"></textarea>
-          <label for="operatorTargetOutcome">Target outcome</label>
-          <textarea id="operatorTargetOutcome" name="targetOutcome"></textarea>
+        <div class="mock-actions">
+          <button class="button" type="submit">Save Kenny Mission</button>
+          <span class="light-note" data-operator-mission-note>Kenny mission saves in this browser only.</span>
         </div>
-        <div class="upload-card form-box report-box">
-          <h3>Risk Control</h3>
-          <label for="operatorCurrentRisk">Current risk</label>
-          <textarea id="operatorCurrentRisk" name="currentRisk"></textarea>
-          <label for="operatorNextCheck">Next check</label>
-          <textarea id="operatorNextCheck" name="nextCheck"></textarea>
+      </form>
+
+      <form class="command-form operator-mission-form" data-operator-mission-form data-operator-id="vudi">
+        <div class="operator-form-title">
+          <div><span class="eyebrow">Vudi // Active Mission</span><h3>ULTRA 1</h3></div>
+          <span class="report-status pending">In Progress</span>
         </div>
-      </div>
-      <div class="mock-actions">
-        <button class="button" type="submit">Save Mission</button>
-        <span class="light-note" data-operator-mission-note>Mission card saves in this browser only.</span>
-      </div>
-    </form>
+        <div class="metadata-bar form-metadata operator-metadata vudi-metadata">
+          <div>
+            <label for="vudiMissionName">Title</label>
+            <input id="vudiMissionName" name="missionName" />
+          </div>
+          <div>
+            <label for="vudiSubtitle">Subtitle</label>
+            <input id="vudiSubtitle" name="subtitle" />
+          </div>
+          <div>
+            <label for="vudiStatus">Status</label>
+            <input id="vudiStatus" name="status" />
+          </div>
+          <div>
+            <label for="vudiRoute">Route</label>
+            <input id="vudiRoute" name="route" />
+          </div>
+          <div>
+            <label for="vudiElevation">Elevation</label>
+            <input id="vudiElevation" name="elevation" />
+          </div>
+        </div>
+        <div class="form-grid report-layout">
+          <div class="upload-card form-box report-box">
+            <h3>Intent</h3>
+            <label for="vudiWhy">Objective</label>
+            <textarea id="vudiWhy" name="why"></textarea>
+            <label for="vudiTargetOutcome">Success criteria</label>
+            <textarea id="vudiTargetOutcome" name="targetOutcome"></textarea>
+          </div>
+          <div class="upload-card form-box report-box">
+            <h3>Risk Control</h3>
+            <label for="vudiCurrentRisk">Current risk</label>
+            <textarea id="vudiCurrentRisk" name="currentRisk"></textarea>
+            <label for="vudiNextCheck">Next check</label>
+            <textarea id="vudiNextCheck" name="nextCheck"></textarea>
+          </div>
+        </div>
+        <div class="mock-actions">
+          <button class="button" type="submit">Save Vudi Mission</button>
+          <span class="light-note" data-operator-mission-note>Vudi mission saves in this browser only.</span>
+        </div>
+      </form>
+    </div>
   </section>
 
   <section class="section operator-evidence-section">
-    <div class="section-header"><h2>Evidence Log</h2><span class="tag">Local entries</span></div>
+    <div class="section-header"><h2>Kenny Evidence Log</h2><span class="tag">Local entries</span></div>
     <form class="command-form operator-entry-form" data-operator-entry-form>
       <input type="hidden" name="entryId" />
       <div class="metadata-bar form-metadata operator-metadata evidence-metadata">
@@ -155,7 +230,7 @@
     <p class="quote operator-ethos">“Strava records the work. This records what the work is turning you into.”</p>
   </section>
 
-  <div class="footer">Project Moonshot // Operators // Kenny Schrader Mission Dossier</div>
+  <div class="footer">Project Moonshot // Operators // Kenny Schrader + Vudi Mission Dossier</div>
 </div>
 </body>
 </html>
