@@ -52,13 +52,16 @@
   </section>
 
   <section class="section">
-    <div class="section-header"><h2>Archive Index</h2><span class="tag">Add each week here</span></div>
+    <div class="section-header"><h2>Archive Index</h2><span class="tag">Local browser reports</span></div>
+    <p class="light-note">Saved reports load from localStorage first. If this browser has no saved reports, the archive shows fallback examples only.</p>
+    <div class="mock-actions archive-actions">
+      <button class="button secondary" type="button" data-clear-reports>Clear Local Reports</button>
+      <span class="light-note" data-archive-note>Local reports stay on this device.</span>
+    </div>
     <table>
       <thead><tr><th>Week</th><th>Status</th><th>Headline</th><th>Decision</th><th>Next Orders</th></tr></thead>
-      <tbody>
-        <tr><td>Week 1<br><span class="small">June 1-7, 2026</span></td><td><span class="report-status">Logged</span></td><td>Hill mileage and first station exposure established the baseline.</td><td>Keep 30+ mile hill week while adding HYROX station practice.</td><td>Increase station benchmarks; protect sleep and strength.</td></tr>
-        <tr><td>Week 2<br><span class="small">June 8-14, 2026</span></td><td><span class="report-status pending">Pending</span></td><td>Awaiting command report.</td><td>TBD</td><td>TBD</td></tr>
-        <tr><td>Week 3<br><span class="small">June 15-21, 2026</span></td><td><span class="report-status pending">Pending</span></td><td>Awaiting command report.</td><td>TBD</td><td>TBD</td></tr>
+      <tbody data-report-archive>
+        <tr><td colspan="5">Loading local reports...</td></tr>
       </tbody>
     </table>
   </section>
