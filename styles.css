@@ -1,5 +1,5 @@
 :root{
-  --bg:#070707; --card:rgba(17,18,20,.86); --card2:rgba(23,25,28,.84); --ink:#f5f5f2; --muted:#a7aab0;
+  --bg:#070707; --card:rgba(17,18,20,.82); --card2:rgba(23,25,28,.80); --ink:#f5f5f2; --muted:#a7aab0;
   --line:#2b2e34; --red:#e11937; --red2:#ff3852; --white:#ffffff; --silver:#d8dce3;
   --amber:#ffb000; --green:#32d583; --blue:#60a5fa; --darkred:#420912;
 }
@@ -7,15 +7,15 @@
 html,body{margin:0;padding:0;color:var(--ink);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;}
 html{background:var(--bg);min-height:100%;}
 body{position:relative;isolation:isolate;min-height:100vh;padding:28px 0 54px;overflow-x:hidden;background:var(--bg);}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:var(--page-bg-image,none);background-repeat:no-repeat;background-size:cover;background-position:var(--page-bg-position,right center);background-attachment:fixed;opacity:.18;filter:grayscale(100%) contrast(82%) brightness(1.66);}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(5,5,5,.86) 0%,rgba(5,5,5,.82) 42%,rgba(5,5,5,.78) 100%);}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:var(--page-bg-image,none);background-repeat:no-repeat;background-size:cover;background-position:var(--page-bg-position,right center);background-attachment:fixed;opacity:.32;filter:grayscale(100%) contrast(82%) brightness(1.66);}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(5,5,5,.43) 0%,rgba(5,5,5,.41) 42%,rgba(5,5,5,.39) 100%);}
 body.page-index{--page-bg-image:url("Hyrox 2.webp");--page-bg-position:right center;}
 body.page-upload{--page-bg-image:url("Hyrox 4.avif");--page-bg-position:left center;}
 body.page-reports{--page-bg-image:url("Hyrox 3.jpg");--page-bg-position:right center;}
 body.page-resources{--page-bg-image:url("Hyrox 1.webp");--page-bg-position:left center;}
 a{color:inherit;}
 .doc{position:relative;z-index:2;width:1080px;max-width:calc(100vw - 32px);margin:0 auto;}
-.site-nav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 auto 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(7,7,7,.78);backdrop-filter:blur(16px);box-shadow:0 16px 48px rgba(0,0,0,.24);}
+.site-nav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 auto 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(7,7,7,.68);backdrop-filter:blur(12px);box-shadow:0 16px 48px rgba(0,0,0,.24);}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:950;text-transform:uppercase;letter-spacing:-.03em;white-space:nowrap;}
 .brand-mark{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--red);box-shadow:0 0 24px rgba(225,25,55,.45);font-size:14px;}
 .nav-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
