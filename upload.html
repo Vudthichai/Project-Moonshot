@@ -22,7 +22,7 @@
   <section class="hero">
     <div class="eyebrow">Mission Control // Weekly Upload Mockup</div>
     <h1>Command <span class="h1-accent">Report</span></h1>
-    <div class="subtitle">No login, no backend, no paid services. This is a static form mockup for the weekly evidence loop: totals, work completed, decisions, and next orders.</div>
+    <div class="subtitle">No login, no backend, no paid services. This is a static form mockup for the weekly evidence loop: completed evidence, decisions, and next orders.</div>
     <div class="meta">
       <div class="meta-card"><div class="label">Cadence</div><div class="value">Weekly</div></div>
       <div class="meta-card"><div class="label">Storage</div><div class="value">Browser draft only</div></div>
@@ -38,19 +38,18 @@
       <div><div class="label">Headline</div><div class="value">One-line mission readout.</div></div>
       <div><div class="label">Status</div><div class="value">Draft, ready, red flag, or logged.</div></div>
     </div>
-    <div class="grid grid-2">
-      <div class="upload-card"><h3>1. Training Totals</h3><ul><li>Vudi miles, elevation, and training hours.</li><li>Ryan miles and training hours.</li><li>Team combined miles.</li><li>Station sessions.</li><li>Lift sessions.</li><li>Recovery notes.</li></ul></div>
-      <div class="upload-card"><h3>2. Work Completed</h3><ul><li>Running accumulation.</li><li>Station work.</li><li>Strength maintenance.</li><li>Quality signal.</li></ul></div>
-      <div class="upload-card"><h3>3. Decision Checkpoint</h3><ul><li>Strategic choice.</li><li>Why.</li><li>Expected gain.</li><li>Expected risk.</li><li>Observed result.</li></ul></div>
-      <div class="upload-card"><h3>4. Next Orders</h3><ul><li>Increase.</li><li>Protect.</li><li>Stop/reduce.</li><li>Red flag.</li><li>Next target.</li></ul></div>
+    <div class="report-layout preview-layout">
+      <div class="upload-card report-box report-box-full"><h3>1. Completed Work</h3><ul><li>Mileage, elevation, and strength work.</li><li>Station work, long run, and recovery notes.</li><li>Lessons learned plus links or screenshots.</li><li>Facts and evidence only.</li></ul></div>
+      <div class="upload-card report-box"><h3>2. Decision Checkpoint</h3><ul><li>Strategic choice.</li><li>Why.</li><li>Expected gain.</li><li>Expected risk.</li><li>Observed result.</li></ul></div>
+      <div class="upload-card report-box"><h3>3. Next Orders</h3><ul><li>Increase.</li><li>Protect.</li><li>Stop/reduce.</li><li>Red flag.</li><li>Next measurable target.</li></ul></div>
     </div>
-    <p class="quote" style="color:#111214">This is not paperwork. It is mission control: totals, evidence, decisions, next orders. Less room for error. More room for honesty.</p>
+    <p class="quote" style="color:#111214">This is not paperwork. It is mission control: evidence, decisions, next orders. Less room for error. More room for honesty.</p>
   </section>
 
   <section class="section light">
     <div class="section-header"><h2>Report Form</h2><span class="tag">Local archive</span></div>
     <form class="command-form" data-report-form>
-      <div class="metadata-bar form-metadata" aria-label="Team Scoreboard metadata">
+      <div class="metadata-bar form-metadata" aria-label="Weekly report metadata">
         <div>
           <label for="week">Week / Dates</label>
           <input id="week" name="week" placeholder="Week 2 - June 8 to June 14, 2026" required />
@@ -64,22 +63,18 @@
           <select id="status" name="status"><option>Draft</option><option>Ready for archive</option><option>Needs Ryan update</option><option>Recovery red flag</option><option>Logged</option></select>
         </div>
       </div>
-      <div class="form-grid">
-        <div class="upload-card form-box">
-          <h3>1. Training Totals</h3>
-          <label for="scoreboard">Totals</label><textarea id="scoreboard" name="teamScoreboard" placeholder="Vudi: miles, elevation, training hours. Ryan: miles, training hours. Team: combined miles. Station sessions. Lift sessions. Recovery notes."></textarea>
+      <div class="form-grid report-layout">
+        <div class="upload-card form-box report-box report-box-full">
+          <h3>1. Completed Work</h3>
+          <label for="completedWork">Facts / Evidence</label><textarea id="completedWork" name="completedWork" placeholder="Mileage, elevation, strength work, station work, long run, recovery notes, lessons learned, links/screenshots."></textarea>
         </div>
-        <div class="upload-card form-box">
-          <h3>2. Work Completed</h3>
-          <label for="done">Completed Work</label><textarea id="done" name="whatGotDone" placeholder="Running accumulation. Station work. Strength maintenance. Quality signal."></textarea>
+        <div class="upload-card form-box report-box">
+          <h3>2. Decision Checkpoint</h3>
+          <label for="decision">D-NAV / Judgment</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice, why, expected gain, expected risk, observed result."></textarea>
         </div>
-        <div class="upload-card form-box">
-          <h3>3. Decision Checkpoint</h3>
-          <label for="decision">Decision</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice. Why. Expected gain. Expected risk. Observed result."></textarea>
-        </div>
-        <div class="upload-card form-box">
-          <h3>4. Next Orders</h3>
-          <label for="orders">Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase. Protect. Stop/reduce. Red flag. Next target."></textarea>
+        <div class="upload-card form-box report-box">
+          <h3>3. Next Orders</h3>
+          <label for="orders">Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase, protect, stop/reduce, red flag, next measurable target."></textarea>
         </div>
       </div>
       <div class="summary-preview" aria-live="polite">
