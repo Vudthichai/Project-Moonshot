@@ -625,4 +625,245 @@
   renderLatestReport();
   renderArchive();
   renderMissionProgress();
+
+  const OPERATOR_MISSION_KEY = 'projectMoonshotOperatorMissionKenny';
+  const OPERATOR_ENTRIES_KEY = 'projectMoonshotOperatorEntriesKenny';
+  const defaultOperatorMission = {
+    missionName: '50 Mile Ultra',
+    raceDate: 'July 4, 2026',
+    status: 'Active',
+    why: 'Finish the 50, learn what breaks, and carry the evidence forward into bigger endurance targets.',
+    targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
+    currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
+    nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.'
+  };
+
+  const safeParseOperatorEntries = (value) => {
+    try {
+      const parsed = JSON.parse(value || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const readOperatorMission = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(OPERATOR_MISSION_KEY) || '{}');
+      return { ...defaultOperatorMission, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
+    } catch (error) {
+      return { ...defaultOperatorMission };
+    }
+  };
+
+  const writeOperatorMission = (mission) => {
+    localStorage.setItem(OPERATOR_MISSION_KEY, JSON.stringify({ ...defaultOperatorMission, ...mission }));
+  };
+
+  const normalizeOperatorEntry = (entry = {}) => ({
+    id: entry.id || `operator-entry-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    savedAt: entry.savedAt || new Date().toISOString(),
+    weekDate: String(entry.weekDate || '').trim(),
+    mileage: String(entry.mileage || '').trim(),
+    longRun: String(entry.longRun || '').trim(),
+    elevation: String(entry.elevation || '').trim(),
+    keyWorkout: String(entry.keyWorkout || '').trim(),
+    recoverySignal: String(entry.recoverySignal || '').trim(),
+    lessonLearned: String(entry.lessonLearned || '').trim(),
+    notes: String(entry.notes || '').trim()
+  });
+
+  const readOperatorEntries = () => safeParseOperatorEntries(localStorage.getItem(OPERATOR_ENTRIES_KEY))
+    .filter((entry) => entry && typeof entry === 'object')
+    .map(normalizeOperatorEntry)
+    .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
+
+  const writeOperatorEntries = (entries) => {
+    localStorage.setItem(OPERATOR_ENTRIES_KEY, JSON.stringify(entries.map(normalizeOperatorEntry)));
+  };
+
+  const parseOperatorNumber = (value) => {
+    const match = String(value || '').replace(/,/g, '').match(/-?\d+(\.\d+)?/);
+    return match ? Number(match[0]) : 0;
+  };
+
+  const formatOperatorNumber = (value) => {
+    if (!Number.isFinite(value)) return '0';
+    return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '');
+  };
+
+  const fillOperatorMissionForm = (form, mission) => {
+    Object.entries(mission).forEach(([key, value]) => {
+      if (form.elements[key]) form.elements[key].value = value;
+    });
+  };
+
+  const fillOperatorEntryForm = (form, entry) => {
+    ['entryId', 'weekDate', 'mileage', 'longRun', 'elevation', 'keyWorkout', 'recoverySignal', 'lessonLearned', 'notes'].forEach((key) => {
+      if (!form.elements[key]) return;
+      const sourceKey = key === 'entryId' ? 'id' : key;
+      form.elements[key].value = entry ? entry[sourceKey] || '' : '';
+    });
+    const button = document.querySelector('[data-operator-save-entry]');
+    if (button) button.textContent = entry ? 'Update Entry' : 'Save Entry';
+  };
+
+  const renderOperatorSummary = () => {
+    const summary = document.querySelector('[data-operator-summary]');
+    if (!summary) return;
+    const mission = readOperatorMission();
+    const entries = readOperatorEntries();
+    const totalMiles = entries.reduce((sum, entry) => sum + parseOperatorNumber(entry.mileage), 0);
+    const peak = entries.reduce((best, entry) => parseOperatorNumber(entry.mileage) > parseOperatorNumber(best.mileage) ? entry : best, { mileage: 0, weekDate: '' });
+    const longest = entries.reduce((best, entry) => Math.max(best, parseOperatorNumber(entry.longRun)), 0);
+    const recentLesson = entries.find((entry) => entry.lessonLearned)?.lessonLearned || 'No lessons logged yet.';
+
+    const setText = (selector, value) => {
+      const element = summary.querySelector(selector);
+      if (element) element.textContent = value;
+    };
+    setText('[data-summary-total-miles]', formatOperatorNumber(totalMiles));
+    setText('[data-summary-peak-week]', peak.weekDate ? `${peak.weekDate} — ${formatOperatorNumber(parseOperatorNumber(peak.mileage))} mi` : 'None logged');
+    setText('[data-summary-longest-run]', `${formatOperatorNumber(longest)} mi`);
+    setText('[data-summary-recent-lesson]', recentLesson);
+    setText('[data-summary-current-status]', mission.status || 'Active');
+  };
+
+  const renderOperatorEntries = () => {
+    const list = document.querySelector('[data-operator-entry-list]');
+    if (!list) return;
+    const entries = readOperatorEntries();
+    list.innerHTML = '';
+    if (!entries.length) {
+      const empty = document.createElement('div');
+      empty.className = 'archive-card operator-entry-card';
+      empty.textContent = 'No operator evidence logged yet. Save the first entry to begin the dossier.';
+      list.appendChild(empty);
+      renderOperatorSummary();
+      return;
+    }
+
+    entries.forEach((entry) => {
+      const card = document.createElement('article');
+      card.className = 'archive-card operator-entry-card';
+      const header = document.createElement('div');
+      header.className = 'archive-card-header';
+      const titleBlock = document.createElement('div');
+      const title = document.createElement('h3');
+      title.textContent = entry.weekDate || 'Untitled evidence entry';
+      const saved = document.createElement('p');
+      saved.className = 'light-note';
+      saved.textContent = entry.savedAt ? `Saved ${new Date(entry.savedAt).toLocaleString()}` : 'Saved locally';
+      titleBlock.append(title, saved);
+      const status = document.createElement('span');
+      status.className = 'report-status';
+      status.textContent = `${displayText(entry.mileage, '0')} mi`;
+      header.append(titleBlock, status);
+
+      const body = document.createElement('div');
+      body.className = 'archive-card-body';
+      [
+        ['Long run', entry.longRun],
+        ['Elevation', entry.elevation],
+        ['Key workout', entry.keyWorkout],
+        ['Recovery signal', entry.recoverySignal],
+        ['Lesson learned', entry.lessonLearned],
+        ['Notes', entry.notes]
+      ].forEach(([label, value]) => {
+        const field = document.createElement('div');
+        field.className = 'operator-entry-field';
+        const fieldLabel = document.createElement('span');
+        const fieldValue = document.createElement('p');
+        fieldLabel.textContent = label;
+        fieldValue.textContent = displayText(value);
+        field.append(fieldLabel, fieldValue);
+        body.appendChild(field);
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'archive-card-actions';
+      const edit = document.createElement('button');
+      edit.className = 'button secondary';
+      edit.type = 'button';
+      edit.textContent = 'Edit Entry';
+      edit.addEventListener('click', () => {
+        const form = document.querySelector('[data-operator-entry-form]');
+        if (form) {
+          fillOperatorEntryForm(form, entry);
+          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      const remove = document.createElement('button');
+      remove.className = 'button danger';
+      remove.type = 'button';
+      remove.textContent = 'Delete Entry';
+      remove.addEventListener('click', () => {
+        writeOperatorEntries(readOperatorEntries().filter((item) => item.id !== entry.id));
+        renderOperatorEntries();
+      });
+      actions.append(edit, remove);
+      card.append(header, body, actions);
+      list.appendChild(card);
+    });
+    renderOperatorSummary();
+  };
+
+  const initializeOperatorPage = () => {
+    const missionForm = document.querySelector('[data-operator-mission-form]');
+    const entryForm = document.querySelector('[data-operator-entry-form]');
+    if (!missionForm && !entryForm) return;
+
+    if (missionForm) {
+      fillOperatorMissionForm(missionForm, readOperatorMission());
+      missionForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const mission = Object.fromEntries(new FormData(missionForm).entries());
+        writeOperatorMission(mission);
+        renderOperatorSummary();
+        const note = document.querySelector('[data-operator-mission-note]');
+        if (note) note.textContent = 'Mission card saved locally.';
+      });
+    }
+
+    if (entryForm) {
+      entryForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = Object.fromEntries(new FormData(entryForm).entries());
+        const entries = readOperatorEntries();
+        const existingId = data.entryId;
+        const savedEntry = normalizeOperatorEntry({ ...data, id: existingId || undefined, savedAt: new Date().toISOString() });
+        const nextEntries = existingId
+          ? entries.map((entry) => entry.id === existingId ? savedEntry : entry)
+          : [savedEntry, ...entries];
+        writeOperatorEntries(nextEntries);
+        fillOperatorEntryForm(entryForm, null);
+        renderOperatorEntries();
+        const note = document.querySelector('[data-operator-entry-note]');
+        if (note) note.textContent = existingId ? 'Entry updated locally.' : 'Entry saved locally.';
+      });
+    }
+
+    const resetEntry = document.querySelector('[data-operator-reset-entry]');
+    if (resetEntry && entryForm) {
+      resetEntry.addEventListener('click', () => fillOperatorEntryForm(entryForm, null));
+    }
+
+    const clear = document.querySelector('[data-operator-clear]');
+    if (clear) {
+      clear.addEventListener('click', () => {
+        localStorage.removeItem(OPERATOR_MISSION_KEY);
+        localStorage.removeItem(OPERATOR_ENTRIES_KEY);
+        if (missionForm) fillOperatorMissionForm(missionForm, readOperatorMission());
+        if (entryForm) fillOperatorEntryForm(entryForm, null);
+        renderOperatorEntries();
+        const note = document.querySelector('[data-operator-entry-note]');
+        if (note) note.textContent = 'Local operator data cleared. Defaults restored.';
+      });
+    }
+
+    renderOperatorEntries();
+  };
+
+  initializeOperatorPage();
+
 })();

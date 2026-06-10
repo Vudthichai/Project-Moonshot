@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPERATORS // Project Moonshot</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="script.js" defer></script>
+</head>
+<body class="page-operators">
+<div class="doc operators-doc">
+  <nav class="site-nav" aria-label="Project Moonshot navigation">
+    <a class="brand" href="index.html"><span class="brand-mark"><img src="PRJMNST.png" alt="" aria-hidden="true"></span><span>Project Moonshot</span></a>
+    <div class="nav-links">
+      <a href="index.html">Dossier</a>
+      <a href="upload.html">Upload</a>
+      <a href="reports.html">Reports</a>
+      <a href="resources.html">Resources</a>
+      <a class="active" href="operators.html">OPERATORS</a>
+    </div>
+  </nav>
+
+  <section class="hero operators-hero">
+    <div class="eyebrow">Mission Control // Individual Athlete Dossier</div>
+    <h1>OPERATORS</h1>
+    <div class="subtitle">Individual athlete missions for goals, evidence, lessons, and future targets. Strava keeps the raw work; this page keeps the operational story.</div>
+    <div class="meta">
+      <div class="meta-card"><div class="label">Operator</div><div class="value">Kenny Schrader</div></div>
+      <div class="meta-card"><div class="label">Status</div><div class="value">Active</div></div>
+      <div class="meta-card"><div class="label">Current Mission</div><div class="value">50 Mile Ultra</div></div>
+      <div class="meta-card"><div class="label">Race Date</div><div class="value">July 4, 2026</div></div>
+    </div>
+  </section>
+
+  <section class="section operator-profile-section">
+    <div class="operator-card premium-card">
+      <div class="operator-card-header">
+        <div>
+          <div class="eyebrow">Operator File // Active</div>
+          <h2>Kenny Schrader</h2>
+        </div>
+        <span class="report-status">Active</span>
+      </div>
+      <div class="operator-stat-grid">
+        <div><span class="label">Role</span><strong>Endurance Operator</strong></div>
+        <div><span class="label">Current Mission</span><strong>50 Mile Ultra</strong></div>
+        <div><span class="label">Race Date</span><strong>July 4, 2026</strong></div>
+        <div><span class="label">Future Missions</span><strong>70.3 / Full Ironman / Moab</strong></div>
+      </div>
+      <p class="operator-brief"><span>Mission Brief:</span> “The current mission is simple: finish the 50, learn what breaks, and carry the evidence forward.”</p>
+    </div>
+  </section>
+
+  <section class="section light operator-edit-section" data-operator-app>
+    <div class="section-header"><h2>Active Mission Card</h2><span class="tag">Editable localStorage</span></div>
+    <form class="command-form operator-mission-form" data-operator-mission-form>
+      <div class="metadata-bar form-metadata operator-metadata">
+        <div>
+          <label for="operatorMissionName">Mission name</label>
+          <input id="operatorMissionName" name="missionName" />
+        </div>
+        <div>
+          <label for="operatorRaceDate">Race date</label>
+          <input id="operatorRaceDate" name="raceDate" />
+        </div>
+        <div>
+          <label for="operatorStatus">Status</label>
+          <input id="operatorStatus" name="status" />
+        </div>
+      </div>
+      <div class="form-grid report-layout">
+        <div class="upload-card form-box report-box">
+          <h3>Intent</h3>
+          <label for="operatorWhy">Why</label>
+          <textarea id="operatorWhy" name="why"></textarea>
+          <label for="operatorTargetOutcome">Target outcome</label>
+          <textarea id="operatorTargetOutcome" name="targetOutcome"></textarea>
+        </div>
+        <div class="upload-card form-box report-box">
+          <h3>Risk Control</h3>
+          <label for="operatorCurrentRisk">Current risk</label>
+          <textarea id="operatorCurrentRisk" name="currentRisk"></textarea>
+          <label for="operatorNextCheck">Next check</label>
+          <textarea id="operatorNextCheck" name="nextCheck"></textarea>
+        </div>
+      </div>
+      <div class="mock-actions">
+        <button class="button" type="submit">Save Mission</button>
+        <span class="light-note" data-operator-mission-note>Mission card saves in this browser only.</span>
+      </div>
+    </form>
+  </section>
+
+  <section class="section operator-evidence-section">
+    <div class="section-header"><h2>Evidence Log</h2><span class="tag">Local entries</span></div>
+    <form class="command-form operator-entry-form" data-operator-entry-form>
+      <input type="hidden" name="entryId" />
+      <div class="metadata-bar form-metadata operator-metadata evidence-metadata">
+        <div><label for="operatorWeekDate">Week/date</label><input id="operatorWeekDate" name="weekDate" placeholder="Week 1 / June 10, 2026" /></div>
+        <div><label for="operatorMileage">Mileage</label><input id="operatorMileage" name="mileage" inputmode="decimal" placeholder="42" /></div>
+        <div><label for="operatorLongRun">Long run</label><input id="operatorLongRun" name="longRun" inputmode="decimal" placeholder="18" /></div>
+        <div><label for="operatorElevation">Elevation</label><input id="operatorElevation" name="elevation" inputmode="decimal" placeholder="3,200 ft" /></div>
+      </div>
+      <div class="form-grid report-layout">
+        <div class="upload-card form-box report-box">
+          <h3>Training Signal</h3>
+          <label for="operatorKeyWorkout">Key workout</label>
+          <textarea id="operatorKeyWorkout" name="keyWorkout"></textarea>
+          <label for="operatorRecoverySignal">Recovery signal</label>
+          <textarea id="operatorRecoverySignal" name="recoverySignal"></textarea>
+        </div>
+        <div class="upload-card form-box report-box">
+          <h3>Lesson Capture</h3>
+          <label for="operatorLessonLearned">Lesson learned</label>
+          <textarea id="operatorLessonLearned" name="lessonLearned"></textarea>
+          <label for="operatorNotes">Notes</label>
+          <textarea id="operatorNotes" name="notes"></textarea>
+        </div>
+      </div>
+      <div class="mock-actions">
+        <button class="button" type="submit" data-operator-save-entry>Save Entry</button>
+        <button class="button secondary" type="button" data-operator-reset-entry>New Entry</button>
+        <button class="button danger" type="button" data-operator-clear>Clear Local Operator Data</button>
+        <span class="light-note" data-operator-entry-note>Evidence entries stay on this device.</span>
+      </div>
+    </form>
+    <div class="operator-entry-list" data-operator-entry-list>
+      <div class="archive-card">Loading operator evidence...</div>
+    </div>
+  </section>
+
+  <section class="section mission-timeline-section">
+    <div class="section-header"><h2>Mission Timeline</h2><span class="tag">Now / next / moonshot</span></div>
+    <div class="operator-timeline">
+      <div class="timeline-node active"><span>50 Mile Ultra</span><strong>Active</strong></div>
+      <div class="timeline-node support"><span>HYROX</span><strong>Supporting mission</strong></div>
+      <div class="timeline-node"><span>70.3</span><strong>Future</strong></div>
+      <div class="timeline-node"><span>Full Ironman</span><strong>Future</strong></div>
+      <div class="timeline-node moonshot"><span>Moab</span><strong>Long-term moonshot</strong></div>
+    </div>
+  </section>
+
+  <section class="section light operator-summary-section">
+    <div class="section-header"><h2>Operator Summary</h2><span class="tag">Generated locally</span></div>
+    <div class="operator-summary-grid" data-operator-summary>
+      <div class="meta-card"><div class="label">Total logged miles</div><div class="value" data-summary-total-miles>0</div></div>
+      <div class="meta-card"><div class="label">Peak week</div><div class="value" data-summary-peak-week>None logged</div></div>
+      <div class="meta-card"><div class="label">Longest run</div><div class="value" data-summary-longest-run>0</div></div>
+      <div class="meta-card"><div class="label">Most recent lesson</div><div class="value" data-summary-recent-lesson>No lessons logged yet.</div></div>
+      <div class="meta-card"><div class="label">Current mission status</div><div class="value" data-summary-current-status>Active</div></div>
+    </div>
+  </section>
+
+  <section class="section operator-ethos-section">
+    <p class="quote operator-ethos">“Strava records the work. This records what the work is turning you into.”</p>
+  </section>
+
+  <div class="footer">Project Moonshot // Operators // Kenny Schrader Mission Dossier</div>
+</div>
+</body>
+</html>
