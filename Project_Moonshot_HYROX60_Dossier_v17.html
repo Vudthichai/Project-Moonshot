@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project Moonshot: HYROX 60 - V17</title>
+<style>
+  :root{
+    --bg:#070707; --card:#111214; --card2:#17191c; --ink:#f5f5f2; --muted:#a7aab0;
+    --line:#2b2e34; --red:#e11937; --red2:#ff3852; --white:#ffffff; --silver:#d8dce3;
+    --amber:#ffb000; --green:#32d583; --blue:#60a5fa; --darkred:#420912;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;}
+  body{padding:28px 0 54px;}
+  .doc{width:1080px;max-width:calc(100vw - 32px);margin:0 auto;}
+  .hero{position:relative;overflow:hidden;border:1px solid #31343a;border-radius:28px;padding:42px 44px 34px;background:
+    radial-gradient(circle at 88% -10%,rgba(225,25,55,.55),transparent 36%),
+    radial-gradient(circle at 0% 100%,rgba(225,25,55,.24),transparent 32%),
+    linear-gradient(135deg,#0a0a0b 0%,#15161a 60%,#090909 100%);box-shadow:0 30px 80px rgba(0,0,0,.38);}
+  .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(90deg,rgba(0,0,0,.85),transparent);}
+  .hero>*{position:relative;z-index:2;}
+  .eyebrow{letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--red2);font-size:12px;margin-bottom:10px;}
+  h1{font-size:66px;line-height:.88;margin:0;text-transform:uppercase;letter-spacing:-.06em;font-weight:950;}
+  .h1-accent{color:var(--red2);display:block;}
+  .subtitle{margin-top:16px;color:#d7d7d9;font-size:18px;max-width:760px;}
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:13px 14px;}
+  .meta-card .label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#a9abb0;font-weight:800;}
+  .meta-card .value{font-size:16px;font-weight:850;margin-top:4px;}
+  .section{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.18);}
+  .section.light{background:#fbfbfa;color:#151619;border-color:#d8dbe0;}
+  .section.light p,.section.light li,.section.light td{color:#464a52;}
+  .section.light h2,.section.light h3{color:#111214;}
+  .section-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:12px;}
+  .section.light .section-header{border-bottom-color:#d9dde4;}
+  h2{font-size:24px;line-height:1.05;margin:0;text-transform:uppercase;letter-spacing:-.025em;font-weight:950;}
+  h3{font-size:16px;margin:16px 0 8px;font-weight:850;}
+  p{font-size:14px;color:var(--muted);margin:0 0 10px;}
+  .small{font-size:12px;color:var(--muted);}
+  .tag{display:inline-flex;align-items:center;border:1px solid rgba(225,25,55,.55);background:rgba(225,25,55,.1);color:#ff6b7d;border-radius:999px;padding:5px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;white-space:nowrap;}
+  .grid{display:grid;gap:14px;}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .card{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:16px;}
+  .section.light .card{background:#fff;border-color:#d8dbe0;}
+  .metric{font-size:34px;font-weight:950;letter-spacing:-.05em;line-height:.95;}
+  .metric span{color:var(--red2);}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:850;color:#8f939a;}
+  .divider{height:1px;background:var(--line);margin:14px 0;}
+  .redline{height:6px;background:linear-gradient(90deg,var(--red),transparent);border-radius:999px;margin:10px 0 0;}
+  ul{margin:8px 0 0;padding-left:18px;} li{font-size:13px;color:var(--muted);margin:4px 0;}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}
+  th,td{padding:9px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8f939a;background:rgba(255,255,255,.03);font-weight:900;}
+  .section.light th{background:#f0f1f3;border-bottom-color:#d9dde4;}
+  .section.light td{border-bottom-color:#e3e5e9;}
+  .course-row{display:grid;grid-template-columns:64px 1fr 1fr 1fr;gap:10px;align-items:stretch;margin-bottom:10px;}
+  .num{display:flex;align-items:center;justify-content:center;background:var(--red);border-radius:16px;font-weight:950;font-size:22px;}
+  .course-row .card{padding:13px;}
+  .pill{display:inline-block;border:1px solid #3a3d43;border-radius:999px;padding:4px 9px;font-size:11px;color:#d8dce3;margin:2px 4px 2px 0;}
+  .section.light .pill{border-color:#d4d8dd;color:#39404a;background:#f7f7f7;}
+  .status-green{color:var(--green);font-weight:900;}.status-amber{color:var(--amber);font-weight:900;}.status-red{color:#ff5368;font-weight:900;}
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .phase{position:relative;overflow:hidden;background:linear-gradient(180deg,#1b1d21,#101114);border:1px solid var(--line);border-radius:18px;padding:16px;min-height:190px;}
+  .phase:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--red);}
+  .phase .week{font-weight:950;color:var(--red2);font-size:13px;text-transform:uppercase;letter-spacing:.12em;}
+  .phase h3{margin-top:8px;color:#fff !important;}
+  .phase li,.phase p{color:#f3f4f6 !important;}
+  .phase ul{color:#f3f4f6;}
+
+  .upload-card{background:#fbfbfa;color:#151619;border:1px solid #d8dbe0;border-radius:18px;padding:18px;margin-top:14px;}
+  .upload-card h3{color:#111214;margin-top:0;}
+  .upload-card p,.upload-card li{color:#464a52;}
+  .upload-grid{display:grid;grid-template-columns:1.05fr 1.1fr 1fr;gap:10px;}
+  .upload-cell{border:1px solid #dfe3e8;border-radius:12px;padding:12px;background:#fff;}
+  .upload-cell .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;color:#8b9098;margin-bottom:6px;}
+  .upload-cell .value{font-size:13px;color:#343841;}
+  .rawbox{width:100%;min-height:120px;border:1px dashed #b7bdc7;border-radius:14px;background:#fff;color:#333;padding:12px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  .light-note{font-size:12px;color:#5d636d;margin-top:10px;}
+  .avg{color:var(--amber);font-weight:900;}
+  .template{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:12.5px;white-space:pre-wrap;background:#0b0c0e;border:1px solid #30343a;border-radius:16px;padding:16px;color:#f5f5f2;}
+  .quote{font-size:24px;line-height:1.15;font-weight:950;letter-spacing:-.04em;color:#fff;margin:8px 0;}
+  .quote .red{color:var(--red2);}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .team{border-radius:20px;padding:18px;border:1px solid var(--line);background:linear-gradient(180deg,#17191d,#101114);}
+  .team.enemy{background:linear-gradient(180deg,#1e1115,#10090b);border-color:#44202a;}
+  .name{font-size:20px;font-weight:950;letter-spacing:-.02em;text-transform:uppercase;}
+  .footer{color:#82868d;font-size:11px;text-align:center;margin-top:22px;}
+  .print-break{break-before:page;page-break-before:always;}
+  @media print{
+    body{background:#fff;padding:0;}.doc{width:100%;max-width:none;margin:0;}.section,.hero{box-shadow:none;break-inside:avoid;}.section{margin-top:14px;} h1{font-size:48px;} .meta,.grid-4,.timeline{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} .course-row{grid-template-columns:44px 1fr 1fr 1fr;} .num{font-size:16px;} a{color:inherit;}
+  }
+  @media (max-width:850px){.meta,.grid-2,.grid-3,.grid-4,.timeline,.compare{grid-template-columns:1fr}.course-row{grid-template-columns:50px 1fr}.course-row .card:nth-child(4){grid-column:2}.hero{padding:30px 24px}h1{font-size:48px}}
+</style>
+</head>
+<body>
+<div class="doc">
+  <section class="hero">
+    <div class="eyebrow">HYROX Race Dossier // Washington D.C.</div>
+    <h1>Project <span class="h1-accent">Moonshot</span></h1>
+    <div class="subtitle">A living race dossier for Vudi Phothisuk and Ryan Smith. The objective is not to finish. The objective is to test how close two first-time HYROX Doubles athletes can get to elite territory in twelve weeks.</div>
+    <div class="meta">
+      <div class="meta-card"><div class="label">Event</div><div class="value">HYROX Washington D.C.</div></div>
+      <div class="meta-card"><div class="label">Race Date</div><div class="value">September 3, 2026</div></div>
+      <div class="meta-card"><div class="label">Division</div><div class="value">Men's Doubles Open</div></div>
+      <div class="meta-card"><div class="label">Moonshot Target</div><div class="value">Sub-60</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Mission Summary</h2><span class="tag">Aim high. Measure honestly.</span></div>
+    <div class="grid grid-3">
+      <div class="card"><div class="label">Primary Objective</div><div class="metric"><span>60</span>:00</div><p>Sub-60 is the moonshot. It is not the base case. It is the number that forces elite-level preparation, partner coordination, and zero wasted motion.</p></div>
+      <div class="card"><div class="label">Victory Range</div><div class="metric">1:03-1:05</div><p>If the moonshot misses and lands here, it is still an exceptional first HYROX Doubles result.</p></div>
+      <div class="card"><div class="label">Minimum Mission</div><div class="metric">Sub-70</div><p>Finish strong, avoid collapse, and prove the system works. Anything beyond this becomes competitive upside.</p></div>
+    </div>
+    <div class="divider"></div>
+    <p class="quote">The difference between a 1:10 team and a 1:00 team is not another 50 pounds on a deadlift. <span class="red">It is running speed, running economy, transition efficiency, station execution, and partner coordination.</span></p>
+  </section>
+
+  <section class="section light">
+    <div class="section-header"><h2>HYROX Course Outline</h2><span class="tag">8 x 1 km + 8 stations</span></div>
+    <p>HYROX is standardized: eight 1 km runs alternate with eight functional stations in the same order worldwide. The Washington D.C. event runs September 3-7, 2026. This plan assumes Men's Doubles Open.</p>
+    <div class="course-row"><div class="num">1</div><div class="card"><b>Run 1</b><br>1 km</div><div class="card"><b>SkiErg</b><br>1,000 m</div><div class="card"><b>Mission</b><br>Do not redline. Exit ready to run.</div></div>
+    <div class="course-row"><div class="num">2</div><div class="card"><b>Run 2</b><br>1 km</div><div class="card"><b>Sled Push</b><br>50 m - 152 kg / 335 lb</div><div class="card"><b>Mission</b><br>Low chest, straight arms, constant pressure.</div></div>
+    <div class="course-row"><div class="num">3</div><div class="card"><b>Run 3</b><br>1 km</div><div class="card"><b>Sled Pull</b><br>50 m - 103 kg / 227 lb</div><div class="card"><b>Mission</b><br>Pull, pull, step. No dead stops.</div></div>
+    <div class="course-row"><div class="num">4</div><div class="card"><b>Run 4</b><br>1 km</div><div class="card"><b>Burpee Broad Jumps</b><br>80 m</div><div class="card"><b>Mission</b><br>Shorter, repeatable jumps. Do not panic.</div></div>
+    <div class="course-row"><div class="num">5</div><div class="card"><b>Run 5</b><br>1 km</div><div class="card"><b>Row</b><br>1,000 m</div><div class="card"><b>Mission</b><br>Legs, body, arms. Efficiency beats violence.</div></div>
+    <div class="course-row"><div class="num">6</div><div class="card"><b>Run 6</b><br>1 km</div><div class="card"><b>Farmers Carry</b><br>200 m - 2 x 24 kg / 53 lb</div><div class="card"><b>Mission</b><br>Fast walk, tall posture, no grip drama.</div></div>
+    <div class="course-row"><div class="num">7</div><div class="card"><b>Run 7</b><br>1 km</div><div class="card"><b>Sandbag Lunges</b><br>100 m - 20 kg / 44 lb</div><div class="card"><b>Mission</b><br>Controlled cadence. Protect the final run.</div></div>
+    <div class="course-row"><div class="num">8</div><div class="card"><b>Run 8</b><br>1 km</div><div class="card"><b>Wall Balls</b><br>100 reps - 6 kg / 13 lb - 3 m target</div><div class="card"><b>Mission</b><br>Catch, squat, throw, breathe. Finish clean.</div></div>
+    <p class="small">Race weights listed for HYROX Men's Doubles Open: sled push 152 kg / 335 lb, sled pull 103 kg / 227 lb, farmers carry 2 x 24 kg / 53 lb, sandbag lunges 20 kg / 44 lb, wall balls 6 kg / 13 lb to a 3 m target.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Time Budget</h2><span class="tag">How 60 happens</span></div>
+    <table>
+      <thead><tr><th>Goal</th><th>Run Avg / km</th><th>Mile Pace</th><th>Treadmill</th><th>Station + Transition Budget</th></tr></thead>
+      <tbody>
+        <tr><td>Sub-75</td><td>5:45-6:00</td><td>9:15-9:39</td><td>6.2-6.5 mph</td><td>~27-29 min</td></tr>
+        <tr><td>Sub-70</td><td>5:15-5:30</td><td>8:27-8:51</td><td>6.8-7.1 mph</td><td>~26-28 min</td></tr>
+        <tr><td>Sub-65</td><td>4:50-5:10</td><td>7:47-8:19</td><td>7.2-7.7 mph</td><td>~24-26 min</td></tr>
+        <tr><td><b>Sub-60</b></td><td><b>4:30-4:50</b></td><td><b>7:14-7:47</b></td><td><b>7.7-8.3 mph</b></td><td><b>~21-23 min</b></td></tr>
+      </tbody>
+    </table>
+    <p>Fresh speed is not the problem. The question is whether the team can repeat fast 1 km efforts after stations. The treadmill bridge workout is simple: set 7.7-8.3 mph for 0.62 miles, complete a station, repeat.</p>
+  </section>
+
+
+
+  <section class="section light">
+    <div class="section-header"><h2>Running Engine Thesis</h2><span class="tag">Accumulation wins</span></div>
+    <div class="grid grid-3">
+      <div class="card"><div class="metric">8 km</div><div class="label">Race running volume</div><p>HYROX is not a lifting event with some jogging. It is eight separate 1 km runs with stations interrupting rhythm, breathing, and leg turnover.</p></div>
+      <div class="card"><div class="metric">100+</div><div class="label">Monthly mile floor</div><p>The goal is not one heroic run. The goal is repeatable accumulation: steady miles, controlled fatigue, and enough durability to keep running late in the race.</p></div>
+      <div class="card"><div class="metric">13K-20K</div><div class="label">Monthly vertical target</div><p>Elevation is the edge-builder: leg durability, cardiac output, mental toughness, and fatigue resistance. It supports HYROX, but it does not replace flat compromised 1 km practice.</p></div>
+    </div>
+    <p><b>What we learned:</b> HYROX looks like a lifting race, but the runners usually decide the ceiling. Strength keeps the stations from becoming disasters; running capacity keeps the whole race from bleeding minutes. The plan is to become strong enough to survive the stations and fit enough to keep running when others start walking.</p>
+  </section>
+  <section class="section light">
+    <div class="section-header"><h2>Athlete Intelligence</h2><span class="tag">Strengths / limiters / targets</span></div>
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="name">Vudi Phothisuk</div>
+        <div class="redline"></div>
+        <p><b>Snapshot:</b> 155 lb, 5'6", first HYROX, advanced relative strength, fast-building aerobic base.</p>
+        <h3>Strengths</h3><ul><li>Exceptional relative strength.</li><li>Strong hill-running durability.</li><li>High training consistency and recovery awareness.</li><li>Likely strong on burpees, carries, sled work, and fatigue management.</li></ul>
+        <h3>Limiters</h3><ul><li>Limited HYROX experience.</li><li>Row/Ski technique still early.</li><li>Transition practice not yet automatic.</li></ul>
+        <h3>Targets</h3><ul><li>120+ miles and 13,000-20,000 ft climbing monthly.</li><li>Maintain 315 bench or 225 x 10+.</li><li>Race-weight sled confidence.</li><li>Repeated 1 km efforts at 4:30-4:50/km after stations.</li></ul>
+      </div>
+      <div class="card">
+        <div class="name">Ryan Smith</div>
+        <div class="redline"></div>
+        <p><b>Snapshot:</b> 217 lb, former track athlete/cyclist, strong absolute strength, first HYROX.</p>
+        <h3>Strengths</h3><ul><li>Former athlete with real competitive memory.</li><li>Size and strength should transfer to sleds, carries, and heavy stations.</li><li>High upside if mileage returns.</li></ul>
+        <h3>Limiters</h3><ul><li>Aerobic rebuild is the biggest swing factor.</li><li>Unknown ability to repeat 1 km efforts after stations.</li><li>Unknown wall ball and rowing capacity.</li></ul>
+        <h3>Targets</h3><ul><li>Build toward 20+ miles/week if recovery allows.</li><li>Get long run from 2-3 mi to 5-8 mi progressively.</li><li>Run-sled-run benchmark every 3-4 weeks.</li><li>Become reliable at team race pace, not just strong in stations.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Station Playbook</h2><span class="tag">Race weights / target / training</span></div>
+    <table>
+      <thead><tr><th>Station</th><th>Men's Doubles Race Standard</th><th class="avg">Avg / Median Benchmark</th><th>Goal</th><th>Moonshot</th><th>Training Prescription</th></tr></thead>
+      <tbody>
+        <tr><td>1 km Runs</td><td>8 total kilometers; both partners run together</td><td class="avg">Field result is running-dominant; total doubles avg often ~1:15-1:35</td><td>4:45-5:00/km repeatable under fatigue</td><td>4:30-4:45/km after stations</td><td>0.62 mi treadmill repeats at 7.7-8.3 mph + station. Test compromised kilometers, not fresh speed.</td></tr>
+        <tr><td>SkiErg</td><td>1,000 m total</td><td class="avg">~4:00-5:00 median range</td><td>4:15-4:30 team station</td><td>Sub-4:00</td><td>500m repeats, technique video review, ski-run bricks. Efficient lats/hinge, not triceps.</td></tr>
+        <tr><td>Sled Push</td><td>152 kg / 335 lb for 50 m</td><td class="avg">~1:46 men's doubles median</td><td>No failed lanes, smooth switches</td><td>Under ~75 sec team split</td><td>Race-weight pushes, 10-15 m exchanges, immediate 1 km run. Train heavier only if form stays clean.</td></tr>
+        <tr><td>Sled Pull</td><td>103 kg / 227 lb for 50 m</td><td class="avg">No dead stops is the standard</td><td>Clean rope management</td><td>Under ~2:00 team split</td><td>Pull-pull-step rhythm, rope management, short switches before grip breaks.</td></tr>
+        <tr><td>Burpee Broad Jumps</td><td>80 m total</td><td class="avg">~2:46 men's doubles median</td><td>80 m smooth</td><td>Under 2:30</td><td>Short broad jumps, stay relaxed, pair with 1 km run.</td></tr>
+        <tr><td>Row</td><td>1,000 m total</td><td class="avg">Sub-5 is fine; sub-4 is sharper</td><td>Sub-4:00</td><td>3:45-3:55</td><td>Leg drive, sequencing, 500m repeats, row-run bricks.</td></tr>
+        <tr><td>Farmers Carry</td><td>2 x 24 kg / 53 lb for 200 m</td><td class="avg">Fast walk; avoid grip failure</td><td>No panic drops</td><td>Fast walk under 2:00</td><td>Grip endurance, posture, 50m/100m repeats. Switch before grip becomes the limiter.</td></tr>
+        <tr><td>Sandbag Lunges</td><td>20 kg / 44 lb for 100 m</td><td class="avg">Legal reps beat reckless speed</td><td>Smooth, legal reps</td><td>No major pace decay after</td><td>Sandbag lunge repeats + immediate run. Practice 10-20 m blocks and planned switches.</td></tr>
+        <tr><td>Wall Balls</td><td>100 reps with 6 kg / 13 lb ball to 3 m target</td><td class="avg">~4:02 men's doubles median</td><td>Clean sets, no no-rep spiral</td><td>100 unbroken fresh; strong late-race sets</td><td>Cadence: catch, squat, throw, breathe. Build 20-30 rep blocks, then fatigued sets after runs.</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Benchmarks are directional: public HYROX average-time summaries place doubles commonly around 1:15-1:35; HYROX split analyses have cited men's doubles medians around 1:16 overall, sled push ~1:46, burpees ~2:46, and wall balls ~4:02. Use them as orientation, not excuses.</p>
+  </section>
+
+  <section class="section light">
+    <div class="section-header"><h2>Training Architecture</h2><span class="tag">12-week operating plan</span></div>
+    <div class="timeline">
+      <div class="phase"><div class="week">Weeks 1-3</div><h3>Base Build</h3><ul><li>30-35 mpw for Vudi.</li><li>Ryan rebuilds from 2-3 mi runs.</li><li>Learn row, ski, sled, wall balls.</li><li>No hero simulations yet.</li></ul></div>
+      <div class="phase"><div class="week">Weeks 4-6</div><h3>Specificity</h3><ul><li>Run-station-run bricks.</li><li>Race-weight sled confidence.</li><li>Wall ball volume and legal-rep consistency.</li><li>Ryan mileage checkpoint.</li></ul></div>
+      <div class="phase"><div class="week">Weeks 7-10</div><h3>Simulation</h3><ul><li>Partial HYROX efforts.</li><li>Team station splits.</li><li>Transition choreography.</li><li>Full-style effort by Week 10.</li></ul></div>
+      <div class="phase"><div class="week">Weeks 11-12</div><h3>Sharpen + Taper</h3><ul><li>Reduce volume.</li><li>Keep intensity.</li><li>No proving fitness.</li><li>Arrive fresh.</li></ul></div>
+    </div>
+  </section>
+
+  <section class="section light">
+    <div class="section-header"><h2>Weekly Command Report</h2><span class="tag">Mission control format</span></div>
+    <div class="grid grid-2">
+      <div class="upload-card"><h3>1. Team Scoreboard</h3><ul><li>Week dates.</li><li>Vudi: miles, elevation, long run, total training hours.</li><li>Ryan: miles, long run, total training hours.</li><li>Team: combined miles, HYROX station sessions, lift sessions, simulations.</li><li>Recovery: RHR, HRV, sleep average, soreness / pain status.</li><li>Optional attachments: Strava screenshots, weekly summary, activity links, row/ski monitor photos.</li></ul></div>
+      <div class="upload-card"><h3>2. What Got Done</h3><ul><li>Running accumulation: total miles, elevation, long run, consistency.</li><li>Station work: ski, row, sled push, sled pull, wall balls, burpees, lunges, carries.</li><li>Strength signal: bench / squat / deadlift maintained or not maintained.</li><li>Quality signal: what felt smooth, what broke down, what needs coaching.</li></ul></div>
+      <div class="upload-card"><h3>3. Decision Checkpoint</h3><ul><li>Only log strategic choices, not every workout.</li><li>Example: "Keep 30-35 mile weeks while adding one HYROX brick."</li><li>Why: build engine without sacrificing strength.</li><li>Expected gain: better compromised running.</li><li>Expected risk: recovery interference.</li><li>Observed result: pending / positive / negative.</li></ul></div>
+      <div class="upload-card"><h3>4. Next Orders</h3><ul><li>Increase: one measurable input.</li><li>Protect: one thing that must not decline.</li><li>Stop/reduce: one wasteful or risky behavior.</li><li>Red flag: one honest concern.</li><li>Next target: one number to hit next week.</li></ul></div>
+    </div>
+    <p class="quote" style="color:#111214">This is not paperwork. It is mission control: totals, evidence, decisions, next orders. Less room for error. More room for honesty.</p>
+  </section>
+
+  <section class="section light">
+    <div class="section-header"><h2>Weekly Upload Card</h2><span class="tag">Copy into the tracker</span></div>
+    <p>Use this as the simple weekly card for the mini-site. The goal is not to write a novel. Capture the totals, the work, the signal, the strategic decisions, and the next target.</p>
+    <table>
+      <thead><tr><th>Category</th><th>Weekly Entry</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr><td>Week / dates</td><td>Week 1 - June 1 to June 7, 2026.</td><td>Creates the timeline.</td></tr>
+        <tr><td>Team scoreboard</td><td>Vudi: 33.9 mi, 5,047 ft climbed, long run ~9.3-9.5 mi, 5h 46m run time. Ryan: mileage TBD. Team: station sessions, lift sessions, simulations TBD.</td><td>Performance evidence.</td></tr>
+        <tr><td>Running accumulation</td><td>Three 7-mile hill loops, one shorter post-sled/bench run, one long sunset hill run.</td><td>HYROX is a running sport with lifting stations. Miles reduce late-race decay.</td></tr>
+        <tr><td>Strength maintenance</td><td>Bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed.</td><td>Strength stayed alive while mileage increased.</td></tr>
+        <tr><td>Station exposure</td><td>Sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks.</td><td>Skill acquisition started, but efficiency is still a limiter.</td></tr>
+        <tr><td>Decision 1</td><td>Keep the 30+ mile hill week while adding HYROX station practice.</td><td>Bigger engine vs recovery interference.</td></tr>
+        <tr><td>Decision 2</td><td>Prioritize running accumulation because HYROX rewards athletes who keep running after stations.</td><td>Runners win the ceiling; strength prevents station collapse.</td></tr>
+        <tr><td>Forces acting against us</td><td>Fatigue, work schedule, Ryan mileage uncertainty, first-HYROX learning curve, row/ski/sled technique still early.</td><td>Pressure and risk context.</td></tr>
+        <tr><td>Next orders</td><td>Increase station benchmarks. Protect sleep and strength. Stop random junk volume. Next target: cleaner run-station-run session and Ryan weekly mileage check-in.</td><td>Action loop.</td></tr>
+      </tbody>
+    </table>
+    <div class="upload-card">
+      <h3>Raw Notes Box</h3>
+      <p>Paste messy notes here first. The tracker can clean them into the weekly card above.</p>
+      <div class="rawbox">Paste Strava summaries, rough workout notes, row/ski monitor photos, soreness notes, and Ryan updates here.</div>
+    </div>
+    <p class="light-note"><b>D-NAV layer:</b> only use the decision rows when there is a real strategic choice. The facts and forces provide the evidence; the decision rows provide the judgment layer.</p>
+  </section>
+
+
+  <section class="section light">
+    <div class="section-header"><h2>Playbook Time Standards</h2><span class="tag">Average in orange</span></div>
+    <table>
+      <thead><tr><th>Outcome Tier</th><th>Total Time</th><th>Run Average</th><th>Station + Transition Budget</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="avg">Men's Doubles Average Range</td><td class="avg">~1:15-1:35</td><td class="avg">Variable</td><td class="avg">Most time is lost through running decay, transitions, and station breakdowns.</td><td class="avg">Respectable field benchmark, not the mission.</td></tr>
+        <tr><td>Strong First Race</td><td>Sub-75</td><td>5:45-6:00/km</td><td>~27-29 min</td><td>Clean execution; no collapse.</td></tr>
+        <tr><td>Competitive</td><td>Sub-70</td><td>5:15-5:30/km</td><td>~26-28 min</td><td>Good running floor and efficient stations.</td></tr>
+        <tr><td>Serious</td><td>Sub-65</td><td>4:50-5:10/km</td><td>~24-26 min</td><td>Running is strong and stations are controlled.</td></tr>
+        <tr><td><b>Moonshot</b></td><td><b>Sub-60</b></td><td><b>4:30-4:50/km</b></td><td><b>~21-23 min</b></td><td><b>Fast compromised kilometers, clean switches, no wasted motion.</b></td></tr>
+      </tbody>
+    </table>
+    <p>The table is the scoreboard. If the team wants sub-60, the running cannot become survival jogging. The stations matter, but the team that keeps running late wins.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Nutrition + Recovery</h2><span class="tag">Support the workload</span></div>
+    <div class="grid grid-3">
+      <div class="card"><h3>Fuel</h3><p>Do not under-eat. Protein stays high, carbs support runs and HYROX sessions, and electrolytes become non-negotiable during heat and double days.</p></div>
+      <div class="card"><h3>Performance Supports</h3><p>Creatine stays. Beet powder and pomegranate juice can be daily if tolerated. They support nitric oxide and blood flow, but they do not replace food or sleep.</p></div>
+      <div class="card"><h3>Recovery</h3><p>Sleep is the hidden limiter. More mileage plus heavy lifting only works if HRV, RHR, mood, and joints stay stable.</p></div>
+    </div>
+  </section>
+
+  <section class="section light">
+    <div class="section-header"><h2>Principles</h2><span class="tag">Non-negotiables</span></div>
+    <div class="grid grid-2">
+      <div class="card"><p class="quote" style="color:#111">Not bench. Not deadlift. Not squat. Not even 5K. <span style="color:#e11937">1 km after a sled push.</span></p><p>Run 1 km. Push the sled. Run another 1 km. The difference tells us whether strength is helping or fatigue is stealing the race.</p></div>
+      <div class="card"><p class="quote" style="color:#111">Running first. <span style="color:#e11937">Strength maintenance second.</span></p><p>Both athletes are strong enough. The team gets fastest when the running floor rises and station execution becomes automatic.</p></div>
+    </div>
+  </section>
+
+  <div class="footer">Project Moonshot: HYROX 60 // Living Dossier v13 // Prepared for Vudi Phothisuk + Ryan Smith</div>
+</div>
+</body>
+</html>
