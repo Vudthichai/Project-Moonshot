@@ -43,53 +43,37 @@
   </section>
 
   <section class="section light">
-    <div class="section-header"><h2>Report Form</h2><span class="tag">Static mockup</span></div>
+    <div class="section-header"><h2>Report Form</h2><span class="tag">Local archive</span></div>
     <form class="command-form" data-report-form>
-      <div class="form-row">
-        <div><label for="week">Week / Dates</label><input id="week" name="week" placeholder="Week 2 - June 8 to June 14, 2026" /></div>
-        <div><label for="status">Status</label><select id="status" name="status"><option>Draft</option><option>Ready for archive</option><option>Needs Ryan update</option><option>Recovery red flag</option></select></div>
+      <div class="form-grid">
+        <div class="upload-card form-box">
+          <h3>1. Team Scoreboard</h3>
+          <div class="form-row compact">
+            <div><label for="week">Week / Dates</label><input id="week" name="week" placeholder="Week 2 - June 8 to June 14, 2026" required /></div>
+            <div><label for="status">Status</label><select id="status" name="status"><option>Draft</option><option>Ready for archive</option><option>Needs Ryan update</option><option>Recovery red flag</option><option>Logged</option></select></div>
+          </div>
+          <label for="headline">Headline</label><input id="headline" name="headline" placeholder="One-line mission headline for the archive." />
+          <label for="scoreboard">Scoreboard Details</label><textarea id="scoreboard" name="teamScoreboard" placeholder="Vudi miles/elevation/hours. Ryan miles/hours. Combined miles. Station sessions. Lift sessions. Simulations. Recovery markers."></textarea>
+        </div>
+        <div class="upload-card form-box">
+          <h3>2. What Got Done</h3>
+          <label for="done">Completed Work</label><textarea id="done" name="whatGotDone" placeholder="Running accumulation, station work, strength maintenance, quality signal, evidence links."></textarea>
+        </div>
+        <div class="upload-card form-box">
+          <h3>3. Decision Checkpoint</h3>
+          <label for="decision">Decision</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice, why, expected gain, expected risk, observed result."></textarea>
+        </div>
+        <div class="upload-card form-box">
+          <h3>4. Next Orders</h3>
+          <label for="orders">Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase, protect, stop/reduce, red flag, next target."></textarea>
+        </div>
       </div>
-      <div><label for="scoreboard">Team Scoreboard</label><textarea id="scoreboard" name="teamScoreboard" placeholder="Vudi miles/elevation/hours. Ryan miles/hours. Combined miles. Station sessions. Lift sessions. Simulations. Recovery markers."></textarea></div>
-      <div><label for="done">What Got Done</label><textarea id="done" name="whatGotDone" placeholder="Running accumulation, station work, strength maintenance, quality signal, evidence links."></textarea></div>
-      <div><label for="decision">Decision Checkpoint</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice, why, expected gain, expected risk, observed result."></textarea></div>
-      <div><label for="orders">Next Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase, protect, stop/reduce, red flag, next target."></textarea></div>
       <div class="mock-actions">
-        <button class="button" type="submit">Save local draft</button>
+        <button class="button" type="submit">Save Local Draft</button>
         <a class="button secondary" href="reports.html">View archive</a>
-        <span class="light-note" data-form-note>Local draft save is only for future local storage testing.</span>
+        <span class="light-note" data-form-note>Save stores this weekly report in this browser only. No backend, no login.</span>
       </div>
     </form>
-  </section>
-
-  <section class="section">
-    <div class="section-header"><h2>Copy Block</h2><span class="tag">Manual fallback</span></div>
-    <div class="template">WEEK / DATES:
-
-TEAM SCOREBOARD:
-- Vudi:
-- Ryan:
-- Team:
-- Recovery:
-
-WHAT GOT DONE:
-- Running:
-- Stations:
-- Strength:
-- Quality signal:
-
-DECISION CHECKPOINT:
-- Choice:
-- Why:
-- Expected gain:
-- Expected risk:
-- Observed result:
-
-NEXT ORDERS:
-- Increase:
-- Protect:
-- Stop/reduce:
-- Red flag:
-- Next target:</div>
   </section>
 
   <div class="footer">Project Moonshot: HYROX 60 // Weekly Command Report // Static GitHub Pages-ready</div>
