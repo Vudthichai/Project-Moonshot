@@ -5,6 +5,94 @@
   const LEGACY_DRAFT_KEY = 'moonshotReportDrafts';
   const DEFAULT_SUMMARY = 'This week built running accumulation, maintained strength, and identified station efficiency as the next limiter.';
 
+  const dailyQuotes = [
+    'If you pray to win a marathon, expect shoes, not a medal.',
+    'The runners win. The strong survive.',
+    'No wasted motion.',
+    'You do not rise to the race. You fall to your preparation.',
+    'The clock is not pressure. It is information.',
+    'Earn the calm before the start line.',
+    'Discipline is speed before speed shows up.',
+    'The split tells the truth without emotion.',
+    'Train until panic has nowhere to stand.',
+    'Every clean rep removes a future excuse.',
+    'Make the hard pace familiar.',
+    'Strong legs are useless without repeatability.',
+    'The station ends when the run is protected.',
+    'Control the breath. Control the room.',
+    'A clean transition is free speed.',
+    'Fitness compounds in silence.',
+    'The body follows the standard it sees every day.',
+    'Do the simple work with violent consistency.',
+    'Fatigue reveals the plan.',
+    'Calm is a trained response.',
+    'The first kilometer cannot spend the eighth.',
+    'Keep moving. Make decisions later.',
+    'Nothing heroic before halfway.',
+    'Precision beats noise.',
+    'Your legs should know the answer.',
+    'The work is the warning shot.',
+    'Never negotiate with the last rep.',
+    'Pace is a weapon when respected.',
+    'Let the scoreboard stay quiet until race day.',
+    'Preparation is aggression with patience.',
+    'Breathe lower. Move cleaner.',
+    'The floor does not care how tired you are.',
+    'Make effort look organized.',
+    'Do not borrow speed you cannot repay.',
+    'The best teams waste nothing between stations.',
+    'Hold form when comfort leaves.',
+    'A target is not a wish. It is a demand.',
+    'Every meter counts twice under fatigue.',
+    'The plan is built to survive bad minutes.',
+    'Do not chase pain. Chase output.',
+    'Quiet training makes loud results.',
+    'Fast is clean before it is fast.',
+    'The next step is the only argument.',
+    'Weak pacing taxes everything.',
+    'Build the engine. Guard the chassis.',
+    'Practice removes drama.',
+    'Race day exposes habits, not intentions.',
+    'A steady team is hard to break.',
+    'The mission rewards boring excellence.',
+    'Make the standard automatic.',
+    'Hard work needs direction or it leaks.',
+    'The clock only reports what you built.',
+    'Enter the station under control. Leave dangerous.',
+    'Every shortcut arrives at the wall balls.',
+    'Run economy is earned, not found.',
+    'Strength matters most when it stays efficient.',
+    'No rep is neutral.',
+    'The race is paid for in advance.',
+    'Move like the minute matters.',
+    'Training should make chaos feel scheduled.',
+    'Do not admire fatigue. Manage it.',
+    'The partner standard is the team standard.',
+    'Recover like the work depends on it.',
+    'Small leaks sink fast teams.',
+    'Own the pace before you test it.',
+    'The lungs complain. The system decides.',
+    'Start patient. Finish hostile.',
+    'Details become minutes under load.',
+    'The sled respects angle, pressure, and nerve.',
+    'The row punishes ego quietly.',
+    'The SkiErg rewards rhythm over rage.',
+    'Carry the bells like nothing is happening.',
+    'Lunge with discipline or pay interest.',
+    'Wall balls end teams that trained vague.',
+    'Run after the station, not away from it.',
+    'Protect the redline until it is useful.',
+    'The cleanest team owns the back half.',
+    'Comfort is not part of the strategy.',
+    'The standard travels with you.',
+    'You cannot fake repeatable power.',
+    'The race finds every loose screw.',
+    'Today is for deposits, not speeches.',
+    'Execution is the only motivation that counts.',
+    'Let the work make the decision obvious.',
+    'Sub-60 starts with another controlled session.'
+  ];
+
   if (countdown) {
     const fields = {
       days: countdown.querySelector('[data-days]'),
@@ -12,6 +100,7 @@
       minutes: countdown.querySelector('[data-minutes]'),
       seconds: countdown.querySelector('[data-seconds]')
     };
+    const dailyQuote = countdown.querySelector('[data-daily-quote]');
     const tick = () => {
       const remaining = Math.max(0, raceDate.getTime() - Date.now());
       const days = Math.floor(remaining / 86400000);
@@ -22,6 +111,8 @@
       fields.hours.textContent = String(hours).padStart(2,'0');
       fields.minutes.textContent = String(minutes).padStart(2,'0');
       fields.seconds.textContent = String(seconds).padStart(2,'0');
+
+      if (dailyQuote) dailyQuote.textContent = dailyQuotes[days % dailyQuotes.length];
     };
     tick();
     setInterval(tick, 1000);
