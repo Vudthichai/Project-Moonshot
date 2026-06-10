@@ -282,33 +282,28 @@
     rows.forEach((report) => {
       const row = document.createElement('tr');
       const week = document.createElement('td');
-      const statusHeadline = document.createElement('td');
+      const statusCell = document.createElement('td');
+      const headlineCell = document.createElement('td');
       const status = document.createElement('span');
-      const headline = document.createElement('div');
       const completed = document.createElement('td');
       const decision = document.createElement('td');
       const orders = document.createElement('td');
+      const summaryCell = document.createElement('td');
       const statusText = normalizeStatus(report.status);
-      const summaryText = displayText(report.generatedSummary, '');
+      const summaryText = displayText(report.generatedSummary || generateReportSummary(report));
 
       appendTextWithBreaks(week, report.week);
       status.className = `report-status${isPendingStatus(statusText) ? ' pending' : ''}`;
       status.textContent = statusText;
-      statusHeadline.appendChild(status);
-      headline.textContent = displayText(report.headline, 'No headline entered.');
-      statusHeadline.appendChild(headline);
+      statusCell.appendChild(status);
+      headlineCell.textContent = displayText(report.headline, 'No headline entered.');
       appendTextWithBreaks(completed, report.completedWork);
-      if (summaryText) {
-        const summary = document.createElement('div');
-        summary.className = 'generated-summary archive-summary';
-        summary.innerHTML = '<span>Generated Summary</span>';
-        summary.appendChild(document.createTextNode(summaryText));
-        statusHeadline.appendChild(summary);
-      }
       decision.textContent = displayText(report.decisionCheckpoint);
       orders.textContent = displayText(report.nextOrders);
+      summaryCell.className = 'generated-summary archive-summary';
+      summaryCell.appendChild(document.createTextNode(summaryText));
 
-      row.append(week, statusHeadline, completed, decision, orders);
+      row.append(week, statusCell, headlineCell, completed, decision, orders, summaryCell);
       archive.appendChild(row);
     });
   };
