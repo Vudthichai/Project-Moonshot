@@ -28,9 +28,9 @@ h1{font-size:66px;line-height:.88;margin:0;text-transform:uppercase;letter-spaci
 .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:13px 14px;}
 .meta-card .label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#a9abb0;font-weight:800;}
 .meta-card .value{font-size:16px;font-weight:850;margin-top:4px;}
-.countdown{display:grid;grid-template-columns:repeat(4,96px);gap:12px;margin-top:26px;padding:14px;border:2px solid rgba(255,176,0,.72);border-radius:24px;background:linear-gradient(135deg,rgba(255,176,0,.18),rgba(225,25,55,.08) 42%,rgba(11,12,14,.92));box-shadow:0 0 0 1px rgba(255,176,0,.18) inset,0 0 32px rgba(255,176,0,.26),0 14px 45px rgba(225,25,55,.18);}
-.countdown-box{border:1px solid rgba(255,201,71,.78);border-radius:18px;background:linear-gradient(180deg,rgba(255,176,0,.22),rgba(255,255,255,.055));padding:12px 10px;text-align:center;box-shadow:0 0 18px rgba(255,176,0,.22) inset,0 10px 26px rgba(0,0,0,.24);}
-.countdown-box strong{display:block;font-size:32px;line-height:1;font-weight:950;letter-spacing:-.04em;color:#ffc947;text-shadow:0 0 18px rgba(255,176,0,.58),0 2px 0 rgba(0,0,0,.35);}
+.countdown{display:grid;grid-template-columns:repeat(4,96px);gap:12px;margin-top:26px;padding:14px;border:2px solid rgba(255,193,7,.95);border-radius:24px;background:linear-gradient(135deg,rgba(255,176,0,.26),rgba(225,25,55,.08) 42%,rgba(11,12,14,.92));box-shadow:0 0 0 2px rgba(255,176,0,.24) inset,0 0 42px rgba(255,176,0,.42),0 0 78px rgba(255,201,71,.18),0 14px 45px rgba(225,25,55,.18);}
+.countdown-box{border:2px solid rgba(255,201,71,.94);border-radius:18px;background:linear-gradient(180deg,rgba(255,176,0,.3),rgba(255,255,255,.07));padding:12px 10px;text-align:center;box-shadow:0 0 24px rgba(255,176,0,.34) inset,0 0 22px rgba(255,176,0,.2),0 10px 26px rgba(0,0,0,.24);}
+.countdown-box strong{display:block;font-size:32px;line-height:1;font-weight:950;letter-spacing:-.04em;color:var(--amber);text-shadow:0 0 10px rgba(255,176,0,.95),0 0 24px rgba(255,201,71,.72),0 0 42px rgba(255,176,0,.44),0 2px 0 rgba(0,0,0,.35);}
 .countdown-box span{display:block;margin-top:6px;color:#ffe7a0;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;}
 .section{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.18);}
 .section.light{background:#fbfbfa;color:#151619;border-color:#d8dbe0;}

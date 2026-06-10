@@ -36,20 +36,47 @@
     }
   };
 
+  const reportKey = (report) => [
+    report.week,
+    report.status,
+    report.headline,
+    report.teamScoreboard,
+    report.whatGotDone,
+    report.decisionCheckpoint,
+    report.nextOrders
+  ].map((value) => String(value || '').trim().toLowerCase()).join('|');
+
+  const dedupeReports = (reports) => {
+    const seen = new Set();
+    return reports.filter((report) => {
+      const key = reportKey(report);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  };
+
   const readReports = () => {
-    const savedReports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
-    return savedReports
-      .filter((report) => report && typeof report === 'object')
-      .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
+    try {
+      const savedReports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
+      return dedupeReports(savedReports
+        .filter((report) => report && typeof report === 'object')
+        .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || ''))));
+    } catch (error) {
+      return [];
+    }
   };
 
   const fallbackReports = [
     {
-      week: 'Week 1',
+      week: 'Week 1 - June 1 to June 7, 2026',
       status: 'Logged',
       headline: 'Baseline established',
-      decisionCheckpoint: 'Keep 30+ mile hill week with HYROX station practice',
-      nextOrders: 'Increase station benchmarks.'
+      teamScoreboard: 'Vudi: 33.9 mi, 5,047 ft climbed, long run ~9.3-9.5 mi, 5h 46m run time. Ryan: mileage TBD. Team: station sessions, lift sessions, simulations TBD.',
+      whatGotDone: 'Running accumulation: three 7-mile hill loops, one shorter post-sled/bench run, one long sunset hill run. Strength maintenance: bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed. Station exposure: sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks.',
+      decisionCheckpoint: 'Keep the 30+ mile hill week while adding HYROX station practice. Prioritize running accumulation because HYROX rewards athletes who keep running after stations.',
+      nextOrders: 'Increase station benchmarks. Protect sleep and strength. Stop random junk volume. Next target: cleaner run-station-run session and Ryan weekly mileage check-in.',
+      generatedSummary: DEFAULT_SUMMARY
     }
   ];
 
@@ -85,6 +112,46 @@
       if (index > 0) cell.appendChild(document.createElement('br'));
       cell.appendChild(document.createTextNode(line));
     });
+  };
+
+  const addReportRow = (tableBody, category, entry, signal) => {
+    const row = document.createElement('tr');
+    const categoryCell = document.createElement('td');
+    const entryCell = document.createElement('td');
+    const signalCell = document.createElement('td');
+
+    categoryCell.textContent = category;
+    appendTextWithBreaks(entryCell, entry);
+    signalCell.textContent = signal;
+    row.append(categoryCell, entryCell, signalCell);
+    tableBody.appendChild(row);
+  };
+
+  const renderLatestReport = () => {
+    const latestReport = document.querySelector('[data-latest-report]');
+    if (!latestReport) return;
+
+    const reports = readReports();
+    const report = reports[0] || fallbackReports[0];
+    const isFallback = reports.length === 0;
+    const tag = document.querySelector('[data-latest-report-tag]');
+    const note = document.querySelector('[data-latest-report-note]');
+    latestReport.innerHTML = '';
+
+    if (tag) tag.textContent = isFallback ? 'Week 1 baseline' : 'Latest saved report';
+    if (note) {
+      note.textContent = isFallback
+        ? 'No saved local reports found. Showing the single Week 1 baseline example.'
+        : 'Showing the most recent saved local command report from this browser.';
+    }
+
+    addReportRow(latestReport, 'Week / dates', report.week, 'Creates the timeline.');
+    addReportRow(latestReport, 'Status / headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.');
+    addReportRow(latestReport, 'Team scoreboard', report.teamScoreboard, 'Performance evidence.');
+    addReportRow(latestReport, 'Completed work', report.whatGotDone, 'Training signal.');
+    addReportRow(latestReport, 'Decision checkpoint', report.decisionCheckpoint, 'Judgment layer.');
+    addReportRow(latestReport, 'Next orders', report.nextOrders, 'Action loop.');
+    addReportRow(latestReport, 'Generated summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.');
   };
 
   const renderArchive = () => {
@@ -142,9 +209,10 @@
       const payload = Object.fromEntries(new FormData(form).entries());
       const report = { ...payload, generatedSummary: generateReportSummary(payload), savedAt: new Date().toISOString() };
       try {
-        const reports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
+        const reports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY))
+          .filter((savedReport) => savedReport && typeof savedReport === 'object');
         reports.unshift(report);
-        localStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(reports.slice(0, 24)));
+        localStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(dedupeReports(reports).slice(0, 24)));
         if (note) note.textContent = 'Saved locally. Open the report archive to see this browser-only entry.';
       } catch (error) {
         if (note) note.textContent = 'Local save unavailable in this browser. No backend was contacted.';
@@ -159,6 +227,7 @@
       try {
         localStorage.removeItem(REPORT_STORAGE_KEY);
         localStorage.removeItem(LEGACY_DRAFT_KEY);
+        renderLatestReport();
         renderArchive();
         if (note) note.textContent = 'Local reports cleared. One clean fallback row is showing again.';
       } catch (error) {
@@ -167,5 +236,6 @@
     });
   }
 
+  renderLatestReport();
   renderArchive();
 })();
