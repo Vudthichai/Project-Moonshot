@@ -22,7 +22,7 @@
   <section class="hero hero-background hero-background--reports">
     <div class="eyebrow">Archive // Weekly Evidence</div>
     <h1>Report <span class="h1-accent">Archive</span></h1>
-    <div class="subtitle">A static race-log archive for weekly command reports. Add future reports as cards or tables; keep the evidence visible and the decision trail honest.</div>
+    <div class="subtitle">Weekly evidence, decisions, and next orders.</div>
     <div class="meta">
       <div class="meta-card"><div class="label">Current Week</div><div class="value">Week 1 logged</div></div>
       <div class="meta-card"><div class="label">Primary Signal</div><div class="value">Running base</div></div>
@@ -45,17 +45,14 @@
 
   <section class="section">
     <div class="section-header"><h2>Archive Index</h2><span class="tag">Local browser reports</span></div>
-    <p class="light-note">Saved reports load from localStorage first. If this browser has no saved reports, the archive shows one clean fallback row only.</p>
+    <p class="light-note">Saved reports load from localStorage first. If this browser has no saved reports, the archive shows one clean fallback card only.</p>
     <div class="mock-actions archive-actions">
       <button class="button secondary" type="button" data-clear-reports>Clear Local Reports</button>
       <span class="light-note" data-archive-note>Local reports stay on this device.</span>
     </div>
-    <table class="archive-table">
-      <thead><tr><th>Week / Dates</th><th>Status</th><th>Headline</th><th>Completed Work</th><th>Decision</th><th>Next Orders</th><th>Summary</th></tr></thead>
-      <tbody data-report-archive>
-        <tr><td colspan="7">Loading local reports...</td></tr>
-      </tbody>
-    </table>
+    <div class="archive-cards" data-report-archive>
+      <div class="archive-card">Loading local reports...</div>
+    </div>
   </section>
 
   <section class="section light">

@@ -93,19 +93,6 @@
     'Sub-60 starts with another controlled session.'
   ];
 
-  const renderCountdownQuotes = () => {
-    const quoteList = document.querySelector('[data-countdown-quotes]');
-    if (!quoteList) return;
-
-    quoteList.innerHTML = '';
-    dailyQuotes.forEach((quote) => {
-      const item = document.createElement('li');
-      item.textContent = quote;
-      quoteList.appendChild(item);
-    });
-  };
-
-  renderCountdownQuotes();
 
   if (countdown) {
     const fields = {
@@ -146,11 +133,26 @@
     .filter(Boolean)
     .join('\n\n');
 
+  const createReportId = () => `report-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  const stableReportId = (report) => {
+    const seed = [report.week, report.status, report.headline, report.completedWork, report.decisionCheckpoint, report.nextOrders]
+      .map((value) => String(value || '').trim().toLowerCase())
+      .join('|');
+    let hash = 0;
+    for (let index = 0; index < seed.length; index += 1) {
+      hash = ((hash << 5) - hash + seed.charCodeAt(index)) | 0;
+    }
+    return `report-${Math.abs(hash).toString(36)}`;
+  };
+
   const normalizeReport = (report = {}) => {
     const { teamScoreboard, whatGotDone, ...currentReport } = report;
+    const completedWork = String(currentReport.completedWork || '').trim() || legacyCompletedWork({ teamScoreboard, whatGotDone });
+    const normalized = { ...currentReport, completedWork };
     return {
-      ...currentReport,
-      completedWork: String(currentReport.completedWork || '').trim() || legacyCompletedWork({ teamScoreboard, whatGotDone })
+      ...normalized,
+      id: currentReport.id || stableReportId(normalized)
     };
   };
 
@@ -271,6 +273,32 @@
     addReportRow(latestReport, 'Generated Summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.');
   };
 
+  const makeArchiveField = (label, value, className = '') => {
+    const field = document.createElement('div');
+    field.className = `archive-field${className ? ` ${className}` : ''}`;
+    const labelEl = document.createElement('div');
+    labelEl.className = 'label';
+    labelEl.textContent = label;
+    const valueEl = document.createElement('div');
+    valueEl.className = 'archive-field-value';
+    appendTextWithBreaks(valueEl, value);
+    field.append(labelEl, valueEl);
+    return field;
+  };
+
+  const makeReportButton = (label, className, onClick) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = className;
+    button.textContent = label;
+    button.addEventListener('click', onClick);
+    return button;
+  };
+
+  const writeReports = (reports) => {
+    localStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(dedupeReports(reports).slice(0, 24)));
+  };
+
   const renderArchive = () => {
     const archive = document.querySelector('[data-report-archive]');
     if (!archive) return;
@@ -280,31 +308,57 @@
     archive.innerHTML = '';
 
     rows.forEach((report) => {
-      const row = document.createElement('tr');
-      const week = document.createElement('td');
-      const statusCell = document.createElement('td');
-      const headlineCell = document.createElement('td');
-      const status = document.createElement('span');
-      const completed = document.createElement('td');
-      const decision = document.createElement('td');
-      const orders = document.createElement('td');
-      const summaryCell = document.createElement('td');
+      const card = document.createElement('article');
+      card.className = 'archive-card';
       const statusText = normalizeStatus(report.status);
       const summaryText = displayText(report.generatedSummary || generateReportSummary(report));
-
-      appendTextWithBreaks(week, report.week);
+      const header = document.createElement('div');
+      header.className = 'archive-card-header';
+      const weekWrap = document.createElement('div');
+      weekWrap.appendChild(makeArchiveField('Week / Dates', report.week));
+      const status = document.createElement('span');
       status.className = `report-status${isPendingStatus(statusText) ? ' pending' : ''}`;
       status.textContent = statusText;
-      statusCell.appendChild(status);
-      headlineCell.textContent = displayText(report.headline, 'No headline entered.');
-      appendTextWithBreaks(completed, report.completedWork);
-      decision.textContent = displayText(report.decisionCheckpoint);
-      orders.textContent = displayText(report.nextOrders);
-      summaryCell.className = 'generated-summary archive-summary';
-      summaryCell.appendChild(document.createTextNode(summaryText));
+      header.append(weekWrap, status);
 
-      row.append(week, statusCell, headlineCell, completed, decision, orders, summaryCell);
-      archive.appendChild(row);
+      const body = document.createElement('div');
+      body.className = 'archive-card-body';
+      body.append(
+        makeArchiveField('Headline', displayText(report.headline, 'No headline entered.')),
+        makeArchiveField('Completed Work', report.completedWork, 'wide'),
+        makeArchiveField('Decision Checkpoint', report.decisionCheckpoint),
+        makeArchiveField('Next Orders', report.nextOrders),
+        makeArchiveField('Generated Summary', summaryText, 'wide generated-summary archive-summary')
+      );
+
+      card.append(header, body);
+
+      if (reports.length) {
+        const actions = document.createElement('div');
+        actions.className = 'archive-card-actions';
+        actions.append(
+          makeReportButton('Edit', 'button secondary', () => {
+            window.location.href = `upload.html?edit=${encodeURIComponent(report.id)}`;
+          }),
+          makeReportButton('Delete', 'button secondary danger', () => {
+            const remaining = readReports().filter((savedReport) => savedReport.id !== report.id);
+            try {
+              writeReports(remaining);
+              renderLatestReport();
+              renderArchive();
+              renderMissionProgress();
+              const note = document.querySelector('[data-archive-note]');
+              if (note) note.textContent = 'Report deleted from localStorage on this device.';
+            } catch (error) {
+              const note = document.querySelector('[data-archive-note]');
+              if (note) note.textContent = 'Unable to delete this report in this browser.';
+            }
+          })
+        );
+        card.appendChild(actions);
+      }
+
+      archive.appendChild(card);
     });
   };
 
@@ -312,24 +366,64 @@
   if (form) {
     const note = document.querySelector('[data-form-note]');
     const summaryPreview = document.querySelector('[data-summary-preview]');
+    const params = new URLSearchParams(window.location.search);
+    let editingReportId = params.get('edit');
+
+    const setFormValue = (name, value) => {
+      const field = form.elements[name];
+      if (field) field.value = value || '';
+    };
+
     const updateSummaryPreview = () => {
       const payload = normalizeReport(Object.fromEntries(new FormData(form).entries()));
       if (summaryPreview) summaryPreview.textContent = generateReportSummary(payload);
     };
+
+    if (editingReportId) {
+      const reportToEdit = readReports().find((report) => report.id === editingReportId);
+      if (reportToEdit) {
+        setFormValue('week', reportToEdit.week);
+        setFormValue('headline', reportToEdit.headline);
+        setFormValue('status', normalizeStatus(reportToEdit.status));
+        setFormValue('completedWork', reportToEdit.completedWork);
+        setFormValue('decisionCheckpoint', reportToEdit.decisionCheckpoint);
+        setFormValue('nextOrders', reportToEdit.nextOrders);
+        const submitButton = form.querySelector('[type="submit"]');
+        if (submitButton) submitButton.textContent = 'Overwrite Report';
+        if (note) note.textContent = 'Editing a saved local report. Saving will overwrite this report in localStorage.';
+      } else {
+        editingReportId = '';
+        if (note) note.textContent = 'Saved report not found in this browser. New saves will create a fresh local report.';
+      }
+    }
+
     form.addEventListener('input', updateSummaryPreview);
     form.addEventListener('change', updateSummaryPreview);
     updateSummaryPreview();
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const payload = normalizeReport(Object.fromEntries(new FormData(form).entries()));
-      const report = { ...payload, generatedSummary: generateReportSummary(payload), savedAt: new Date().toISOString() };
+      const report = {
+        ...payload,
+        id: editingReportId || payload.id || createReportId(),
+        generatedSummary: generateReportSummary(payload),
+        savedAt: new Date().toISOString()
+      };
       try {
         const reports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY))
           .filter((savedReport) => savedReport && typeof savedReport === 'object')
           .map(normalizeReport);
-        reports.unshift(report);
-        localStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(dedupeReports(reports).slice(0, 24)));
-        if (note) note.textContent = 'Saved locally. Open the report archive to see this browser-only entry.';
+        const existingIndex = reports.findIndex((savedReport) => savedReport.id === report.id);
+        if (existingIndex >= 0) {
+          reports[existingIndex] = report;
+        } else {
+          reports.unshift(report);
+        }
+        writeReports(reports);
+        editingReportId = report.id;
+        if (note) note.textContent = existingIndex >= 0
+          ? 'Report overwritten locally. Open the archive to review the updated card.'
+          : 'Saved locally. Open the report archive to see this browser-only entry.';
       } catch (error) {
         if (note) note.textContent = 'Local save unavailable in this browser. No backend was contacted.';
       }
@@ -341,12 +435,12 @@
     miles: 33.9,
     elevation: 5047,
     stations: 4,
-    simulations: 1
+    simulations: 0
   };
 
   const progressTargets = {
     miles: 500,
-    elevation: 100000,
+    elevation: 50000,
     stations: 80,
     simulations: 8
   };
@@ -374,25 +468,34 @@
     report.headline,
     report.completedWork,
     report.decisionCheckpoint,
-    report.nextOrders,
-    report.generatedSummary
+    report.nextOrders
   ].map((value) => String(value || '')).join(' ');
 
-  const extractMissionProgress = (reports) => {
-    const text = reports.map(reportSearchText).join(' ').replace(/\s+/g, ' ');
-    if (!text.trim()) return {};
+  const hasSimulationMention = (text) => /\b(?:full\s+simulation|partial\s+simulation|simulations?|sims?)\b/i.test(text);
 
+  const extractReportProgress = (report) => {
+    const text = reportSearchText(report).replace(/\s+/g, ' ');
     const miles = sumMatches(text, /(?:mileage|miles?|mi)\s*(?:\/\s*elevation)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:team\s*)?(?:miles?|mi\b))/gi)
       ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:team\s*)?(?:miles?|mi\b)/gi);
     const elevation = sumMatches(text, /(?:elevation|vert(?:ical)?|climb(?:ed|ing)?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:ft|feet|feet\s+climbed))/gi)
       ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:ft|feet)\s*(?:climbed|elevation|vert(?:ical)?)?/gi);
     const stations = sumMatches(text, /(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?|work)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
       ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?)/gi);
-    const simulations = sumMatches(text, /(?:full|partial|race-flow|hyrox)?\s*(?:simulations?|sims?|rehearsals?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
-      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:full|partial|race-flow|hyrox)?\s*(?:simulations?|sims?|rehearsals?)/gi);
+    const explicitSimulations = sumMatches(text, /(?:full\s+simulation|partial\s+simulation|simulations?|sims?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
+      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:full\s+simulation|partial\s+simulation|simulations?|sims?)/gi);
+    const simulationMentioned = hasSimulationMention(text);
+    const simulations = explicitSimulations ?? (simulationMentioned ? 1 : null);
 
-    return { miles, elevation, stations, simulations };
+    return { report, miles, elevation, stations, simulations, simulationMentioned };
   };
+
+  const extractMissionProgress = (reports) => reports.reduce((totals, report) => {
+    const parsed = extractReportProgress(report);
+    ['miles', 'elevation', 'stations', 'simulations'].forEach((key) => {
+      if (Number.isFinite(parsed[key])) totals[key] = (totals[key] || 0) + parsed[key];
+    });
+    return totals;
+  }, {});
 
   const formatProgressValue = (key, value) => {
     const rounded = key === 'miles' ? Math.round(value * 10) / 10 : Math.round(value);
@@ -401,6 +504,54 @@
     if (key === 'miles') return `${formatted} / ${target} mi`;
     if (key === 'elevation') return `${formatted} / ${target} ft`;
     return `${formatted} / ${target}`;
+  };
+
+  const formatLogValue = (key, value) => {
+    if (!Number.isFinite(value)) return 'not detected';
+    if (key === 'miles') return `${(Math.round(value * 10) / 10).toLocaleString(undefined, { maximumFractionDigits: 1 })} mi`;
+    if (key === 'elevation') return `${Math.round(value).toLocaleString()} ft`;
+    return String(Math.round(value));
+  };
+
+  const renderProgressSourceLog = (reports) => {
+    const log = document.querySelector('[data-progress-source-log]');
+    if (!log) return;
+    log.innerHTML = '';
+    const title = document.createElement('div');
+    title.className = 'source-log-title';
+    title.textContent = 'Progress Source Log';
+    log.appendChild(title);
+
+    if (!reports.length) {
+      const empty = document.createElement('div');
+      empty.className = 'source-log-empty';
+      empty.textContent = `No saved reports parsed. Manual placeholders: ${formatLogValue('miles', manualMeterValues.miles)}, ${formatLogValue('elevation', manualMeterValues.elevation)}, ${formatLogValue('stations', manualMeterValues.stations)} station sessions, ${manualMeterValues.simulations} simulations.`;
+      log.appendChild(empty);
+      return;
+    }
+
+    reports.map(extractReportProgress).forEach((parsed) => {
+      const card = document.createElement('div');
+      card.className = 'source-log-card';
+      const week = document.createElement('div');
+      week.className = 'source-log-week';
+      week.textContent = displayText(parsed.report.week, 'Report date TBD');
+      const list = document.createElement('dl');
+      [
+        ['Miles detected', formatLogValue('miles', parsed.miles)],
+        ['Elevation detected', formatLogValue('elevation', parsed.elevation)],
+        ['Station sessions detected', formatLogValue('stations', parsed.stations)],
+        ['Simulation detected', parsed.simulationMentioned ? `yes (${formatLogValue('simulations', parsed.simulations)})` : 'no']
+      ].forEach(([label, value]) => {
+        const dt = document.createElement('dt');
+        const dd = document.createElement('dd');
+        dt.textContent = label;
+        dd.textContent = value;
+        list.append(dt, dd);
+      });
+      card.append(week, list);
+      log.appendChild(card);
+    });
   };
 
   const renderMissionProgress = () => {
@@ -428,11 +579,14 @@
       const note = row.querySelector('.meter-note');
       if (valueEl) valueEl.textContent = formatProgressValue(key, value);
       if (bar) bar.style.width = `${percent}%`;
-      if (track) track.setAttribute('aria-valuenow', String(Math.round(value)));
+      if (track) {
+        track.setAttribute('aria-valuenow', String(Math.round(value)));
+        track.setAttribute('aria-valuemax', String(target));
+      }
       if (note) {
-        note.classList.toggle('placeholder', !hasParsedValue);
-        note.textContent = hasParsedValue ? note.dataset.originalText || note.textContent : `${note.dataset.originalText || note.textContent} · manual placeholder`;
         note.dataset.originalText = note.dataset.originalText || note.textContent.replace(' · manual placeholder', '');
+        note.classList.toggle('placeholder', !hasParsedValue);
+        note.textContent = hasParsedValue ? note.dataset.originalText : `${note.dataset.originalText} · manual placeholder`;
       }
     });
 
@@ -445,6 +599,7 @@
     if (source) {
       source.textContent = parsedCount > 0 ? `${parsedCount}/4 lanes parsed` : 'Manual placeholders';
     }
+    renderProgressSourceLog(reports);
   };
 
   const clearReports = document.querySelector('[data-clear-reports]');
@@ -457,7 +612,7 @@
         renderLatestReport();
         renderArchive();
         renderMissionProgress();
-        if (note) note.textContent = 'Local reports cleared. One clean fallback row is showing again.';
+        if (note) note.textContent = 'Local reports cleared. One clean fallback card is showing again.';
       } catch (error) {
         if (note) note.textContent = 'Unable to clear local reports in this browser.';
       }
