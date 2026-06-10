@@ -127,12 +127,24 @@
     }
   };
 
+  const legacyCompletedWork = (legacyFields) => [legacyFields.teamScoreboard, legacyFields.whatGotDone]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean)
+    .join('\n\n');
+
+  const normalizeReport = (report = {}) => {
+    const { teamScoreboard, whatGotDone, ...currentReport } = report;
+    return {
+      ...currentReport,
+      completedWork: String(currentReport.completedWork || '').trim() || legacyCompletedWork({ teamScoreboard, whatGotDone })
+    };
+  };
+
   const reportKey = (report) => [
     report.week,
     report.status,
     report.headline,
-    report.teamScoreboard,
-    report.whatGotDone,
+    report.completedWork,
     report.decisionCheckpoint,
     report.nextOrders
   ].map((value) => String(value || '').trim().toLowerCase()).join('|');
@@ -152,6 +164,7 @@
       const savedReports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
       return dedupeReports(savedReports
         .filter((report) => report && typeof report === 'object')
+        .map(normalizeReport)
         .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || ''))));
     } catch (error) {
       return [];
@@ -163,8 +176,7 @@
       week: 'Week 1 - June 1 to June 7, 2026',
       status: 'Logged',
       headline: 'Baseline established',
-      teamScoreboard: 'Vudi: 33.9 mi, 5,047 ft climbed, 5h 46m run time. Ryan: miles and training hours TBD. Team combined miles TBD. Station sessions TBD. Lift sessions TBD. Recovery notes TBD.',
-      whatGotDone: 'Running accumulation: three 7-mile hill loops, one shorter post-sled/bench run, one long sunset hill run. Strength maintenance: bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed. Station exposure: sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks.',
+      completedWork: 'Mileage/elevation: Vudi logged 33.9 mi and 5,047 ft climbed across the week. Long run: sunset hill run. Strength work: bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed. Station work: sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks. Recovery notes and Ryan updates TBD.',
       decisionCheckpoint: 'Keep the 30+ mile hill week while adding HYROX station practice. Prioritize running accumulation because HYROX rewards athletes who keep running after stations.',
       nextOrders: 'Increase station benchmarks. Protect sleep and strength. Stop random junk volume. Next target: cleaner run-station-run session and Ryan weekly mileage check-in.',
       generatedSummary: DEFAULT_SUMMARY
@@ -178,8 +190,9 @@
   const includesAny = (text, terms) => terms.some((term) => text.includes(term));
 
   const generateReportSummary = (data) => {
-    const summarySource = ['week', 'headline', 'teamScoreboard', 'whatGotDone', 'decisionCheckpoint', 'nextOrders']
-      .map((key) => data?.[key] || '')
+    const normalizedData = normalizeReport(data || {});
+    const summarySource = ['completedWork', 'decisionCheckpoint', 'nextOrders']
+      .map((key) => normalizedData[key] || '')
       .join(' ');
     if (!summarySource.trim()) return DEFAULT_SUMMARY;
     const combined = summarySource.toLowerCase();
@@ -236,13 +249,12 @@
         : 'Showing the most recent saved local command report from this browser.';
     }
 
-    addReportRow(latestReport, 'Week / dates', report.week, 'Creates the timeline.');
-    addReportRow(latestReport, 'Status / headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.');
-    addReportRow(latestReport, 'Training totals', report.teamScoreboard, 'Volume and recovery evidence.');
-    addReportRow(latestReport, 'Completed work', report.whatGotDone, 'Training signal.');
-    addReportRow(latestReport, 'Decision checkpoint', report.decisionCheckpoint, 'Judgment layer.');
-    addReportRow(latestReport, 'Next orders', report.nextOrders, 'Action loop.');
-    addReportRow(latestReport, 'Generated summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.');
+    addReportRow(latestReport, 'Week / Dates', report.week, 'Creates the timeline.');
+    addReportRow(latestReport, 'Status + Headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.');
+    addReportRow(latestReport, 'Completed Work', report.completedWork, 'Facts and evidence block.');
+    addReportRow(latestReport, 'Decision Checkpoint', report.decisionCheckpoint, 'Judgment layer.');
+    addReportRow(latestReport, 'Next Orders', report.nextOrders, 'Action loop.');
+    addReportRow(latestReport, 'Generated Summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.');
   };
 
   const renderArchive = () => {
@@ -256,9 +268,10 @@
     rows.forEach((report) => {
       const row = document.createElement('tr');
       const week = document.createElement('td');
-      const statusCell = document.createElement('td');
+      const statusHeadline = document.createElement('td');
       const status = document.createElement('span');
-      const headline = document.createElement('td');
+      const headline = document.createElement('div');
+      const completed = document.createElement('td');
       const decision = document.createElement('td');
       const orders = document.createElement('td');
       const statusText = normalizeStatus(report.status);
@@ -267,19 +280,21 @@
       appendTextWithBreaks(week, report.week);
       status.className = `report-status${isPendingStatus(statusText) ? ' pending' : ''}`;
       status.textContent = statusText;
-      statusCell.appendChild(status);
+      statusHeadline.appendChild(status);
       headline.textContent = displayText(report.headline, 'No headline entered.');
+      statusHeadline.appendChild(headline);
+      appendTextWithBreaks(completed, report.completedWork);
       if (summaryText) {
         const summary = document.createElement('div');
         summary.className = 'generated-summary archive-summary';
         summary.innerHTML = '<span>Generated Summary</span>';
         summary.appendChild(document.createTextNode(summaryText));
-        headline.appendChild(summary);
+        statusHeadline.appendChild(summary);
       }
       decision.textContent = displayText(report.decisionCheckpoint);
       orders.textContent = displayText(report.nextOrders);
 
-      row.append(week, statusCell, headline, decision, orders);
+      row.append(week, statusHeadline, completed, decision, orders);
       archive.appendChild(row);
     });
   };
@@ -289,7 +304,7 @@
     const note = document.querySelector('[data-form-note]');
     const summaryPreview = document.querySelector('[data-summary-preview]');
     const updateSummaryPreview = () => {
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const payload = normalizeReport(Object.fromEntries(new FormData(form).entries()));
       if (summaryPreview) summaryPreview.textContent = generateReportSummary(payload);
     };
     form.addEventListener('input', updateSummaryPreview);
@@ -297,11 +312,12 @@
     updateSummaryPreview();
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const payload = normalizeReport(Object.fromEntries(new FormData(form).entries()));
       const report = { ...payload, generatedSummary: generateReportSummary(payload), savedAt: new Date().toISOString() };
       try {
         const reports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY))
-          .filter((savedReport) => savedReport && typeof savedReport === 'object');
+          .filter((savedReport) => savedReport && typeof savedReport === 'object')
+          .map(normalizeReport);
         reports.unshift(report);
         localStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(dedupeReports(reports).slice(0, 24)));
         if (note) note.textContent = 'Saved locally. Open the report archive to see this browser-only entry.';
