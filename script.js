@@ -190,8 +190,8 @@
   const fallbackReports = [
     {
       week: 'Week 1 - June 1 to June 7, 2026',
-      status: 'Logged',
-      headline: 'Baseline established',
+      status: 'Ready for archive',
+      headline: 'Starting is more than others ever do',
       completedWork: 'Mileage/elevation: Vudi logged 33.9 mi and 5,047 ft climbed across the week. Long run: sunset hill run. Strength work: bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed. Station work: sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks. Recovery notes and Ryan updates TBD.',
       decisionCheckpoint: 'Keep the 30+ mile hill week while adding HYROX station practice. Prioritize running accumulation because HYROX rewards athletes who keep running after stations.',
       nextOrders: 'Increase station benchmarks. Protect sleep and strength. Stop random junk volume. Next target: cleaner run-station-run session and Ryan weekly mileage check-in.',
@@ -267,9 +267,10 @@
     }
 
     addReportRow(latestReport, 'Week / Dates', report.week, 'Creates the timeline.');
-    addReportRow(latestReport, 'Status + Headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.', 'is-headline');
+    addReportRow(latestReport, 'Status', normalizeStatus(report.status), 'Archive readiness.');
+    addReportRow(latestReport, 'Headline', displayText(report.headline, 'No headline entered.'), 'Fast archive context.', 'is-headline');
     addReportRow(latestReport, 'Completed Work', report.completedWork, 'Facts and evidence block.');
-    addReportRow(latestReport, 'Decision Checkpoint', report.decisionCheckpoint, 'Judgment layer.');
+    addReportRow(latestReport, 'Decision Checkpoint', report.decisionCheckpoint, 'Strategic choice layer.');
     addReportRow(latestReport, 'Next Orders', report.nextOrders, 'Action loop.');
     addReportRow(latestReport, 'Generated Summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.', 'is-summary');
   };
