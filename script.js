@@ -234,8 +234,9 @@
     });
   };
 
-  const addReportRow = (tableBody, category, entry, signal) => {
+  const addReportRow = (tableBody, category, entry, signal, className = '') => {
     const row = document.createElement('tr');
+    if (className) row.className = className;
     const categoryCell = document.createElement('td');
     const entryCell = document.createElement('td');
     const signalCell = document.createElement('td');
@@ -266,16 +267,17 @@
     }
 
     addReportRow(latestReport, 'Week / Dates', report.week, 'Creates the timeline.');
-    addReportRow(latestReport, 'Status + Headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.');
+    addReportRow(latestReport, 'Status + Headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.', 'is-headline');
     addReportRow(latestReport, 'Completed Work', report.completedWork, 'Facts and evidence block.');
     addReportRow(latestReport, 'Decision Checkpoint', report.decisionCheckpoint, 'Judgment layer.');
     addReportRow(latestReport, 'Next Orders', report.nextOrders, 'Action loop.');
-    addReportRow(latestReport, 'Generated Summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.');
+    addReportRow(latestReport, 'Generated Summary', report.generatedSummary || generateReportSummary(report), 'One-line command readout.', 'is-summary');
   };
 
   const makeArchiveField = (label, value, className = '') => {
     const field = document.createElement('div');
-    field.className = `archive-field${className ? ` ${className}` : ''}`;
+    const toneClass = label === 'Headline' ? 'is-headline' : label === 'Generated Summary' ? 'is-summary' : '';
+    field.className = `archive-field${className ? ` ${className}` : ''}${toneClass ? ` ${toneClass}` : ''}`;
     const labelEl = document.createElement('div');
     labelEl.className = 'label';
     labelEl.textContent = label;
