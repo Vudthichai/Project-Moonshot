@@ -3,6 +3,7 @@
   const countdown = document.querySelector('[data-countdown]');
   const REPORT_STORAGE_KEY = 'moonshotWeeklyReports';
   const LEGACY_DRAFT_KEY = 'moonshotReportDrafts';
+  const DEFAULT_SUMMARY = 'This week built running accumulation, maintained strength, and identified station efficiency as the next limiter.';
 
   if (countdown) {
     const fields = {
@@ -37,39 +38,47 @@
 
   const readReports = () => {
     const savedReports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
-    const legacyDrafts = safeParseReports(localStorage.getItem(LEGACY_DRAFT_KEY));
-    return [...savedReports, ...legacyDrafts]
+    return savedReports
       .filter((report) => report && typeof report === 'object')
       .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
   };
 
   const fallbackReports = [
     {
-      week: 'Week 1\nJune 1-7, 2026',
+      week: 'Week 1',
       status: 'Logged',
-      headline: 'Hill mileage and first station exposure established the baseline.',
-      decisionCheckpoint: 'Keep 30+ mile hill week while adding HYROX station practice.',
-      nextOrders: 'Increase station benchmarks; protect sleep and strength.'
-    },
-    {
-      week: 'Week 2\nJune 8-14, 2026',
-      status: 'Pending',
-      headline: 'Awaiting command report.',
-      decisionCheckpoint: 'TBD',
-      nextOrders: 'TBD'
-    },
-    {
-      week: 'Week 3\nJune 15-21, 2026',
-      status: 'Pending',
-      headline: 'Awaiting command report.',
-      decisionCheckpoint: 'TBD',
-      nextOrders: 'TBD'
+      headline: 'Baseline established',
+      decisionCheckpoint: 'Keep 30+ mile hill week with HYROX station practice',
+      nextOrders: 'Increase station benchmarks.'
     }
   ];
 
   const normalizeStatus = (status) => status || 'Draft';
   const isPendingStatus = (status) => /pending|draft|needs|red flag/i.test(status);
   const displayText = (value, fallback = 'TBD') => String(value || '').trim() || fallback;
+
+  const includesAny = (text, terms) => terms.some((term) => text.includes(term));
+
+  const generateReportSummary = (data) => {
+    const summarySource = ['week', 'headline', 'teamScoreboard', 'whatGotDone', 'decisionCheckpoint', 'nextOrders']
+      .map((key) => data?.[key] || '')
+      .join(' ');
+    if (!summarySource.trim()) return DEFAULT_SUMMARY;
+    const combined = summarySource.toLowerCase();
+    const built = includesAny(combined, ['run', 'mile', 'mileage', 'hill', 'long run', 'accumulation'])
+      ? 'built running accumulation'
+      : 'kept the weekly training signal moving';
+    const strength = includesAny(combined, ['strength', 'lift', 'bench', 'squat', 'deadlift', 'pull-up', 'carry'])
+      ? 'maintained strength'
+      : 'protected the strength floor';
+    const limiter = includesAny(combined, ['station', 'ski', 'row', 'sled', 'wall ball', 'burpee', 'lunge', 'transition'])
+      ? 'station efficiency'
+      : includesAny(combined, ['sleep', 'recovery', 'sore', 'pain', 'fatigue', 'hrv', 'rhr'])
+        ? 'recovery discipline'
+        : 'next-week execution';
+
+    return `This week ${built}, ${strength}, and identified ${limiter} as the next limiter.`;
+  };
 
   const appendTextWithBreaks = (cell, text) => {
     displayText(text).split('\n').forEach((line, index) => {
@@ -95,12 +104,20 @@
       const decision = document.createElement('td');
       const orders = document.createElement('td');
       const statusText = normalizeStatus(report.status);
+      const summaryText = displayText(report.generatedSummary, '');
 
       appendTextWithBreaks(week, report.week);
       status.className = `report-status${isPendingStatus(statusText) ? ' pending' : ''}`;
       status.textContent = statusText;
       statusCell.appendChild(status);
       headline.textContent = displayText(report.headline, 'No headline entered.');
+      if (summaryText) {
+        const summary = document.createElement('div');
+        summary.className = 'generated-summary archive-summary';
+        summary.innerHTML = '<span>Generated Summary</span>';
+        summary.appendChild(document.createTextNode(summaryText));
+        headline.appendChild(summary);
+      }
       decision.textContent = displayText(report.decisionCheckpoint);
       orders.textContent = displayText(report.nextOrders);
 
@@ -112,10 +129,18 @@
   const form = document.querySelector('[data-report-form]');
   if (form) {
     const note = document.querySelector('[data-form-note]');
+    const summaryPreview = document.querySelector('[data-summary-preview]');
+    const updateSummaryPreview = () => {
+      const payload = Object.fromEntries(new FormData(form).entries());
+      if (summaryPreview) summaryPreview.textContent = generateReportSummary(payload);
+    };
+    form.addEventListener('input', updateSummaryPreview);
+    form.addEventListener('change', updateSummaryPreview);
+    updateSummaryPreview();
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const payload = Object.fromEntries(new FormData(form).entries());
-      const report = { ...payload, savedAt: new Date().toISOString() };
+      const report = { ...payload, generatedSummary: generateReportSummary(payload), savedAt: new Date().toISOString() };
       try {
         const reports = safeParseReports(localStorage.getItem(REPORT_STORAGE_KEY));
         reports.unshift(report);
@@ -135,7 +160,7 @@
         localStorage.removeItem(REPORT_STORAGE_KEY);
         localStorage.removeItem(LEGACY_DRAFT_KEY);
         renderArchive();
-        if (note) note.textContent = 'Local reports cleared. Fallback examples are showing again.';
+        if (note) note.textContent = 'Local reports cleared. One clean fallback row is showing again.';
       } catch (error) {
         if (note) note.textContent = 'Unable to clear local reports in this browser.';
       }
