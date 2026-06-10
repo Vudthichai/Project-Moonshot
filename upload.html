@@ -33,11 +33,16 @@
 
   <section class="section light">
     <div class="section-header"><h2>Weekly Command Report</h2><span class="tag">Mission control format</span></div>
+    <div class="metadata-bar upload-card">
+      <div><div class="label">Week / Dates</div><div class="value">Compact timeline metadata.</div></div>
+      <div><div class="label">Headline</div><div class="value">One-line mission readout.</div></div>
+      <div><div class="label">Status</div><div class="value">Draft, ready, red flag, or logged.</div></div>
+    </div>
     <div class="grid grid-2">
-      <div class="upload-card"><h3>1. Team Scoreboard</h3><ul><li>Week dates.</li><li>Vudi: miles, elevation, long run, total training hours.</li><li>Ryan: miles, long run, total training hours.</li><li>Team: combined miles, HYROX station sessions, lift sessions, simulations.</li><li>Recovery: RHR, HRV, sleep average, soreness / pain status.</li><li>Optional attachments: Strava screenshots, weekly summary, activity links, row/ski monitor photos.</li></ul></div>
-      <div class="upload-card"><h3>2. What Got Done</h3><ul><li>Running accumulation: total miles, elevation, long run, consistency.</li><li>Station work: ski, row, sled push, sled pull, wall balls, burpees, lunges, carries.</li><li>Strength signal: bench / squat / deadlift maintained or not maintained.</li><li>Quality signal: what felt smooth, what broke down, what needs coaching.</li></ul></div>
-      <div class="upload-card"><h3>3. Decision Checkpoint</h3><ul><li>Only log strategic choices, not every workout.</li><li>Example: "Keep 30-35 mile weeks while adding one HYROX brick."</li><li>Why: build engine without sacrificing strength.</li><li>Expected gain: better compromised running.</li><li>Expected risk: recovery interference.</li><li>Observed result: pending / positive / negative.</li></ul></div>
-      <div class="upload-card"><h3>4. Next Orders</h3><ul><li>Increase: one measurable input.</li><li>Protect: one thing that must not decline.</li><li>Stop/reduce: one wasteful or risky behavior.</li><li>Red flag: one honest concern.</li><li>Next target: one number to hit next week.</li></ul></div>
+      <div class="upload-card"><h3>1. Training Totals</h3><ul><li>Vudi miles, elevation, and training hours.</li><li>Ryan miles and training hours.</li><li>Team combined miles.</li><li>Station sessions.</li><li>Lift sessions.</li><li>Recovery notes.</li></ul></div>
+      <div class="upload-card"><h3>2. Work Completed</h3><ul><li>Running accumulation.</li><li>Station work.</li><li>Strength maintenance.</li><li>Quality signal.</li></ul></div>
+      <div class="upload-card"><h3>3. Decision Checkpoint</h3><ul><li>Strategic choice.</li><li>Why.</li><li>Expected gain.</li><li>Expected risk.</li><li>Observed result.</li></ul></div>
+      <div class="upload-card"><h3>4. Next Orders</h3><ul><li>Increase.</li><li>Protect.</li><li>Stop/reduce.</li><li>Red flag.</li><li>Next target.</li></ul></div>
     </div>
     <p class="quote" style="color:#111214">This is not paperwork. It is mission control: totals, evidence, decisions, next orders. Less room for error. More room for honesty.</p>
   </section>
@@ -45,27 +50,36 @@
   <section class="section light">
     <div class="section-header"><h2>Report Form</h2><span class="tag">Local archive</span></div>
     <form class="command-form" data-report-form>
+      <div class="metadata-bar form-metadata" aria-label="Team Scoreboard metadata">
+        <div>
+          <label for="week">Week / Dates</label>
+          <input id="week" name="week" placeholder="Week 2 - June 8 to June 14, 2026" required />
+        </div>
+        <div>
+          <label for="headline">Headline</label>
+          <input id="headline" name="headline" placeholder="One-line mission headline for the archive." />
+        </div>
+        <div>
+          <label for="status">Status</label>
+          <select id="status" name="status"><option>Draft</option><option>Ready for archive</option><option>Needs Ryan update</option><option>Recovery red flag</option><option>Logged</option></select>
+        </div>
+      </div>
       <div class="form-grid">
         <div class="upload-card form-box">
-          <h3>1. Team Scoreboard</h3>
-          <div class="form-row compact">
-            <div><label for="week">Week / Dates</label><input id="week" name="week" placeholder="Week 2 - June 8 to June 14, 2026" required /></div>
-            <div><label for="status">Status</label><select id="status" name="status"><option>Draft</option><option>Ready for archive</option><option>Needs Ryan update</option><option>Recovery red flag</option><option>Logged</option></select></div>
-          </div>
-          <label for="headline">Headline</label><input id="headline" name="headline" placeholder="One-line mission headline for the archive." />
-          <label for="scoreboard">Scoreboard Details</label><textarea id="scoreboard" name="teamScoreboard" placeholder="Vudi miles/elevation/hours. Ryan miles/hours. Combined miles. Station sessions. Lift sessions. Simulations. Recovery markers."></textarea>
+          <h3>1. Training Totals</h3>
+          <label for="scoreboard">Totals</label><textarea id="scoreboard" name="teamScoreboard" placeholder="Vudi: miles, elevation, training hours. Ryan: miles, training hours. Team: combined miles. Station sessions. Lift sessions. Recovery notes."></textarea>
         </div>
         <div class="upload-card form-box">
-          <h3>2. What Got Done</h3>
-          <label for="done">Completed Work</label><textarea id="done" name="whatGotDone" placeholder="Running accumulation, station work, strength maintenance, quality signal, evidence links."></textarea>
+          <h3>2. Work Completed</h3>
+          <label for="done">Completed Work</label><textarea id="done" name="whatGotDone" placeholder="Running accumulation. Station work. Strength maintenance. Quality signal."></textarea>
         </div>
         <div class="upload-card form-box">
           <h3>3. Decision Checkpoint</h3>
-          <label for="decision">Decision</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice, why, expected gain, expected risk, observed result."></textarea>
+          <label for="decision">Decision</label><textarea id="decision" name="decisionCheckpoint" placeholder="Strategic choice. Why. Expected gain. Expected risk. Observed result."></textarea>
         </div>
         <div class="upload-card form-box">
           <h3>4. Next Orders</h3>
-          <label for="orders">Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase, protect, stop/reduce, red flag, next target."></textarea>
+          <label for="orders">Orders</label><textarea id="orders" name="nextOrders" placeholder="Increase. Protect. Stop/reduce. Red flag. Next target."></textarea>
         </div>
       </div>
       <div class="summary-preview" aria-live="polite">
