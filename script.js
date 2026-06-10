@@ -163,7 +163,7 @@
       week: 'Week 1 - June 1 to June 7, 2026',
       status: 'Logged',
       headline: 'Baseline established',
-      teamScoreboard: 'Vudi: 33.9 mi, 5,047 ft climbed, long run ~9.3-9.5 mi, 5h 46m run time. Ryan: mileage TBD. Team: station sessions, lift sessions, simulations TBD.',
+      teamScoreboard: 'Vudi: 33.9 mi, 5,047 ft climbed, 5h 46m run time. Ryan: miles and training hours TBD. Team combined miles TBD. Station sessions TBD. Lift sessions TBD. Recovery notes TBD.',
       whatGotDone: 'Running accumulation: three 7-mile hill loops, one shorter post-sled/bench run, one long sunset hill run. Strength maintenance: bench 225 x 11 / 10 / 10; later 225 x 6 x 6. Squat 225 x 5 x 5. Pull-ups completed. Station exposure: sled work, SkiErg exposure, first rowing lesson, early row/ski benchmarks.',
       decisionCheckpoint: 'Keep the 30+ mile hill week while adding HYROX station practice. Prioritize running accumulation because HYROX rewards athletes who keep running after stations.',
       nextOrders: 'Increase station benchmarks. Protect sleep and strength. Stop random junk volume. Next target: cleaner run-station-run session and Ryan weekly mileage check-in.',
@@ -238,7 +238,7 @@
 
     addReportRow(latestReport, 'Week / dates', report.week, 'Creates the timeline.');
     addReportRow(latestReport, 'Status / headline', `${normalizeStatus(report.status)} - ${displayText(report.headline, 'No headline entered.')}`, 'Fast archive context.');
-    addReportRow(latestReport, 'Team scoreboard', report.teamScoreboard, 'Performance evidence.');
+    addReportRow(latestReport, 'Training totals', report.teamScoreboard, 'Volume and recovery evidence.');
     addReportRow(latestReport, 'Completed work', report.whatGotDone, 'Training signal.');
     addReportRow(latestReport, 'Decision checkpoint', report.decisionCheckpoint, 'Judgment layer.');
     addReportRow(latestReport, 'Next orders', report.nextOrders, 'Action loop.');
