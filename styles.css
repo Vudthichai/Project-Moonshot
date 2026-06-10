@@ -89,3 +89,113 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}th,t
 .footer{color:#82868d;font-size:11px;text-align:center;margin-top:22px;}.print-break{break-before:page;page-break-before:always;}
 @media print{body{background:#fff;padding:0;}.site-nav{display:none;}.doc{width:100%;max-width:none;margin:0;}.section,.hero{box-shadow:none;break-inside:avoid;}.section{margin-top:14px;}h1{font-size:48px;}.meta,.grid-4,.timeline{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:repeat(2,1fr);}.course-row{grid-template-columns:44px 1fr 1fr 1fr;}.num{font-size:16px;}a{color:inherit;}}
 @media (max-width:850px){body{padding-top:16px;}.quote-list{columns:1;}.site-nav{position:static;border-radius:22px;align-items:flex-start;flex-direction:column;}.nav-links{justify-content:flex-start;}.meta,.metadata-bar,.grid-2,.grid-3,.grid-4,.timeline,.compare,.form-grid,.report-layout,.form-row{grid-template-columns:1fr;}.course-row{grid-template-columns:50px 1fr;}.course-row .card:nth-child(4){grid-column:2;}.hero{padding:30px 24px;}h1{font-size:48px;}.countdown{grid-template-columns:repeat(2,1fr);}.countdown-quote{grid-column:1 / -1;min-height:86px;}}
+
+/* Mobile-first hardening: preserve desktop above tablet widths, turn dense data into cards below. */
+.countdown{box-shadow:0 0 0 1px rgba(255,176,0,.105) inset,0 18px 44px rgba(0,0,0,.24),0 0 24px rgba(255,176,0,.135);}
+.countdown-box{box-shadow:0 0 12px rgba(255,176,0,.105) inset,0 10px 24px rgba(0,0,0,.22);}
+.countdown-quote{box-shadow:0 0 14px rgba(255,176,0,.06) inset;}
+.countdown-quote blockquote:before{box-shadow:0 0 10px rgba(255,176,0,.3);}
+
+@media (max-width:768px){
+  body{padding:12px 0 36px;overflow-x:hidden;}
+  .doc{max-width:calc(100vw - 20px);}
+  .site-nav{position:static;display:flex;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 10px;border-radius:20px;padding:9px;margin-bottom:12px;}
+  .brand{flex:1 1 190px;font-size:13px;letter-spacing:-.035em;min-width:0;}
+  .brand-mark{width:30px;height:30px;font-size:12px;box-shadow:0 0 18px rgba(225,25,55,.32);}
+  .nav-links{flex:1 1 100%;justify-content:center;gap:5px;}
+  .nav-links a{padding:7px 9px;font-size:10px;letter-spacing:.06em;}
+
+  .hero{padding:26px 18px 22px;border-radius:22px;}
+  h1{font-size:clamp(38px,13vw,52px);line-height:.9;}
+  .subtitle{font-size:15px;}
+  .meta{grid-template-columns:1fr 1fr;gap:9px;margin-top:20px;}
+  .meta-card{padding:11px;border-radius:14px;}
+  .meta-card .value{font-size:14px;overflow-wrap:anywhere;}
+
+  .countdown{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:10px;border-radius:18px;}
+  .countdown-box{min-width:0;border-radius:14px;padding:10px 4px;}
+  .countdown-box strong{font-size:clamp(22px,8vw,30px);}
+  .countdown-box span{font-size:8px;letter-spacing:.08em;}
+  .countdown-quote{grid-column:1 / -1;min-height:0;padding:12px 13px;border-radius:14px;}
+  .countdown-quote blockquote{font-size:14px;line-height:1.25;padding-left:13px;}
+
+  .section{padding:18px;border-radius:20px;margin-top:16px;}
+  .section-header{align-items:flex-start;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .section-header .tag,.tag{max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.25;}
+  h2{font-size:21px;}
+  .grid,.grid-2,.grid-3,.grid-4,.compare,.timeline,.metadata-bar,.form-grid,.report-layout,.form-row,.meter-grid{grid-template-columns:1fr;}
+  .card{min-width:0;overflow-wrap:anywhere;}
+  .metric{font-size:34px;}
+  .quote{font-size:20px;}
+
+  .moonshot-meter{padding:16px;border-radius:18px;}
+  .meter-topline{flex-direction:column;gap:12px;}
+  .meter-topline h3{font-size:24px;}
+  .meter-score{font-size:44px;}
+  .meter-row{padding:13px;border-radius:16px;}
+  .meter-row-head{align-items:flex-start;flex-direction:column;gap:5px;}
+  .meter-row-head strong{white-space:normal;}
+
+  .course-row{grid-template-columns:1fr;gap:8px;padding:10px;border:1px solid #d8dbe0;border-radius:18px;background:#fff;margin-bottom:12px;}
+  .course-row .num{width:44px;height:36px;border-radius:12px;font-size:18px;}
+  .course-row .card,.course-row .card:nth-child(4){grid-column:auto;width:100%;padding:12px;overflow-wrap:normal;word-break:normal;}
+  .course-row .card b{display:inline-block;margin-bottom:2px;}
+
+  table{border-collapse:separate;border-spacing:0;width:100%;}
+  table thead{display:none;}
+  table tbody,table tr,table td{display:block;width:100%;}
+  table tr{margin:0 0 12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));box-shadow:0 12px 26px rgba(0,0,0,.12);}
+  .section.light table tr{background:#fff;border-color:#d8dbe0;box-shadow:0 10px 22px rgba(17,18,20,.06);}
+  table td{position:relative;padding:0 0 10px 0;border-bottom:0;font-size:13px;line-height:1.45;overflow-wrap:anywhere;}
+  table td:last-child{padding-bottom:0;}
+  table td:before{content:"Detail";display:block;margin-bottom:3px;color:#8f939a;font-size:9px;text-transform:uppercase;letter-spacing:.13em;font-weight:950;}
+  .section.light table td:before{color:#6f7580;}
+  .latest-report-table td:nth-child(1):before{content:"Category";}
+  .latest-report-table td:nth-child(2):before{content:"Weekly Entry";}
+  .latest-report-table td:nth-child(3):before{content:"Signal";}
+  .archive-table td:nth-child(1):before{content:"Week / Dates";}
+  .archive-table td:nth-child(2):before{content:"Status";}
+  .archive-table td:nth-child(3):before{content:"Headline";}
+  .archive-table td:nth-child(4):before{content:"Completed Work";}
+  .archive-table td:nth-child(5):before{content:"Decision";}
+  .archive-table td:nth-child(6):before{content:"Next Orders";}
+  .archive-table td:nth-child(7):before{content:"Summary";}
+  .time-budget-table td:nth-child(1):before{content:"Outcome Tier";}
+  .time-budget-table td:nth-child(2):before{content:"Total Time";}
+  .time-budget-table td:nth-child(3):before{content:"Run Average";}
+  .time-budget-table td:nth-child(4):before{content:"Treadmill Pace";}
+  .time-budget-table td:nth-child(5):before{content:"Station Budget";}
+  .time-budget-table td:nth-child(6):before{content:"Meaning";}
+  .station-table td:nth-child(1):before{content:"Station";}
+  .station-table td:nth-child(2):before{content:"Race Standard";}
+  .station-table td:nth-child(3):before{content:"Avg / Median";}
+  .station-table td:nth-child(4):before{content:"Goal";}
+  .station-table td:nth-child(5):before{content:"Moonshot";}
+  .station-table td:nth-child(6):before{content:"Training";}
+  .archive-summary{display:block;margin-top:0;border-left:0;padding:0;background:transparent;color:#f4d27c;}
+  .section.light .archive-summary{background:transparent;color:#343841;}
+  .report-status{max-width:100%;white-space:normal;overflow-wrap:anywhere;}
+  .mock-actions{align-items:stretch;flex-direction:column;}
+}
+
+@media (max-width:480px){
+  .doc{max-width:calc(100vw - 14px);}
+  .site-nav{gap:7px;padding:8px;border-radius:18px;}
+  .brand{flex-basis:100%;justify-content:center;font-size:12px;}
+  .nav-links{gap:4px;}
+  .nav-links a{flex:1 1 calc(50% - 4px);text-align:center;padding:7px 6px;font-size:9.5px;}
+  .hero{padding:22px 14px 18px;border-radius:20px;}
+  .eyebrow{font-size:10px;letter-spacing:.14em;}
+  .meta{grid-template-columns:1fr;}
+  .countdown{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .countdown-box{padding:11px 6px;}
+  .countdown-box strong{font-size:30px;}
+  .countdown-quote blockquote{font-size:13px;}
+  .section{padding:15px;border-radius:18px;}
+  h2{font-size:19px;}
+  .meter-score{font-size:40px;}
+  .course-row{padding:9px;}
+  table tr{padding:11px;border-radius:14px;}
+  table td{font-size:12.5px;}
+  .quote{font-size:18px;}
+}
