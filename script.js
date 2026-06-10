@@ -341,6 +341,117 @@
     });
   }
 
+
+  const manualMeterValues = {
+    miles: 33.9,
+    elevation: 5047,
+    stations: 4,
+    simulations: 1
+  };
+
+  const progressTargets = {
+    miles: 500,
+    elevation: 100000,
+    stations: 80,
+    simulations: 8
+  };
+
+  const textNumber = (value) => Number(String(value).replace(/,/g, ''));
+
+  const sumMatches = (text, pattern, unitMultiplier = 1) => {
+    let total = 0;
+    let matched = false;
+    let match;
+    pattern.lastIndex = 0;
+    while ((match = pattern.exec(text)) !== null) {
+      const value = textNumber(match[1]);
+      if (Number.isFinite(value)) {
+        total += value * unitMultiplier;
+        matched = true;
+      }
+    }
+    return matched ? total : null;
+  };
+
+  const reportSearchText = (report) => [
+    report.week,
+    report.status,
+    report.headline,
+    report.completedWork,
+    report.decisionCheckpoint,
+    report.nextOrders,
+    report.generatedSummary
+  ].map((value) => String(value || '')).join(' ');
+
+  const extractMissionProgress = (reports) => {
+    const text = reports.map(reportSearchText).join(' ').replace(/\s+/g, ' ');
+    if (!text.trim()) return {};
+
+    const miles = sumMatches(text, /(?:mileage|miles?|mi)\s*(?:\/\s*elevation)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:team\s*)?(?:miles?|mi\b))/gi)
+      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:team\s*)?(?:miles?|mi\b)/gi);
+    const elevation = sumMatches(text, /(?:elevation|vert(?:ical)?|climb(?:ed|ing)?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:ft|feet|feet\s+climbed))/gi)
+      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:ft|feet)\s*(?:climbed|elevation|vert(?:ical)?)?/gi);
+    const stations = sumMatches(text, /(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?|work)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
+      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?)/gi);
+    const simulations = sumMatches(text, /(?:full|partial|race-flow|hyrox)?\s*(?:simulations?|sims?|rehearsals?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
+      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:full|partial|race-flow|hyrox)?\s*(?:simulations?|sims?|rehearsals?)/gi);
+
+    return { miles, elevation, stations, simulations };
+  };
+
+  const formatProgressValue = (key, value) => {
+    const rounded = key === 'miles' ? Math.round(value * 10) / 10 : Math.round(value);
+    const formatted = rounded.toLocaleString(undefined, { maximumFractionDigits: key === 'miles' ? 1 : 0 });
+    const target = progressTargets[key].toLocaleString();
+    if (key === 'miles') return `${formatted} / ${target} mi`;
+    if (key === 'elevation') return `${formatted} / ${target} ft`;
+    return `${formatted} / ${target}`;
+  };
+
+  const renderMissionProgress = () => {
+    const meter = document.querySelector('[data-mission-progress]');
+    if (!meter) return;
+
+    const reports = readReports();
+    const parsed = extractMissionProgress(reports);
+    let parsedCount = 0;
+    const percentages = [];
+
+    Object.entries(progressTargets).forEach(([key, target]) => {
+      const row = meter.querySelector(`[data-progress-row][data-goal="${key}"]`);
+      if (!row) return;
+      const parsedValue = parsed[key];
+      const hasParsedValue = Number.isFinite(parsedValue) && parsedValue > 0;
+      const value = hasParsedValue ? parsedValue : manualMeterValues[key];
+      if (hasParsedValue) parsedCount += 1;
+      const percent = Math.min(100, Math.max(0, (value / target) * 100));
+      percentages.push(percent);
+
+      const valueEl = row.querySelector('[data-progress-value]');
+      const bar = row.querySelector('[data-progress-bar]');
+      const track = row.querySelector('.progress-track');
+      const note = row.querySelector('.meter-note');
+      if (valueEl) valueEl.textContent = formatProgressValue(key, value);
+      if (bar) bar.style.width = `${percent}%`;
+      if (track) track.setAttribute('aria-valuenow', String(Math.round(value)));
+      if (note) {
+        note.classList.toggle('placeholder', !hasParsedValue);
+        note.textContent = hasParsedValue ? note.dataset.originalText || note.textContent : `${note.dataset.originalText || note.textContent} · manual placeholder`;
+        note.dataset.originalText = note.dataset.originalText || note.textContent.replace(' · manual placeholder', '');
+      }
+    });
+
+    const total = document.querySelector('[data-meter-total]');
+    if (total && percentages.length) {
+      total.textContent = String(Math.round(percentages.reduce((sum, value) => sum + value, 0) / percentages.length));
+    }
+
+    const source = document.querySelector('[data-meter-source]');
+    if (source) {
+      source.textContent = parsedCount > 0 ? `${parsedCount}/4 lanes parsed` : 'Manual placeholders';
+    }
+  };
+
   const clearReports = document.querySelector('[data-clear-reports]');
   if (clearReports) {
     const note = document.querySelector('[data-archive-note]');
@@ -350,6 +461,7 @@
         localStorage.removeItem(LEGACY_DRAFT_KEY);
         renderLatestReport();
         renderArchive();
+        renderMissionProgress();
         if (note) note.textContent = 'Local reports cleared. One clean fallback row is showing again.';
       } catch (error) {
         if (note) note.textContent = 'Unable to clear local reports in this browser.';
@@ -359,4 +471,5 @@
 
   renderLatestReport();
   renderArchive();
+  renderMissionProgress();
 })();
