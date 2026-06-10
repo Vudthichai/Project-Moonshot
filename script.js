@@ -93,6 +93,20 @@
     'Sub-60 starts with another controlled session.'
   ];
 
+  const renderCountdownQuotes = () => {
+    const quoteList = document.querySelector('[data-countdown-quotes]');
+    if (!quoteList) return;
+
+    quoteList.innerHTML = '';
+    dailyQuotes.forEach((quote) => {
+      const item = document.createElement('li');
+      item.textContent = quote;
+      quoteList.appendChild(item);
+    });
+  };
+
+  renderCountdownQuotes();
+
   if (countdown) {
     const fields = {
       days: countdown.querySelector('[data-days]'),
