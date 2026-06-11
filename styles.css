@@ -317,11 +317,20 @@ body.page-operators::after{background:radial-gradient(circle at 78% 18%,rgba(225
 .operator-ethos-section{background:linear-gradient(135deg,rgba(225,25,55,.22),rgba(255,176,0,.08) 46%,rgba(255,255,255,.04));border-color:rgba(255,176,0,.26);}
 .operator-ethos{max-width:900px;margin:0 auto;text-align:center;color:#fff;font-size:32px;}
 
+
+.export-button{background:linear-gradient(135deg,var(--red),#ff7a00);border-color:rgba(255,176,0,.52);box-shadow:0 0 0 1px rgba(255,176,0,.12) inset,0 10px 28px rgba(225,25,55,.22);}
+.export-button:hover{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(255,176,0,.18) inset,0 14px 34px rgba(225,25,55,.28);}
+.operator-journal-section{background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(225,25,55,.09) 50%,rgba(255,176,0,.045));border-color:rgba(255,176,0,.24);}
+.operator-journal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px;}
+.operator-journal-card h3{margin:4px 0 0;color:#fff;font-size:24px;text-transform:uppercase;letter-spacing:-.03em;}
+.operator-journal-body .operator-entry-field.wide,.operator-entry-field.wide{grid-column:1 / -1;}
+.operator-journal-inputs textarea{min-height:118px;}
+
 @media (max-width:850px){
   body.page-operators{--page-bg-position:center center;}
   body.page-operators::after{background:linear-gradient(180deg,rgba(5,5,5,.84),rgba(5,5,5,.74));}
   .operators-hero{min-height:460px;background-position:center center;padding-top:220px;}
-  .operator-card-grid,.operator-mission-grid,.operator-stat-grid,.kenny-stat-grid,.vudi-stat-grid,.operator-summary-grid,.operator-timeline,.operator-metadata,.vudi-metadata,.evidence-metadata,.operator-entry-card .archive-card-body{grid-template-columns:1fr;}
+  .operator-card-grid,.operator-mission-grid,.operator-journal-grid,.operator-stat-grid,.kenny-stat-grid,.vudi-stat-grid,.operator-summary-grid,.operator-timeline,.operator-metadata,.vudi-metadata,.evidence-metadata,.operator-entry-card .archive-card-body{grid-template-columns:1fr;}
   .operator-card-header,.operator-form-title{flex-direction:column;}
   .operator-ethos{font-size:24px;}
 }
