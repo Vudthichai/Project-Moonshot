@@ -889,30 +889,32 @@ ${contentHtml}
     },
     vudi: {
       id: 'vudi',
+      profileVersion: 'vudi-ultra-1',
       name: 'Vudi Phothisuk',
-      missionName: 'HYROX Build',
+      missionName: 'ULTRA 1',
+      currentMission: '30 Mile Mountain Run',
       raceDate: 'TBD',
       status: 'Active',
       missionHealth: '🟢 ON TRACK',
-      currentChallenge: 'Build run durability while keeping station power repeatable.',
-      futureMissions: 'HYROX / Endurance Base / Strength Standard',
+      currentChallenge: '30 Mile Mountain Run',
+      futureMissions: 'HYROX 60 / 50K / 50 Mile / Mountain Ultra',
       progressPercent: 18,
       currentWeek: 1,
       totalWeeks: 8,
-      currentMiles: 34,
-      targetMiles: 45,
+      currentMiles: 0,
+      targetMiles: 30,
       longestRun: 'TBD',
-      heroSubtitle: ' A private mission dossier for converting training proof into sharper race choices.',
+      heroSubtitle: ' A private mission journal for the 30 Mile Mountain Run and the bigger mountain-ultra arc beyond it.',
       trainingBlocks: [
-        { week: 'Week 1', title: 'Baseline Capture', miles: 'Run + station proof', state: 'active' },
-        { week: 'Week 2', title: 'Run-Station Rhythm', miles: 'Planned', state: 'upcoming' },
-        { week: 'Week 3', title: 'Compromised Running', miles: 'Planned', state: 'upcoming' },
-        { week: 'Week 4', title: 'Benchmark Week', miles: 'Planned', state: 'upcoming' }
+        { week: 'Week 1', title: 'Mountain Base', miles: '30 Mile Mountain Run prep', state: 'active' },
+        { week: 'Week 2', title: 'Climb + Fueling', miles: 'Planned', state: 'upcoming' },
+        { week: 'Week 3', title: 'Long Run Confidence', miles: 'Planned', state: 'upcoming' },
+        { week: 'Week 4', title: 'Mountain Ultra Readiness', miles: 'Planned', state: 'upcoming' }
       ],
       checkpoints: [
-        { title: 'BASELINE', date: 'TBD', evidence: 'Initial run and station markers.', takeaway: 'Know the starting standard.' },
-        { title: 'RUN-STATION RHYTHM', date: 'TBD', evidence: 'First clean compromised session.', takeaway: 'Recover while moving.' },
-        { title: 'BENCHMARK WEEK', date: 'TBD', evidence: 'Repeatable race markers.', takeaway: 'Let proof set the next target.' }
+        { title: 'BASELINE', date: 'TBD', evidence: 'Initial mountain-run markers.', takeaway: 'Know the starting standard.' },
+        { title: 'FUELING TEST', date: 'TBD', evidence: 'Nutrition tested before fatigue decides.', takeaway: 'Fuel earlier and make it repeatable.' },
+        { title: 'MOUNTAIN CONFIDENCE', date: 'TBD', evidence: 'Long-run proof on terrain.', takeaway: 'Let distance become familiar.' }
       ]
     }
   };
@@ -958,12 +960,14 @@ ${contentHtml}
     const id = normalizeOperator(operatorId);
     const fallback = operatorProfiles[id];
     const saved = readOperatorsStore()[id] || {};
+    const savedMatchesProfileVersion = !fallback.profileVersion || saved.profileVersion === fallback.profileVersion;
+    const base = savedMatchesProfileVersion ? { ...fallback, ...saved } : { ...fallback, missionLog: saved.missionLog };
     return {
-      ...fallback,
-      ...saved,
+      ...base,
       id,
-      trainingBlocks: saved.trainingBlocks || fallback.trainingBlocks,
-      checkpoints: saved.checkpoints || fallback.checkpoints,
+      profileVersion: fallback.profileVersion,
+      trainingBlocks: savedMatchesProfileVersion && saved.trainingBlocks ? saved.trainingBlocks : fallback.trainingBlocks,
+      checkpoints: savedMatchesProfileVersion && saved.checkpoints ? saved.checkpoints : fallback.checkpoints,
       missionLog: Array.isArray(saved.missionLog) ? saved.missionLog : []
     };
   };
@@ -1063,14 +1067,14 @@ ${contentHtml}
     if (!records.length) {
       const empty = document.createElement('p');
       empty.className = 'empty-record-note';
-      empty.textContent = 'No captain\'s log entries yet. Add the next meaningful signal to the permanent record.';
+      empty.textContent = 'No operator insights yet. Add the next mission journal entry.';
       list.appendChild(empty);
       return;
     }
     records.forEach((record) => {
       const card = document.createElement('article');
       card.className = 'operator-record-card captain-log-card';
-      card.innerHTML = `<div class="operator-record-date"><span>${escapeHtml(longRecordDate(record.savedAt))}</span><strong>${escapeHtml(recordTime(record.savedAt))}</strong></div><p class="captain-log-entry">${escapeHtml(record.entry || 'TBD')}</p>`;
+      card.innerHTML = `<div class="operator-record-date">${escapeHtml(longRecordDate(record.savedAt))}</div><p class="captain-log-entry">${escapeHtml(record.entry || 'TBD')}</p>`;
       list.appendChild(card);
     });
   };
@@ -1078,7 +1082,7 @@ ${contentHtml}
   const buildDossierPrintHtml = (profile) => {
     const generated = new Date();
     const timelineRows = (profile.trainingBlocks || []).map((block) => `<tr><td>${escapeHtml(block.week || '')}</td><td>${escapeHtml(block.title || '')}</td><td>${escapeHtml(block.miles || '')}</td><td>${escapeHtml(block.state || '')}</td></tr>`).join('');
-    const logRows = (profile.missionLog || []).map(legacyEntryToMissionLog).map((record) => `<article class="log-entry"><h3>${escapeHtml(longRecordDate(record.savedAt))}</h3><time>${escapeHtml(recordTime(record.savedAt))}</time><p>${escapeHtml(record.entry || 'TBD')}</p></article>`).join('') || '<p>No captain\'s log entries recorded.</p>';
+    const logRows = (profile.missionLog || []).map(legacyEntryToMissionLog).map((record) => `<article class="log-entry"><h3>${escapeHtml(longRecordDate(record.savedAt))}</h3><time>${escapeHtml(recordTime(record.savedAt))}</time><p>${escapeHtml(record.entry || 'TBD')}</p></article>`).join('') || '<p>No operator insights recorded.</p>';
     return `<!DOCTYPE html><html><head><title>Operator Dossier // ${escapeHtml(profile.name)}</title><style>
       body{margin:0;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;line-height:1.45;}
       main{max-width:820px;margin:0 auto;padding:48px 40px;}
@@ -1110,7 +1114,7 @@ ${contentHtml}
         <div class="field"><span class="label">Future Missions</span><strong>${escapeHtml(profile.futureMissions)}</strong></div>
       </div></section>
       <section><h3>Timeline</h3><table><thead><tr><th>Phase</th><th>Mission Focus</th><th>Target</th><th>Status</th></tr></thead><tbody>${timelineRows}</tbody></table></section>
-      <section><h3>Captain's Log Entries</h3>${logRows}</section>
+      <section><h3>Operator Insights</h3>${logRows}</section>
       <div class="generated">Generation Date: ${escapeHtml(generated.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }))}</div>
     </main><script>window.addEventListener('load',()=>{window.print();});<\/script></body></html>`;
   };
@@ -1136,8 +1140,8 @@ ${contentHtml}
     setText('[data-operator-name]', formatOperatorName(profile.name).toUpperCase());
     setText('[data-hero-mission]', profile.missionName || 'New Mission');
     setText('[data-hero-subtitle]', profile.heroSubtitle || ' A private mission dashboard.');
-    setText('[data-hero-current-mission]', profile.missionName || 'New Mission');
-    setText('[data-hero-current-challenge]', profile.currentChallenge || 'TBD');
+    setText('[data-hero-current-mission]', profile.currentMission || profile.currentChallenge || profile.missionName || 'New Mission');
+    setText('[data-hero-current-challenge]', profile.currentMission || profile.currentChallenge || 'TBD');
     setText('[data-hero-target-date]', profile.raceDate || 'TBD');
     setText('[data-hero-status]', profile.status || 'Draft');
     setText('[data-hero-health]', profile.missionHealth || '🟡 WATCH');
@@ -1152,7 +1156,7 @@ ${contentHtml}
     const bar = document.querySelector('[data-progress-bar]');
     if (bar) bar.style.width = `${percent}%`;
 
-    fillNamedFields(document.querySelector('[data-mission-brief-form]'), profile);
+    fillNamedFields(document.querySelector('[data-mission-brief-form]'), { ...profile, currentMission: profile.currentMission || profile.currentChallenge || '' });
     renderWeekProgressRow(profile);
     renderTimeline(profile);
     renderMissionLog(profile);
@@ -1177,7 +1181,9 @@ ${contentHtml}
       missionBriefForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const existing = readOperatorData(currentOperator);
-        writeOperatorData(currentOperator, { ...existing, ...collectForm(missionBriefForm) });
+        const updates = collectForm(missionBriefForm);
+        if (updates.currentMission) updates.currentChallenge = updates.currentMission;
+        writeOperatorData(currentOperator, { ...existing, ...updates });
         renderOperatorDashboard(currentOperator);
         const note = document.querySelector('[data-mission-brief-note]');
         if (note) note.textContent = 'Mission brief updated.';
@@ -1202,7 +1208,15 @@ ${contentHtml}
         clearForm(form);
         renderOperatorDashboard(currentOperator);
         const note = document.querySelector('[data-mission-log-note]');
-        if (note) note.textContent = 'Entry added to the record.';
+        if (note) {
+          note.textContent = '✓ Added to Record';
+          note.classList.add('is-visible');
+          window.clearTimeout(note._fadeTimer);
+          note._fadeTimer = window.setTimeout(() => {
+            note.classList.remove('is-visible');
+            note.textContent = '';
+          }, 3200);
+        }
       });
     };
 
