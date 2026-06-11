@@ -425,23 +425,23 @@
   .print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;padding:12px;background:rgba(5,5,5,.82);backdrop-filter:blur(14px)}button{border:1px solid rgba(225,25,55,.62);border-radius:999px;background:var(--red);color:white;padding:11px 16px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;cursor:pointer}
   .record-body{display:grid;gap:16px;padding:22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field,.metric,.progress-card{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:15px}.field.wide{grid-column:1/-1}.field .label,.metric span{display:block;margin-bottom:6px;color:#aeb4bf;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:900}.field .value{font-size:14px;color:#f7f8fa}.metric strong{display:block;color:#fff;font-size:24px;line-height:1}.mission-seal{border:1px solid rgba(255,176,0,.32);border-radius:18px;padding:14px;color:#f7d681;background:rgba(255,176,0,.07);font-weight:800}.progress-row{margin:10px 0}.progress-head{display:flex;justify-content:space-between;font-weight:900}.bar{height:9px;border-radius:999px;background:rgba(255,255,255,.13);overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--amber))}
   @media (max-width:720px){body{padding:14px}.record-top,.grid{display:block}.field,.metric{margin-bottom:12px}.record h1{font-size:30px}}
-  @page{size:Letter;margin:.4in}
+  @page{size:Letter;margin:.35in}
   @media print{
-    :root{color-scheme:light;--ink:#111214;--panel:#fff;--line:#222}
-    html,body{width:100%;min-height:auto;background:#fff!important;color:#111214!important;padding:0!important;margin:0!important;font:9.5pt/1.34 Inter,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;overflow:visible!important}
-    body::before,body::after,.print-actions,button{display:none!important}
-    body.scorecard-print{display:block;background:#fff!important}
+    :root{color-scheme:light;--red:#e11d48;--amber:#d99000;--ink:#111;--panel:#fff;--line:#d7d7d7}
+    html,body{width:100%;min-height:auto;background:#fff!important;color:#111!important;padding:0!important;margin:0!important;font:9pt/1.25 Inter,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;overflow:visible!important}
+    body::before,body::after,.print-actions,button,.background-layer{display:none!important}
+    body.scorecard-print{display:block;background:#fff!important;color:#111!important}
     *{box-shadow:none!important;text-shadow:none!important;overflow:visible!important}
-    .record{display:block;width:100%!important;max-width:none!important;margin:0 auto!important;border:1px solid #222;border-radius:0;background:#fff!important;box-shadow:none!important;transform:none!important;overflow:visible!important;page-break-inside:avoid;break-inside:avoid}
-    .record-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:0 0 10px;margin:0 0 10px;border-bottom:2px solid var(--red);background:#fff!important;page-break-inside:avoid;break-inside:avoid}
-    .eyebrow{color:var(--red)!important;font-size:8pt;letter-spacing:.14em}.record h1{color:#111214!important;font-size:24pt;line-height:.9;margin:4px 0 0}.record h2{color:var(--red)!important;font-size:10pt;margin:0 0 6px;letter-spacing:.12em}
-    .mission-seal{border:1px solid var(--amber);border-radius:10px;padding:8px;color:#111214!important;background:#fff8e5!important;font-size:8.5pt;line-height:1.3;page-break-inside:avoid;break-inside:avoid}
-    .record-body{display:grid;gap:9px;padding:0;background:#fff!important;page-break-inside:avoid;break-inside:avoid}
-    .scorecard-section,.record-body>.grid,.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;page-break-inside:avoid;break-inside:avoid}
-    .scorecard-section,.detected-signals,.progress-card{page-break-inside:avoid;break-inside:avoid}
-    .field,.metric,.progress-card,.progress-row{page-break-inside:avoid;break-inside:avoid;background:#fff!important;border:1px solid #2b2f36;color:#111214!important;border-radius:10px;padding:8px}
-    .field.wide{grid-column:1/-1}.field .label,.metric span{color:#4b5563!important;font-size:7.5pt;margin-bottom:3px;letter-spacing:.12em}.field .value{color:#111214!important;font-size:9pt}.metric strong{color:#111214!important;font-size:16pt;line-height:1.05}
-    .progress-card{border-color:var(--amber);background:#fffdf7!important}.progress-row{margin:6px 0;padding:0;border:0;border-radius:0}.progress-head{color:#111214!important;font-size:8.5pt}.bar{height:7px;border:1px solid #2b2f36;background:#fff!important;border-radius:999px;overflow:hidden!important}.bar span{background:linear-gradient(90deg,var(--red),var(--amber))!important}
+    .record{display:block;width:100%!important;max-width:none!important;margin:0!important;padding:.18in!important;border:1px solid #ddd!important;border-radius:8px;background:#fff!important;color:#111!important;box-shadow:none!important;transform:none!important;overflow:visible!important;page-break-inside:avoid;break-inside:avoid}
+    .record *{color:#111!important;box-shadow:none!important}
+    .record-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:0 0 8px;margin:0 0 8px;border-bottom:2px solid var(--red);background:#fff!important;page-break-inside:avoid;break-inside:avoid}
+    .eyebrow{color:var(--amber)!important;font-size:7.5pt;letter-spacing:.13em}.record h1{color:var(--red)!important;font-size:21pt;line-height:1;margin:3px 0 0}.record h2{color:var(--red)!important;font-size:9.5pt;line-height:1.1;margin:0 0 5px;letter-spacing:.12em}.detected-signals h2{color:var(--amber)!important}
+    .mission-seal{border:1px solid var(--amber);border-radius:8px;padding:6px;color:#111!important;background:#fff8e5!important;font-size:7.7pt;line-height:1.2;font-weight:900;page-break-inside:avoid;break-inside:avoid}
+    .record-body{display:grid;gap:7px;padding:0;background:#fff!important;page-break-inside:avoid;break-inside:avoid}
+    .scorecard-section,.record-body>.grid,.grid,.detected-grid,.progress-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;page-break-inside:avoid;break-inside:avoid}
+    .scorecard-section,.detected-signals,.progress-card{page-break-inside:avoid;break-inside:avoid;background:#fff!important;border:1px solid #d7d7d7!important;border-radius:8px!important;padding:7px!important;margin:0!important}
+    .field,.metric,.progress-row{page-break-inside:avoid;break-inside:avoid;background:#fff!important;border:1px solid #d7d7d7!important;color:#111!important;border-radius:7px!important;padding:6px!important;margin:0!important}
+    .field.wide{grid-column:1/-1}.field .label,.metric span,.progress-head span:first-child{display:block;color:#4b5563!important;font-size:7pt!important;line-height:1.1!important;margin-bottom:2px;text-transform:uppercase;letter-spacing:.11em;font-weight:950}.field .value{color:#111!important;font-size:8.4pt!important;line-height:1.22!important}.metric strong{display:block;color:#111!important;font-size:13pt!important;line-height:1.05;font-weight:950}.progress-card{border-color:var(--amber)!important;background:#fffdf7!important}.progress-card h2{grid-column:1/-1;color:var(--red)!important}.progress-row{border-color:#ead8a8!important;background:#fff!important}.progress-head{display:flex;justify-content:space-between;gap:8px;color:#111!important;font-size:7.7pt!important;line-height:1.1!important;font-weight:950}.progress-head span:last-child{color:#111!important;font-weight:950;white-space:nowrap}.bar{height:5px;margin-top:4px;border:1px solid #b9b9b9;background:#fff!important;border-radius:999px;overflow:hidden!important}.bar span{background:linear-gradient(90deg,var(--red),var(--amber))!important}
   }
 </style>
 </head>
@@ -480,8 +480,8 @@ ${contentHtml}
             <div class="field"><div class="label">Next Orders</div><div class="value">${escapeHtml(normalized.nextOrders)}</div></div>
             <div class="field wide"><div class="label">Generated Summary</div><div class="value">${escapeHtml(summaryText)}</div></div>
           </div>
-          <div class="detected-signals"><h2>Detected Signals</h2><div class="grid"><div class="metric"><span>Detected Miles</span><strong>${escapeHtml(formatLogValue('miles', parsed.miles))}</strong></div><div class="metric"><span>Detected Elevation</span><strong>${escapeHtml(formatLogValue('elevation', parsed.elevation))}</strong></div><div class="metric"><span>Detected HYROX Stations</span><strong>${escapeHtml(stations)}</strong></div><div class="metric"><span>Detected Simulations</span><strong>${escapeHtml(formatLogValue('simulations', parsed.simulations))}</strong></div></div></div>
-          <div class="progress-card"><h2>Progress Toward Goals</h2>${progressRowsHtml(parsed)}</div>
+          <div class="detected-signals"><h2>Detected Signals</h2><div class="grid detected-grid"><div class="metric"><span>Detected Miles</span><strong>${escapeHtml(formatLogValue('miles', parsed.miles))}</strong></div><div class="metric"><span>Detected Elevation</span><strong>${escapeHtml(formatLogValue('elevation', parsed.elevation))}</strong></div><div class="metric"><span>Detected HYROX Stations</span><strong>${escapeHtml(stations)}</strong></div><div class="metric"><span>Detected Simulations</span><strong>${escapeHtml(formatLogValue('simulations', parsed.simulations))}</strong></div></div></div>
+          <div class="progress-card progress-grid"><h2>Progress Toward Goals</h2>${progressRowsHtml(parsed)}</div>
         </section>
       </main>`
     );
