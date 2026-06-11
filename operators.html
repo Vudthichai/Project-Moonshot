@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KENNY SCHRADER // Project Moonshot Operators</title>
+<title>Operators // Project Moonshot</title>
 <link rel="stylesheet" href="styles.css" />
 <script src="script.js" defer></script>
 </head>
 <body class="page-operators">
 <div class="doc operators-doc" data-operator-app>
-  <nav class="site-nav" aria-label="Project Moonshot navigation">
+  <nav class="site-nav operator-nav" aria-label="Project Moonshot navigation">
     <button class="mobile-menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav-links" data-mobile-nav-toggle>
       <span></span>
       <span></span>
@@ -23,162 +23,110 @@
       <a href="resources.html">Resources</a>
       <a class="active" href="operators.html">OPERATORS</a>
     </div>
+    <label class="operator-selector-shell" aria-label="Current operator">
+      <span>Operator</span>
+      <select data-operator-selector>
+        <option value="kenny">KENNY SCHRADER</option>
+        <option value="vudi">VUDI PHOTHISUK</option>
+        <option value="ryan">RYAN SMITH</option>
+        <option value="new">+ NEW OPERATOR</option>
+      </select>
+    </label>
   </nav>
 
   <section class="hero operators-hero kenny-operator-hero">
-    <div class="eyebrow">Operator File // Active</div>
-    <h1>KENNY SCHRADER</h1>
-    <div class="subtitle"><strong>50 Mile Ultra</strong> — a live mission record for Kenny’s first 50-mile ultra and the bigger endurance arc beyond it.</div>
+    <div class="eyebrow" data-hero-eyebrow>Operator File // Active</div>
+    <h1 data-operator-name>KENNY SCHRADER</h1>
+    <div class="subtitle"><strong data-hero-mission>50 Mile Ultra</strong><span data-hero-subtitle> A private mission record for the current challenge and the bigger endurance arc beyond it.</span></div>
     <div class="meta operator-hero-tiles">
-      <div class="meta-card"><div class="label">Current Mission</div><div class="value">50 Mile Ultra</div></div>
-      <div class="meta-card"><div class="label">Target Date</div><div class="value">July 4, 2026</div></div>
-      <div class="meta-card"><div class="label">Status</div><div class="value">Active</div></div>
-      <div class="meta-card"><div class="label">Future Missions</div><div class="value">HYROX / 70.3 / Full Ironman / Moab</div></div>
+      <div class="meta-card"><div class="label">Current Mission</div><div class="value" data-hero-current-mission>50 Mile Ultra</div></div>
+      <div class="meta-card"><div class="label">Current Challenge</div><div class="value" data-hero-current-challenge>Week 5 complete. Building toward peak fatigue.</div></div>
+      <div class="meta-card"><div class="label">Target Date</div><div class="value" data-hero-target-date>July 4, 2026</div></div>
+      <div class="meta-card"><div class="label">Status</div><div class="value" data-hero-status>Active</div></div>
+      <div class="meta-card"><div class="label">Future Missions</div><div class="value" data-hero-future>HYROX / 70.3 / Full Ironman / Moab</div></div>
     </div>
   </section>
 
-  <section class="section operator-intro-section">
-    <div class="section-header operator-section-header"><h2>Private Mission Sandbox</h2><span class="tag">Evidence over performance theater</span></div>
-    <p class="operator-principle">This is not Strava. This is not a generic athlete profile. This is a private operator record for Kenny to record, remember, reflect, and track who he becomes through hard challenges.</p>
-  </section>
-
-  <form class="operator-sandbox-form" data-operator-mission-form data-operator-id="kenny">
-    <section class="section light operator-edit-section why-mission-section">
-      <div class="section-header"><h2>WHY THIS MISSION</h2><span class="tag">Editable localStorage</span></div>
-      <p class="mission-copy">This is not just about finishing fifty miles. The mission is to find out what happens when preparation, patience, discomfort, and belief all have to hold for longer than motivation can last.</p>
-      <div class="operator-field-grid why-field-grid">
-        <label class="operator-edit-card"><span>Why I started</span><textarea name="whyStarted" id="kennyWhyStarted"></textarea></label>
-        <label class="operator-edit-card"><span>What I’m trying to prove to myself</span><textarea name="proveToMyself" id="kennyProveToMyself"></textarea></label>
-        <label class="operator-edit-card"><span>What I want to remember</span><textarea name="wantToRemember" id="kennyWantToRemember"></textarea></label>
-        <label class="operator-edit-card"><span>What I’m afraid of</span><textarea name="afraidOf" id="kennyAfraidOf"></textarea></label>
-        <label class="operator-edit-card wide"><span>What finishing would mean</span><textarea name="finishingMeaning" id="kennyFinishingMeaning"></textarea></label>
-      </div>
-    </section>
-
-    <section class="section mission-brief-section">
-      <div class="section-header"><h2>MISSION BRIEF</h2><span class="tag">Operating parameters</span></div>
-      <div class="operator-brief-grid">
-        <label class="operator-brief-tile"><span>Challenge</span><input name="missionName" id="kennyMissionName" /></label>
-        <label class="operator-brief-tile"><span>Date</span><input name="raceDate" id="kennyRaceDate" /></label>
-        <label class="operator-brief-tile"><span>Status</span><input name="status" id="kennyStatus" /></label>
-        <label class="operator-brief-tile"><span>Terrain</span><input name="terrain" id="kennyTerrain" /></label>
-        <label class="operator-brief-tile"><span>Success Criteria</span><input name="successCriteria" id="kennySuccessCriteria" /></label>
-        <label class="operator-brief-tile"><span>Constraint</span><input name="constraint" id="kennyConstraint" /></label>
-        <label class="operator-brief-tile wide"><span>Bigger Arc</span><input name="biggerArc" id="kennyBiggerArc" /></label>
-      </div>
-    </section>
-
-    <section class="section light preparation-plan-section">
-      <div class="section-header"><h2>PREPARATION PLAN</h2><span class="tag">Placeholder values for refinement</span></div>
-      <div class="operator-plan-grid">
-        <label class="operator-edit-card"><span>Long Run Build</span><textarea name="longRunBuild" id="kennyLongRunBuild"></textarea></label>
-        <label class="operator-edit-card"><span>Weekly Mileage</span><textarea name="weeklyMileage" id="kennyWeeklyMileage"></textarea></label>
-        <label class="operator-edit-card"><span>Elevation / Terrain</span><textarea name="elevationTerrain" id="kennyElevationTerrain"></textarea></label>
-        <label class="operator-edit-card"><span>Fueling Practice</span><textarea name="fuelingPractice" id="kennyFuelingPractice"></textarea></label>
-        <label class="operator-edit-card"><span>Recovery Discipline</span><textarea name="recoveryDiscipline" id="kennyRecoveryDiscipline"></textarea></label>
-        <label class="operator-edit-card"><span>Mental Checkpoints</span><textarea name="mentalCheckpoints" id="kennyMentalCheckpoints"></textarea></label>
-      </div>
-    </section>
-
-    <section class="section checkpoints-section">
-      <div class="section-header"><h2>CHECKPOINTS</h2><span class="tag">Timeline cards</span></div>
-      <div class="checkpoint-timeline">
-        <article class="checkpoint-card">
-          <div class="checkpoint-title"><span>Checkpoint 01</span><strong>Baseline</strong></div>
-          <label>Date<input name="checkpoint01Date" /></label>
-          <label>Evidence<textarea name="checkpoint01Evidence"></textarea></label>
-          <label>Lesson<textarea name="checkpoint01Lesson"></textarea></label>
-          <label>Next Order<textarea name="checkpoint01NextOrder"></textarea></label>
-        </article>
-        <article class="checkpoint-card">
-          <div class="checkpoint-title"><span>Checkpoint 02</span><strong>Long Run Confidence</strong></div>
-          <label>Date<input name="checkpoint02Date" /></label>
-          <label>Evidence<textarea name="checkpoint02Evidence"></textarea></label>
-          <label>Lesson<textarea name="checkpoint02Lesson"></textarea></label>
-          <label>Next Order<textarea name="checkpoint02NextOrder"></textarea></label>
-        </article>
-        <article class="checkpoint-card">
-          <div class="checkpoint-title"><span>Checkpoint 03</span><strong>Fueling Test</strong></div>
-          <label>Date<input name="checkpoint03Date" /></label>
-          <label>Evidence<textarea name="checkpoint03Evidence"></textarea></label>
-          <label>Lesson<textarea name="checkpoint03Lesson"></textarea></label>
-          <label>Next Order<textarea name="checkpoint03NextOrder"></textarea></label>
-        </article>
-        <article class="checkpoint-card">
-          <div class="checkpoint-title"><span>Checkpoint 04</span><strong>Final Taper</strong></div>
-          <label>Date<input name="checkpoint04Date" /></label>
-          <label>Evidence<textarea name="checkpoint04Evidence"></textarea></label>
-          <label>Lesson<textarea name="checkpoint04Lesson"></textarea></label>
-          <label>Next Order<textarea name="checkpoint04NextOrder"></textarea></label>
-        </article>
-        <article class="checkpoint-card">
-          <div class="checkpoint-title"><span>Checkpoint 05</span><strong>Race Reflection</strong></div>
-          <label>Date<input name="checkpoint05Date" /></label>
-          <label>Evidence<textarea name="checkpoint05Evidence"></textarea></label>
-          <label>Lesson<textarea name="checkpoint05Lesson"></textarea></label>
-          <label>Next Order<textarea name="checkpoint05NextOrder"></textarea></label>
-        </article>
-      </div>
-    </section>
-
-    <section class="section light operator-evidence-section">
-      <div class="section-header"><h2>EVIDENCE LOG</h2><span class="tag">What mattered</span></div>
-      <p class="light-note">This does not replace Strava. This summarizes what mattered.</p>
-      <div class="operator-field-grid evidence-log-grid">
-        <label class="operator-edit-card"><span>Key runs</span><textarea name="keyRuns"></textarea></label>
-        <label class="operator-edit-card"><span>Longest run</span><textarea name="longestRun"></textarea></label>
-        <label class="operator-edit-card"><span>Weekly volume</span><textarea name="weeklyVolume"></textarea></label>
-        <label class="operator-edit-card"><span>Terrain notes</span><textarea name="terrainNotes"></textarea></label>
-        <label class="operator-edit-card"><span>Recovery notes</span><textarea name="recoveryNotes"></textarea></label>
-        <label class="operator-edit-card"><span>Links / screenshots</span><textarea name="linksScreenshots"></textarea></label>
-        <label class="operator-edit-card wide red-flag-card"><span>Red flags</span><textarea name="redFlags"></textarea></label>
-      </div>
-    </section>
-
-    <section class="section lessons-section">
-      <div class="section-header"><h2>LESSONS LEARNED</h2><span class="tag">Transformation record</span></div>
-      <div class="operator-lessons-grid">
-        <label class="operator-edit-card lesson-card"><span>Body</span><textarea name="lessonBody"></textarea></label>
-        <label class="operator-edit-card lesson-card"><span>Mind</span><textarea name="lessonMind"></textarea></label>
-        <label class="operator-edit-card lesson-card"><span>Pacing</span><textarea name="lessonPacing"></textarea></label>
-        <label class="operator-edit-card lesson-card"><span>Fueling</span><textarea name="lessonFueling"></textarea></label>
-        <label class="operator-edit-card lesson-card"><span>Fear</span><textarea name="lessonFear"></textarea></label>
-        <label class="operator-edit-card lesson-card"><span>Confidence</span><textarea name="lessonConfidence"></textarea></label>
-      </div>
-    </section>
-
-    <section class="section operator-export-section">
-      <div class="export-panel premium-card">
-        <div>
-          <div class="eyebrow">Operator Record // PDF-friendly</div>
-          <h2>EXPORT KENNY RECORD</h2>
-          <p>Save the current sandbox first, then open an ink-friendly Project Moonshot operator record with the hero info, why section, mission brief, checkpoints, evidence log, and lessons learned.</p>
+  <form class="operator-sandbox-form mission-brief-form" data-mission-brief-form>
+    <section class="section mission-brief-section dashboard-priority-section">
+      <div class="section-header"><h2>MISSION BRIEF</h2><span class="tag">Progress → Reflection → Decisions</span></div>
+      <div class="mission-dashboard-grid">
+        <div class="mission-progress-panel">
+          <div class="mission-progress-topline">
+            <div>
+              <div class="eyebrow">Mission Progress</div>
+              <strong data-progress-percent>52%</strong>
+            </div>
+            <span data-progress-week>Week 5 / 9</span>
+          </div>
+          <div class="mission-progress-track" aria-label="Mission progress"><span data-progress-bar style="width:52%"></span></div>
+          <div class="mission-progress-stats">
+            <div><span>Target Miles</span><strong data-progress-miles>31 of 60 target miles</strong></div>
+            <div><span>Longest Run</span><strong data-progress-longest>18 miles</strong></div>
+            <div><span>Race Day</span><strong data-progress-race>July 4, 2026</strong></div>
+          </div>
         </div>
-        <div class="mock-actions operator-save-actions">
-          <button class="button" type="submit">Save Kenny Sandbox</button>
-          <button class="button secondary export-button" type="button" data-operator-export="kenny">EXPORT KENNY RECORD</button>
-          <span class="light-note" data-operator-mission-note>Kenny record saves in this browser only.</span>
+        <div class="operator-brief-grid compact-brief-grid">
+          <label class="operator-brief-tile"><span>Challenge</span><input name="missionName" /></label>
+          <label class="operator-brief-tile"><span>Date</span><input name="raceDate" /></label>
+          <label class="operator-brief-tile"><span>Status</span><input name="status" /></label>
+          <label class="operator-brief-tile"><span>Current Challenge</span><input name="currentChallenge" /></label>
+          <label class="operator-brief-tile wide"><span>Future Missions</span><input name="futureMissions" /></label>
         </div>
+      </div>
+      <div class="mock-actions operator-save-actions brief-save-actions">
+        <button class="button" type="submit">Save Mission Brief</button>
+        <span class="light-note" data-mission-brief-note>Mission brief saves in this browser only.</span>
       </div>
     </section>
   </form>
 
   <section class="section mission-timeline-section">
-    <div class="section-header"><h2>Future Mission Arc</h2><span class="tag">Now / next / moonshot</span></div>
-    <div class="operator-timeline">
-      <div class="timeline-node active"><span>50 Mile Ultra</span><strong>Active</strong></div>
-      <div class="timeline-node support"><span>HYROX</span><strong>Future mission</strong></div>
-      <div class="timeline-node"><span>70.3</span><strong>Future</strong></div>
-      <div class="timeline-node"><span>Full Ironman</span><strong>Future</strong></div>
-      <div class="timeline-node moonshot"><span>Moab</span><strong>Long-term moonshot</strong></div>
-    </div>
+    <div class="section-header"><h2>MISSION TIMELINE</h2><span class="tag">Generated from training blocks</span></div>
+    <div class="training-timeline" data-training-timeline></div>
   </section>
 
-  <section class="section operator-ethos-section">
-    <p class="quote operator-ethos">“Strava records the work. This records what the work is turning you into.”</p>
+  <section class="section mission-log-section">
+    <div class="section-header"><h2>MISSION LOG</h2><span class="tag">Captain's log</span></div>
+    <form class="operator-log-form" data-mission-log-form>
+      <label class="operator-log-field"><span>Record what happened</span><textarea name="entry" placeholder="June 11&#10;&#10;Completed 18 mile run.&#10;&#10;Started tired. Felt strong after mile 8. Need better fueling before mile 10."></textarea></label>
+      <div class="mock-actions"><button class="button" type="submit">Save Entry</button><span class="light-note" data-mission-log-note>Entries appear newest first.</span></div>
+    </form>
+    <div class="record-card-list" data-mission-log-list></div>
   </section>
 
-  <div class="footer">Project Moonshot // Operators // Kenny Schrader Mission Sandbox</div>
+  <section class="section operator-insights-section">
+    <div class="section-header"><h2>OPERATOR INSIGHTS</h2><span class="tag">Reflection</span></div>
+    <form class="insight-form" data-insight-form>
+      <div class="three-field-grid">
+        <label class="operator-edit-card"><span>What Happened?</span><textarea name="whatHappened" placeholder="Completed first 18 mile long run."></textarea></label>
+        <label class="operator-edit-card"><span>What Happened For Me?</span><textarea name="whatHappenedForMe" placeholder="Built confidence that distance is no longer intimidating."></textarea></label>
+        <label class="operator-edit-card"><span>What Did I Learn?</span><textarea name="whatLearned" placeholder="I need fuel earlier than I think."></textarea></label>
+      </div>
+      <div class="mock-actions"><button class="button" type="submit">Save Insight</button><span class="light-note" data-insight-note>Insights become the transformation record.</span></div>
+    </form>
+    <div class="record-card-list three-card-list" data-insight-list></div>
+  </section>
+
+  <section class="section decisions-section">
+    <div class="section-header"><h2>DECISIONS MADE</h2><span class="tag">D-NAV signal</span></div>
+    <form class="decision-form" data-decision-form>
+      <div class="three-field-grid">
+        <label class="operator-edit-card"><span>Decision</span><textarea name="decision" placeholder="Move long runs to Fridays."></textarea></label>
+        <label class="operator-edit-card"><span>Reason</span><textarea name="reason" placeholder="Improves weekend recovery."></textarea></label>
+        <label class="operator-edit-card"><span>Result</span><textarea name="result" placeholder="Positive / Testing / Needs review."></textarea></label>
+      </div>
+      <div class="mock-actions"><button class="button" type="submit">Save Decision</button><span class="light-note" data-decision-note>Track meaningful calls and their outcomes.</span></div>
+    </form>
+    <div class="record-card-list three-card-list" data-decision-list></div>
+  </section>
+
+  <section class="section future-arc-section">
+    <div class="section-header"><h2>FUTURE MISSION ARC</h2><span class="tag">Now / next / moonshot</span></div>
+    <div class="operator-timeline" data-future-timeline></div>
+  </section>
+
+  <div class="footer">Project Moonshot // Operators // Private Mission Dashboard</div>
 </div>
 </body>
 </html>
