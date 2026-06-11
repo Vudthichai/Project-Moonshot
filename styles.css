@@ -108,7 +108,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}th,t
 .section.light .archive-field{background:#fbfbfa;border-color:#e3e5e9;}
 .section.light .archive-field-value{color:#343841;}
 
-.report-featured{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(18,19,22,.70),rgba(8,9,11,.58)),radial-gradient(circle at 92% 0%,rgba(255,176,0,.14),transparent 32%);color:var(--ink);border-color:rgba(255,176,0,.52);box-shadow:0 0 0 1px rgba(255,176,0,.12) inset,0 24px 70px rgba(0,0,0,.30),0 0 34px rgba(255,176,0,.08);backdrop-filter:blur(10px) saturate(125%);}
+.report-featured{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(18,19,22,.58),rgba(8,9,11,.48)),radial-gradient(circle at 92% 0%,rgba(255,176,0,.12),transparent 32%);color:var(--ink);border-color:rgba(255,176,0,.52);box-shadow:0 0 0 1px rgba(255,176,0,.12) inset,0 24px 70px rgba(0,0,0,.30),0 0 34px rgba(255,176,0,.08);backdrop-filter:blur(10px) saturate(125%);}
 .report-featured:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.026) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(90deg,rgba(0,0,0,.74),transparent);pointer-events:none;}
 .report-featured>*{position:relative;z-index:1;}
 .report-featured .section-header{border-bottom-color:rgba(255,176,0,.28);}
@@ -118,7 +118,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}th,t
 .report-featured table th{background:rgba(255,255,255,.045);border-bottom-color:rgba(255,255,255,.12);}
 .report-featured table td{border-bottom-color:rgba(255,255,255,.10);}
 .report-featured .latest-report-table tr.is-summary td:first-child,.report-featured .latest-report-table tr.is-headline td:nth-child(2){color:var(--amber);}
-.resource-command-links{background:linear-gradient(180deg,rgba(18,19,22,.66),rgba(8,9,11,.54));color:var(--ink);border-color:rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.24);backdrop-filter:blur(10px) saturate(122%);}
+.resource-command-links{background:linear-gradient(180deg,rgba(18,19,22,.54),rgba(8,9,11,.44));color:var(--ink);border-color:rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.24);backdrop-filter:blur(10px) saturate(122%);}
 .resource-command-links .section-header{border-bottom-color:rgba(255,255,255,.12);}
 .resource-command-links p,.resource-command-links li{color:#cdd1d8;}
 .resource-command-links h2,.resource-command-links h3{color:#fff;}
