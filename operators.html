@@ -28,8 +28,6 @@
       <select data-operator-selector>
         <option value="kenny">KENNY SCHRADER</option>
         <option value="vudi">VUDI PHOTHISUK</option>
-        <option value="ryan">RYAN SMITH</option>
-        <option value="new">+ NEW OPERATOR</option>
       </select>
     </label>
   </nav>
@@ -50,7 +48,7 @@
 
   <form class="operator-sandbox-form mission-brief-form" data-mission-brief-form>
     <section class="section mission-brief-section dashboard-priority-section">
-      <div class="section-header"><h2>MISSION BRIEF</h2><span class="tag">Progress → Reflection → Decisions</span></div>
+      <div class="section-header"><h2>MISSION BRIEF</h2><span class="tag">Mission → Progress → Record</span></div>
       <div class="mission-dashboard-grid">
         <div class="mission-progress-panel">
           <div class="mission-progress-topline">
@@ -83,7 +81,8 @@
       </div>
       <div class="mock-actions operator-save-actions brief-save-actions">
         <button class="button" type="submit">Save Mission Brief</button>
-        <span class="light-note" data-mission-brief-note>Mission brief saves in this browser only.</span>
+        <button class="button export-dossier-button" type="button" data-export-dossier>Export Dossier</button>
+        <span class="light-note" data-mission-brief-note>Mission brief updates the active dossier.</span>
       </div>
     </section>
   </form>
@@ -93,21 +92,18 @@
     <div class="training-timeline" data-training-timeline></div>
   </section>
 
-  <section class="section checkpoint-section">
-    <div class="section-header"><h2>CHECKPOINT TIMELINE</h2><span class="tag">Milestones and takeaways</span></div>
-    <div class="checkpoint-timeline" data-checkpoint-timeline></div>
-  </section>
 
   <section class="section mission-log-section">
-    <div class="section-header"><h2>MISSION LOG</h2><span class="tag">Progress → Reflection → Decisions</span></div>
+    <div class="section-header"><h2>CAPTAIN'S LOG</h2><span class="tag">Mission record // Newest first</span></div>
     <form class="operator-log-form" data-mission-log-form>
-      <div class="mission-log-grid">
-        <label class="operator-log-field"><span>What Happened?</span><textarea name="whatHappened" placeholder="Completed first 18-mile long run."></textarea></label>
-        <label class="operator-log-field"><span>What Changed?</span><textarea name="whatChanged" placeholder="Distance no longer feels intimidating."></textarea></label>
-        <label class="operator-log-field"><span>Decision</span><textarea name="decision" placeholder="Move long runs to Fridays."></textarea></label>
-        <label class="operator-log-field"><span>Next Action</span><textarea name="nextAction" placeholder="Practice fueling every 30 minutes."></textarea></label>
-      </div>
-      <div class="mock-actions"><button class="button" type="submit">Save Entry</button><span class="light-note" data-mission-log-note>Entries appear newest first.</span></div>
+      <label class="operator-log-field captain-log-field"><span>Captain's Log Entry</span><textarea name="entry" placeholder="Completed first 18 mile run.
+
+Started tired.
+
+Felt strong after mile 8.
+
+Need to fuel earlier."></textarea></label>
+      <div class="mock-actions"><button class="button" type="submit">Add To Record</button><span class="light-note" data-mission-log-note>Entries appear newest first.</span></div>
     </form>
     <div class="record-card-list mission-log-list" data-mission-log-list></div>
   </section>
