@@ -368,3 +368,48 @@ body.page-operators::after{background:radial-gradient(circle at 78% 18%,rgba(225
   .brand-mark{width:36px;height:36px;min-width:36px;}
   .mobile-menu-toggle{width:40px;height:40px;}
 }
+
+/* Kenny Operator Sandbox */
+body.page-operators{--page-bg-image:url("assets/ultra-1.jpg");--page-bg-position:right center;}
+.kenny-operator-hero{min-height:560px;background:linear-gradient(90deg,rgba(8,8,9,.96),rgba(12,13,15,.84) 48%,rgba(10,10,10,.24)),radial-gradient(circle at 72% 18%,rgba(225,25,55,.22),transparent 32%),linear-gradient(rgba(8,8,8,.36),rgba(8,8,8,.60)),url("assets/ultra-1.jpg");background-size:cover;background-position:right center;border-color:rgba(255,255,255,.18);box-shadow:0 38px 110px rgba(0,0,0,.56),0 0 90px rgba(225,25,55,.11) inset;}
+.kenny-operator-hero .subtitle strong{display:block;color:#fff;font-size:30px;line-height:1.05;text-transform:uppercase;letter-spacing:-.04em;margin-bottom:8px;}
+.operator-hero-tiles .meta-card{background:rgba(5,5,5,.52);backdrop-filter:blur(8px);}
+.operator-intro-section{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(225,25,55,.08),rgba(255,176,0,.045));border-color:rgba(255,176,0,.22);}
+.operator-principle{max-width:940px;margin:0;color:#f4f5f7;font-size:26px;line-height:1.18;font-weight:900;letter-spacing:-.045em;}
+.operator-sandbox-form{display:block;margin:0;padding:0;}
+.operator-sandbox-form input,.operator-sandbox-form textarea{width:100%;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(5,5,5,.45);color:#fff;padding:11px 12px;font:inherit;font-size:14px;outline:none;box-shadow:0 0 0 1px rgba(225,25,55,.04) inset;}
+.operator-sandbox-form textarea{min-height:108px;resize:vertical;}
+.operator-sandbox-form input:focus,.operator-sandbox-form textarea:focus{border-color:rgba(255,176,0,.54);box-shadow:0 0 0 3px rgba(255,176,0,.10);}
+.operator-sandbox-form .section.light{background:linear-gradient(180deg,rgba(244,246,250,.98),rgba(229,233,240,.96));color:#151619;border-color:rgba(255,255,255,.72);}
+.operator-sandbox-form .section.light h2,.operator-sandbox-form .section.light h3{color:#151619;}
+.operator-sandbox-form .section.light .tag{background:rgba(225,25,55,.08);color:#a51125;border-color:rgba(225,25,55,.20);}
+.operator-sandbox-form .section.light .mission-copy,.operator-sandbox-form .section.light .light-note{color:#555d68;}
+.operator-sandbox-form .section.light input,.operator-sandbox-form .section.light textarea{background:#fff;color:#151619;border-color:#d8dce4;box-shadow:0 10px 24px rgba(17,18,20,.04);}
+.mission-copy{max-width:900px;margin:0 0 18px;color:#d7d9de;font-size:19px;font-weight:750;letter-spacing:-.02em;}
+.operator-field-grid,.operator-plan-grid,.operator-lessons-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.operator-plan-grid,.operator-lessons-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.operator-edit-card,.operator-brief-tile{display:flex;flex-direction:column;gap:8px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.028));padding:15px;box-shadow:0 18px 44px rgba(0,0,0,.16);}
+.section.light .operator-edit-card{background:#fff;border-color:#d8dce4;box-shadow:0 12px 26px rgba(17,18,20,.06);}
+.operator-edit-card span,.operator-brief-tile span,.checkpoint-card label{color:#aeb3bc;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:950;}
+.section.light .operator-edit-card span{color:#5b6370;}
+.operator-edit-card.wide,.operator-brief-tile.wide,.red-flag-card{grid-column:1 / -1;}
+.operator-brief-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.operator-brief-tile{background:rgba(255,255,255,.055);}
+.checkpoint-timeline{display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:14px;overflow-x:auto;padding-bottom:4px;}
+.checkpoint-card{position:relative;display:flex;flex-direction:column;gap:10px;min-width:210px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.028));padding:16px;box-shadow:0 18px 44px rgba(0,0,0,.20);}
+.checkpoint-card:before{content:"";position:absolute;top:0;left:16px;right:16px;height:4px;border-radius:0 0 999px 999px;background:linear-gradient(90deg,var(--red2),var(--amber));}
+.checkpoint-title span{display:block;color:var(--amber);font-size:10px;text-transform:uppercase;letter-spacing:.16em;font-weight:950;}
+.checkpoint-title strong{display:block;color:#fff;font-size:19px;line-height:1.02;text-transform:uppercase;letter-spacing:-.03em;}
+.checkpoint-card label{display:flex;flex-direction:column;gap:6px;color:#aeb3bc;}
+.checkpoint-card textarea{min-height:74px;}
+.operator-evidence-section .red-flag-card{border-color:rgba(225,25,55,.30);}
+.lessons-section{background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(225,25,55,.07),rgba(255,176,0,.035));}
+.lesson-card textarea{min-height:132px;}
+.operator-export-section{padding:0;background:transparent;border:0;box-shadow:none;}
+.export-panel{display:flex;align-items:center;justify-content:space-between;gap:24px;border-color:rgba(255,176,0,.24);background:linear-gradient(135deg,rgba(225,25,55,.20),rgba(255,176,0,.08),rgba(255,255,255,.04));}
+.export-panel h2{margin:0;color:#fff;font-size:34px;letter-spacing:-.05em;}
+.export-panel p{max-width:650px;margin:10px 0 0;color:#d8dbe0;font-weight:750;}
+.operator-save-actions{flex:0 0 320px;justify-content:flex-end;}
+.operator-save-actions .light-note{width:100%;text-align:right;color:#b9bec7;}
+@media (max-width:1100px){.operator-plan-grid,.operator-lessons-grid,.operator-brief-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.checkpoint-timeline{grid-template-columns:repeat(3,minmax(220px,1fr));}}
+@media (max-width:850px){.kenny-operator-hero{min-height:460px;background-position:center center;padding-top:220px;}.operator-principle{font-size:21px;}.operator-field-grid,.operator-plan-grid,.operator-lessons-grid,.operator-brief-grid,.operator-hero-tiles{grid-template-columns:1fr;}.checkpoint-timeline{grid-template-columns:1fr;overflow:visible;}.export-panel{flex-direction:column;align-items:flex-start;}.operator-save-actions{flex:initial;width:100%;}.operator-save-actions .light-note{text-align:left;}}
