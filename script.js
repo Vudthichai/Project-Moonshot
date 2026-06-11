@@ -857,14 +857,62 @@ ${contentHtml}
       missionName: '50 Mile Ultra',
       raceDate: 'July 4, 2026',
       status: 'Active',
-      why: 'Finish the 50, learn what breaks, and carry the evidence forward into bigger race targets.',
+      terrain: 'Ultra endurance / long-duration effort',
+      successCriteria: 'Finish under own power',
+      constraint: 'Stay patient, stay fueled, keep moving',
+      biggerArc: 'HYROX → 70.3 → Full Ironman → Moab',
+      whyStarted: 'I started because the 50-mile distance demands a version of me that cannot be faked.',
+      proveToMyself: 'That I can stay composed when the effort outlasts motivation.',
+      wantToRemember: 'The decisions, evidence, and moments that show who I became before and after the race.',
+      afraidOf: 'Going out too fast, underfueling, letting pain become panic, or quitting on a solvable problem.',
+      finishingMeaning: 'Proof that patience, preparation, discomfort, and belief can hold for the full mission.',
+      why: 'This is not just about finishing fifty miles. The mission is to find out what happens when preparation, patience, discomfort, and belief all have to hold for longer than motivation can last.',
       targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
       currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
       nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.',
-      preparationPlan: 'Stack long-run durability, fueling practice, heat management, foot care, and post-run debriefs into one repeatable operating rhythm.',
-      checkpoints: 'Long-run durability check; nutrition tolerance check; recovery signal review; final gear and route plan.',
-      evidenceNotes: 'Weekly evidence entries should prove mileage, long-run durability, fueling decisions, recovery status, and problem-solving under fatigue.',
-      lessonsLearned: 'Respect the distance early. Record what breaks without drama, then convert the lesson into the next training order.'
+      longRunBuild: 'Placeholder: build the long run patiently, then prove time-on-feet confidence without racing training days.',
+      weeklyMileage: 'Placeholder: keep weekly volume honest, sustainable, and backed by recovery evidence.',
+      elevationTerrain: 'Placeholder: expose legs and feet to terrain stress without turning every run into a test.',
+      fuelingPractice: 'Placeholder: rehearse calories, fluids, salt, and stomach tolerance before race day.',
+      recoveryDiscipline: 'Placeholder: protect sleep, mobility, easy days, and the humility to absorb the work.',
+      mentalCheckpoints: 'Placeholder: pre-plan the thoughts, commands, and reset cues for when the mission gets quiet and hard.',
+      preparationPlan: 'Long-run build, weekly mileage, terrain exposure, fueling practice, recovery discipline, and mental checkpoints stay editable as the mission evolves.',
+      checkpoint01Date: 'TBD',
+      checkpoint01Evidence: 'Baseline fitness, current long run, current weekly rhythm, known risks.',
+      checkpoint01Lesson: 'Record the starting point without ego.',
+      checkpoint01NextOrder: 'Set the next controlled build week.',
+      checkpoint02Date: 'TBD',
+      checkpoint02Evidence: 'Longest durable run and how the body responded afterward.',
+      checkpoint02Lesson: 'Confidence comes from repeatable control, not one heroic day.',
+      checkpoint02NextOrder: 'Extend only what can be recovered from.',
+      checkpoint03Date: 'TBD',
+      checkpoint03Evidence: 'Fueling test notes: calories, fluids, salt, gut response, energy swings.',
+      checkpoint03Lesson: 'Nutrition is part of the mission, not an accessory.',
+      checkpoint03NextOrder: 'Lock the simplest fueling plan that works under fatigue.',
+      checkpoint04Date: 'TBD',
+      checkpoint04Evidence: 'Final taper signal: legs, sleep, gear, route, heat, confidence.',
+      checkpoint04Lesson: 'Arrive sharp, not anxious.',
+      checkpoint04NextOrder: 'Reduce noise and protect the start line.',
+      checkpoint05Date: 'Post-race',
+      checkpoint05Evidence: 'Race result, key moments, problems solved, screenshots, and post-race notes.',
+      checkpoint05Lesson: 'Convert the finish into the next version of the operator.',
+      checkpoint05NextOrder: 'Debrief honestly before choosing the next mission.',
+      checkpoints: 'Baseline; Long Run Confidence; Fueling Test; Final Taper; Race Reflection.',
+      keyRuns: 'Placeholder: list the runs that changed confidence, exposed risk, or proved readiness.',
+      longestRun: 'Placeholder: longest run and what it revealed.',
+      weeklyVolume: 'Placeholder: weekly mileage / time-on-feet trend that matters.',
+      terrainNotes: 'Placeholder: heat, surface, climb, descent, technical footing, and foot-care signals.',
+      recoveryNotes: 'Placeholder: sleep, soreness, mood, HR/RPE, mobility, and recovery debt.',
+      linksScreenshots: 'Placeholder: Strava links, screenshots, route files, photos, or receipts of the work.',
+      redFlags: 'Placeholder: anything that could compromise the mission if ignored.',
+      evidenceNotes: 'This does not replace Strava. This summarizes what mattered: key runs, volume, terrain, recovery, links, screenshots, and red flags.',
+      lessonBody: 'Placeholder: what the body is teaching me.',
+      lessonMind: 'Placeholder: what my mind does when the effort gets long.',
+      lessonPacing: 'Placeholder: how patience shows up in pace and effort.',
+      lessonFueling: 'Placeholder: what works, what fails, and what must be simpler.',
+      lessonFear: 'Placeholder: what fear is pointing at and how I respond.',
+      lessonConfidence: 'Placeholder: the evidence that I can trust when doubt gets loud.',
+      lessonsLearned: 'Lessons stay organized across body, mind, pacing, fueling, fear, and confidence.'
     },
     vudi: {
       missionName: 'ULTRA 1',
@@ -1100,26 +1148,55 @@ ${contentHtml}
     return entries.find((entry) => entry.lessonLearned)?.lessonLearned || '';
   };
 
+  const checkpointRows = (mission) => [
+    ['Checkpoint 01: Baseline', mission.checkpoint01Date, mission.checkpoint01Evidence, mission.checkpoint01Lesson, mission.checkpoint01NextOrder],
+    ['Checkpoint 02: Long Run Confidence', mission.checkpoint02Date, mission.checkpoint02Evidence, mission.checkpoint02Lesson, mission.checkpoint02NextOrder],
+    ['Checkpoint 03: Fueling Test', mission.checkpoint03Date, mission.checkpoint03Evidence, mission.checkpoint03Lesson, mission.checkpoint03NextOrder],
+    ['Checkpoint 04: Final Taper', mission.checkpoint04Date, mission.checkpoint04Evidence, mission.checkpoint04Lesson, mission.checkpoint04NextOrder],
+    ['Checkpoint 05: Race Reflection', mission.checkpoint05Date, mission.checkpoint05Evidence, mission.checkpoint05Lesson, mission.checkpoint05NextOrder]
+  ];
+
+  const checkpointSummary = (mission) => checkpointRows(mission)
+    .map(([title, date, evidence, lesson, nextOrder]) => `${title}\nDate: ${displayText(date)}\nEvidence: ${displayText(evidence)}\nLesson: ${displayText(lesson)}\nNext Order: ${displayText(nextOrder)}`)
+    .join('\n\n');
+
   const operatorJournalFields = (operatorId, mission, entries = []) => {
-    const currentMission = [mission.missionName, mission.subtitle, mission.raceDate, mission.route, mission.elevation]
-      .map((value) => String(value || '').trim())
-      .filter(Boolean)
-      .join(' // ');
-    const lessons = [mission.lessonsLearned, latestOperatorLesson(operatorId, entries)]
-      .map((value) => String(value || '').trim())
-      .filter(Boolean)
-      .join('\n\n');
-    const evidence = [mission.evidenceNotes, ...entries.slice(0, 3).map((entry) => [entry.weekDate, entry.keyWorkout, entry.notes].filter(Boolean).join(' — '))]
-      .map((value) => String(value || '').trim())
-      .filter(Boolean)
-      .join('\n\n');
+    if (operatorId !== 'kenny') {
+      const currentMission = [mission.missionName, mission.subtitle, mission.raceDate, mission.route, mission.elevation]
+        .map((value) => String(value || '').trim())
+        .filter(Boolean)
+        .join(' // ');
+      const lessons = [mission.lessonsLearned, latestOperatorLesson(operatorId, entries)]
+        .map((value) => String(value || '').trim())
+        .filter(Boolean)
+        .join('\n\n');
+      const evidence = [mission.evidenceNotes, ...entries.slice(0, 3).map((entry) => [entry.weekDate, entry.keyWorkout, entry.notes].filter(Boolean).join(' — '))]
+        .map((value) => String(value || '').trim())
+        .filter(Boolean)
+        .join('\n\n');
+      return [
+        ['Why This Mission', mission.why],
+        ['Current Mission', currentMission || mission.targetOutcome],
+        ['Preparation Plan', mission.preparationPlan],
+        ['Checkpoints', mission.checkpoints || mission.nextCheck],
+        ['Evidence Notes', evidence],
+        ['Lessons Learned', lessons]
+      ];
+    }
+
     return [
+      ['Hero Info', `Operator: Kenny Schrader\nMission: ${displayText(mission.missionName)}\nTarget Date: ${displayText(mission.raceDate)}\nStatus: ${displayText(mission.status)}\nFuture Missions: ${displayText(mission.biggerArc)}`],
       ['Why This Mission', mission.why],
-      ['Current Mission', currentMission || mission.targetOutcome],
-      ['Preparation Plan', mission.preparationPlan],
-      ['Checkpoints', mission.checkpoints || mission.nextCheck],
-      ['Evidence Notes', evidence],
-      ['Lessons Learned', lessons]
+      ['Why I Started', mission.whyStarted],
+      ['What I’m Trying To Prove To Myself', mission.proveToMyself],
+      ['What I Want To Remember', mission.wantToRemember],
+      ['What I’m Afraid Of', mission.afraidOf],
+      ['What Finishing Would Mean', mission.finishingMeaning],
+      ['Mission Brief', `Challenge: ${displayText(mission.missionName)}\nDate: ${displayText(mission.raceDate)}\nTerrain: ${displayText(mission.terrain)}\nSuccess Criteria: ${displayText(mission.successCriteria)}\nConstraint: ${displayText(mission.constraint)}\nBigger Arc: ${displayText(mission.biggerArc)}`],
+      ['Preparation Plan', `Long Run Build: ${displayText(mission.longRunBuild)}\n\nWeekly Mileage: ${displayText(mission.weeklyMileage)}\n\nElevation / Terrain: ${displayText(mission.elevationTerrain)}\n\nFueling Practice: ${displayText(mission.fuelingPractice)}\n\nRecovery Discipline: ${displayText(mission.recoveryDiscipline)}\n\nMental Checkpoints: ${displayText(mission.mentalCheckpoints)}`],
+      ['Checkpoints', checkpointSummary(mission)],
+      ['Evidence Log', `Key runs: ${displayText(mission.keyRuns)}\n\nLongest run: ${displayText(mission.longestRun)}\n\nWeekly volume: ${displayText(mission.weeklyVolume)}\n\nTerrain notes: ${displayText(mission.terrainNotes)}\n\nRecovery notes: ${displayText(mission.recoveryNotes)}\n\nLinks / screenshots: ${displayText(mission.linksScreenshots)}\n\nRed flags: ${displayText(mission.redFlags)}`],
+      ['Lessons Learned', `Body: ${displayText(mission.lessonBody)}\n\nMind: ${displayText(mission.lessonMind)}\n\nPacing: ${displayText(mission.lessonPacing)}\n\nFueling: ${displayText(mission.lessonFueling)}\n\nFear: ${displayText(mission.lessonFear)}\n\nConfidence: ${displayText(mission.lessonConfidence)}`]
     ];
   };
 
@@ -1127,7 +1204,7 @@ ${contentHtml}
     const mission = readOperatorMission(operatorId);
     const entries = operatorId === 'kenny' ? readOperatorEntries() : [];
     const fields = operatorJournalFields(operatorId, mission, entries);
-    const fieldHtml = fields.map(([label, value]) => `<div class="field${label === 'Evidence Notes' || label === 'Lessons Learned' ? ' wide' : ''}"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(value)}</div></div>`).join('');
+    const fieldHtml = fields.map(([label, value]) => `<div class="field${['Hero Info', 'Why This Mission', 'Mission Brief', 'Preparation Plan', 'Checkpoints', 'Evidence Log', 'Evidence Notes', 'Lessons Learned'].includes(label) ? ' wide' : ''}"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(value)}</div></div>`).join('');
     const evidenceSummary = entries.length
       ? `${entries.length} evidence entr${entries.length === 1 ? 'y' : 'ies'} stored locally. Latest: ${entries[0].weekDate || 'date TBD'}.`
       : 'No separate evidence entries stored for this operator yet.';
@@ -1165,7 +1242,7 @@ ${contentHtml}
       const exportButton = document.createElement('button');
       exportButton.className = 'button export-button';
       exportButton.type = 'button';
-      exportButton.textContent = 'Export Operator Record';
+      exportButton.textContent = operatorId === 'kenny' ? 'Export Kenny Record' : 'Export Operator Record';
       exportButton.addEventListener('click', () => exportOperatorRecord(operatorId));
       header.append(titleBlock, exportButton);
 
@@ -1228,6 +1305,19 @@ ${contentHtml}
     if (resetEntry && entryForm) {
       resetEntry.addEventListener('click', () => fillOperatorEntryForm(entryForm, null));
     }
+
+    document.querySelectorAll('[data-operator-export]').forEach((exportButton) => {
+      exportButton.addEventListener('click', () => {
+        const operatorId = normalizeOperatorId(exportButton.dataset.operatorExport);
+        const missionForm = exportButton.closest('[data-operator-mission-form]');
+        if (missionForm) {
+          writeOperatorMission(operatorId, Object.fromEntries(new FormData(missionForm).entries()));
+          const note = missionForm.querySelector('[data-operator-mission-note]');
+          if (note) note.textContent = 'Kenny record saved locally and opened for export.';
+        }
+        exportOperatorRecord(operatorId);
+      });
+    });
 
     const clear = document.querySelector('[data-operator-clear]');
     if (clear) {
