@@ -846,91 +846,115 @@ ${contentHtml}
   renderArchive();
   renderMissionProgress();
 
-  const OPERATOR_MISSION_KEYS = {
-    kenny: 'projectMoonshotOperatorMissionKenny',
-    vudi: 'projectMoonshotOperatorMissionVudi'
-  };
-  const OPERATOR_ENTRIES_KEY = 'projectMoonshotOperatorEntriesKenny';
-  const OPERATOR_RECORDS_KEY = 'projectMoonshotOperatorRecords';
-  const defaultOperatorMissions = {
+  const OPERATOR_CURRENT_KEY = 'projectMoonshotCurrentOperator';
+  const OPERATOR_PROFILE_PREFIX = 'projectMoonshotOperatorProfile:';
+  const OPERATOR_LOG_PREFIX = 'projectMoonshotMissionLog:';
+  const OPERATOR_INSIGHT_PREFIX = 'projectMoonshotOperatorInsights:';
+  const OPERATOR_DECISION_PREFIX = 'projectMoonshotDecisions:';
+
+  const operatorProfiles = {
     kenny: {
+      id: 'kenny',
+      name: 'Kenny Schrader',
       missionName: '50 Mile Ultra',
       raceDate: 'July 4, 2026',
       status: 'Active',
-      terrain: 'Ultra endurance / long-duration effort',
-      successCriteria: 'Finish under own power',
-      constraint: 'Stay patient, stay fueled, keep moving',
-      biggerArc: 'HYROX → 70.3 → Full Ironman → Moab',
-      whyStarted: 'I started because the 50-mile distance demands a version of me that cannot be faked.',
-      proveToMyself: 'That I can stay composed when the effort outlasts motivation.',
-      wantToRemember: 'The decisions, evidence, and moments that show who I became before and after the race.',
-      afraidOf: 'Going out too fast, underfueling, letting pain become panic, or quitting on a solvable problem.',
-      finishingMeaning: 'Proof that patience, preparation, discomfort, and belief can hold for the full mission.',
-      why: 'This is not just about finishing fifty miles. The mission is to find out what happens when preparation, patience, discomfort, and belief all have to hold for longer than motivation can last.',
-      targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
-      currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
-      nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.',
-      longRunBuild: 'Placeholder: build the long run patiently, then prove time-on-feet confidence without racing training days.',
-      weeklyMileage: 'Placeholder: keep weekly volume honest, sustainable, and backed by recovery evidence.',
-      elevationTerrain: 'Placeholder: expose legs and feet to terrain stress without turning every run into a test.',
-      fuelingPractice: 'Placeholder: rehearse calories, fluids, salt, and stomach tolerance before race day.',
-      recoveryDiscipline: 'Placeholder: protect sleep, mobility, easy days, and the humility to absorb the work.',
-      mentalCheckpoints: 'Placeholder: pre-plan the thoughts, commands, and reset cues for when the mission gets quiet and hard.',
-      preparationPlan: 'Long-run build, weekly mileage, terrain exposure, fueling practice, recovery discipline, and mental checkpoints stay editable as the mission evolves.',
-      checkpoint01Date: 'TBD',
-      checkpoint01Evidence: 'Baseline fitness, current long run, current weekly rhythm, known risks.',
-      checkpoint01Lesson: 'Record the starting point without ego.',
-      checkpoint01NextOrder: 'Set the next controlled build week.',
-      checkpoint02Date: 'TBD',
-      checkpoint02Evidence: 'Longest durable run and how the body responded afterward.',
-      checkpoint02Lesson: 'Confidence comes from repeatable control, not one heroic day.',
-      checkpoint02NextOrder: 'Extend only what can be recovered from.',
-      checkpoint03Date: 'TBD',
-      checkpoint03Evidence: 'Fueling test notes: calories, fluids, salt, gut response, energy swings.',
-      checkpoint03Lesson: 'Nutrition is part of the mission, not an accessory.',
-      checkpoint03NextOrder: 'Lock the simplest fueling plan that works under fatigue.',
-      checkpoint04Date: 'TBD',
-      checkpoint04Evidence: 'Final taper signal: legs, sleep, gear, route, heat, confidence.',
-      checkpoint04Lesson: 'Arrive sharp, not anxious.',
-      checkpoint04NextOrder: 'Reduce noise and protect the start line.',
-      checkpoint05Date: 'Post-race',
-      checkpoint05Evidence: 'Race result, key moments, problems solved, screenshots, and post-race notes.',
-      checkpoint05Lesson: 'Convert the finish into the next version of the operator.',
-      checkpoint05NextOrder: 'Debrief honestly before choosing the next mission.',
-      checkpoints: 'Baseline; Long Run Confidence; Fueling Test; Final Taper; Race Reflection.',
-      keyRuns: 'Placeholder: list the runs that changed confidence, exposed risk, or proved readiness.',
-      longestRun: 'Placeholder: longest run and what it revealed.',
-      weeklyVolume: 'Placeholder: weekly mileage / time-on-feet trend that matters.',
-      terrainNotes: 'Placeholder: heat, surface, climb, descent, technical footing, and foot-care signals.',
-      recoveryNotes: 'Placeholder: sleep, soreness, mood, HR/RPE, mobility, and recovery debt.',
-      linksScreenshots: 'Placeholder: Strava links, screenshots, route files, photos, or receipts of the work.',
-      redFlags: 'Placeholder: anything that could compromise the mission if ignored.',
-      evidenceNotes: 'This does not replace Strava. This summarizes what mattered: key runs, volume, terrain, recovery, links, screenshots, and red flags.',
-      lessonBody: 'Placeholder: what the body is teaching me.',
-      lessonMind: 'Placeholder: what my mind does when the effort gets long.',
-      lessonPacing: 'Placeholder: how patience shows up in pace and effort.',
-      lessonFueling: 'Placeholder: what works, what fails, and what must be simpler.',
-      lessonFear: 'Placeholder: what fear is pointing at and how I respond.',
-      lessonConfidence: 'Placeholder: the evidence that I can trust when doubt gets loud.',
-      lessonsLearned: 'Lessons stay organized across body, mind, pacing, fueling, fear, and confidence.'
+      currentChallenge: 'Week 5 complete. Building toward peak fatigue and race-specific durability.',
+      futureMissions: 'HYROX / 70.3 / Full Ironman / Moab',
+      progressPercent: 52,
+      currentWeek: 5,
+      totalWeeks: 9,
+      currentMiles: 31,
+      targetMiles: 60,
+      longestRun: '18 miles',
+      heroSubtitle: ' A private mission record for Kenny’s first 50-mile ultra and the bigger endurance arc beyond it.',
+      trainingBlocks: [
+        { week: 'Week 1', title: 'Recovery Week', miles: '~22 miles', state: 'completed' },
+        { week: 'Week 2', title: 'Base Rebuild', miles: '~31 miles', state: 'completed' },
+        { week: 'Week 3', title: 'Volume Step-Up', miles: '~37 miles', state: 'completed' },
+        { week: 'Week 4', title: 'Big Volume Test', miles: '~51 miles', state: 'completed' },
+        { week: 'Week 5', title: 'Durability Proof', miles: '~56 miles', state: 'completed' },
+        { week: 'Week 6', title: 'Peak Fatigue', miles: '~60 miles planned', state: 'active' },
+        { week: 'Week 7', title: 'Peak Long Run', miles: '~58–60 miles planned', state: 'upcoming' },
+        { week: 'Week 8', title: 'Taper Begins', miles: '~40 miles planned', state: 'upcoming' },
+        { week: 'Week 9', title: 'Race Week', miles: '50 Mile Ultra', state: 'upcoming' }
+      ],
+      futureArc: ['50 Mile Ultra', 'HYROX', '70.3', 'Full Ironman', 'Moab']
     },
     vudi: {
-      missionName: 'ULTRA 1',
-      subtitle: '30 Mile Mountain Run',
-      status: 'In Progress',
-      route: '5x Cove Run Loop + Emerging Extension',
-      elevation: '4,000+ ft gain',
-      why: 'Complete a self-supported 30-mile mountain effort.',
-      targetOutcome: 'Finish under own power. No pace requirement. No time requirement.',
-      currentRisk: 'Route management, mountain footing, fueling discipline, and keeping the effort self-supported.',
-      nextCheck: 'Confirm Cove Run Loop repetition count, Emerging Extension access, and water/fuel carry plan before the next long effort.',
-      preparationPlan: 'Validate loops, water carries, mountain footing, fueling, and self-supported decision points before extending the effort.',
-      checkpoints: 'Route confirmation; water and fuel carry check; loop-repeat confidence; mountain footing signal; finish-under-own-power review.',
-      evidenceNotes: 'Keep notes on route conditions, elevation, fueling, fatigue, and proof that the mission is becoming more controllable.',
-      lessonsLearned: 'The mountain effort is won by patience, route clarity, and the refusal to turn discomfort into confusion.'
+      id: 'vudi',
+      name: 'Vudi Phothisuk',
+      missionName: 'HYROX Build',
+      raceDate: 'TBD',
+      status: 'Active',
+      currentChallenge: 'Build run durability while keeping station power repeatable.',
+      futureMissions: 'HYROX / Endurance Base / Strength Standard',
+      progressPercent: 18,
+      currentWeek: 1,
+      totalWeeks: 8,
+      currentMiles: 34,
+      targetMiles: 45,
+      longestRun: 'TBD',
+      heroSubtitle: ' A private operator record for converting training evidence into sharper race decisions.',
+      trainingBlocks: [
+        { week: 'Week 1', title: 'Baseline Capture', miles: 'Run + station evidence', state: 'active' },
+        { week: 'Week 2', title: 'Run-Station Rhythm', miles: 'Planned', state: 'upcoming' },
+        { week: 'Week 3', title: 'Compromised Running', miles: 'Planned', state: 'upcoming' },
+        { week: 'Week 4', title: 'Benchmark Week', miles: 'Planned', state: 'upcoming' }
+      ],
+      futureArc: ['HYROX', 'Run Base', 'Station Power', 'Race Simulation']
+    },
+    ryan: {
+      id: 'ryan',
+      name: 'Ryan Smith',
+      missionName: 'Operator Build',
+      raceDate: 'TBD',
+      status: 'Planning',
+      currentChallenge: 'Define the first measurable mission and weekly rhythm.',
+      futureMissions: 'Base / Strength / Endurance Event',
+      progressPercent: 8,
+      currentWeek: 0,
+      totalWeeks: 6,
+      currentMiles: 0,
+      targetMiles: 30,
+      longestRun: 'TBD',
+      heroSubtitle: ' A private operator record for turning intent into visible progress and decisions.',
+      trainingBlocks: [
+        { week: 'Week 1', title: 'Mission Definition', miles: 'Planning', state: 'active' },
+        { week: 'Week 2', title: 'Baseline Week', miles: 'Upcoming', state: 'upcoming' },
+        { week: 'Week 3', title: 'First Build', miles: 'Upcoming', state: 'upcoming' }
+      ],
+      futureArc: ['Define Mission', 'Build Base', 'Test Standard']
+    },
+    new: {
+      id: 'new',
+      name: 'New Operator',
+      missionName: 'New Mission',
+      raceDate: 'TBD',
+      status: 'Draft',
+      currentChallenge: 'Define the mission that deserves a private record.',
+      futureMissions: 'TBD',
+      progressPercent: 0,
+      currentWeek: 0,
+      totalWeeks: 1,
+      currentMiles: 0,
+      targetMiles: 0,
+      longestRun: 'TBD',
+      heroSubtitle: ' Start a new private mission dossier with only the decisions and reflections that matter.',
+      trainingBlocks: [
+        { week: 'Week 1', title: 'Define Mission', miles: 'Draft', state: 'active' }
+      ],
+      futureArc: ['New Mission']
     }
   };
-  const safeParseOperatorEntries = (value) => {
+
+  const operatorIds = Object.keys(operatorProfiles);
+  const normalizeOperator = (operatorId) => operatorIds.includes(operatorId) ? operatorId : 'kenny';
+  const profileKey = (operatorId) => `${OPERATOR_PROFILE_PREFIX}${operatorId}`;
+  const listKey = (prefix, operatorId) => `${prefix}${operatorId}`;
+  const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
+  const formatOperatorName = (name) => String(name || 'New Operator').trim();
+  const safeJsonArray = (value) => {
     try {
       const parsed = JSON.parse(value || '[]');
       return Array.isArray(parsed) ? parsed : [];
@@ -938,407 +962,175 @@ ${contentHtml}
       return [];
     }
   };
-
-  const normalizeOperatorId = (operatorId) => OPERATOR_MISSION_KEYS[operatorId] ? operatorId : 'kenny';
-
-  const readOperatorMission = (operatorId = 'kenny') => {
-    const normalizedOperatorId = normalizeOperatorId(operatorId);
-    const defaultMission = defaultOperatorMissions[normalizedOperatorId];
+  const createLocalRecordId = () => `operator-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const shortDate = (iso) => {
+    const date = iso ? new Date(iso) : new Date();
+    if (Number.isNaN(date.getTime())) return 'Saved locally';
+    return date.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  };
+  const readOperatorProfile = (operatorId) => {
+    const id = normalizeOperator(operatorId);
+    const fallback = operatorProfiles[id];
     try {
-      const parsed = JSON.parse(localStorage.getItem(OPERATOR_MISSION_KEYS[normalizedOperatorId]) || '{}');
-      return { ...defaultMission, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
+      const saved = JSON.parse(localStorage.getItem(profileKey(id)) || '{}');
+      return { ...fallback, ...saved, id, trainingBlocks: fallback.trainingBlocks, futureArc: fallback.futureArc };
     } catch (error) {
-      return { ...defaultMission };
+      return fallback;
     }
   };
+  const writeOperatorProfile = (operatorId, profile) => {
+    const id = normalizeOperator(operatorId);
+    const keep = (({ missionName, raceDate, status, currentChallenge, futureMissions, progressPercent, currentWeek, totalWeeks, currentMiles, targetMiles, longestRun }) => ({ missionName, raceDate, status, currentChallenge, futureMissions, progressPercent, currentWeek, totalWeeks, currentMiles, targetMiles, longestRun }))(profile);
+    localStorage.setItem(profileKey(id), JSON.stringify(keep));
+  };
+  const readOperatorList = (prefix, operatorId) => safeJsonArray(localStorage.getItem(listKey(prefix, operatorId)));
+  const writeOperatorList = (prefix, operatorId, records) => localStorage.setItem(listKey(prefix, operatorId), JSON.stringify(records));
 
-  const safeParseOperatorRecords = () => {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(OPERATOR_RECORDS_KEY) || '{}');
-      return parsed && typeof parsed === 'object' ? parsed : {};
-    } catch (error) {
-      return {};
-    }
+  const setText = (selector, value) => {
+    const node = document.querySelector(selector);
+    if (node) node.textContent = value;
+  };
+  const fillNamedFields = (form, values) => {
+    if (!form) return;
+    Array.from(form.elements).forEach((field) => {
+      if (!field.name) return;
+      field.value = values[field.name] ?? '';
+    });
+  };
+  const collectForm = (form) => Object.fromEntries(new FormData(form).entries());
+  const clearForm = (form) => {
+    if (form) form.reset();
   };
 
-  const writeOperatorMission = (operatorId = 'kenny', mission) => {
-    const normalizedOperatorId = normalizeOperatorId(operatorId);
-    const nextMission = { ...defaultOperatorMissions[normalizedOperatorId], ...mission };
-    localStorage.setItem(OPERATOR_MISSION_KEYS[normalizedOperatorId], JSON.stringify(nextMission));
-    const records = safeParseOperatorRecords();
-    records[normalizedOperatorId] = {
-      operatorId: normalizedOperatorId,
-      profile: normalizedOperatorId === 'vudi' ? 'Vudi' : 'Kenny Schrader',
-      mission: nextMission,
-      updatedAt: new Date().toISOString()
-    };
-    localStorage.setItem(OPERATOR_RECORDS_KEY, JSON.stringify(records));
-  };
-
-  const normalizeOperatorEntry = (entry = {}) => ({
-    id: entry.id || `operator-entry-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    savedAt: entry.savedAt || new Date().toISOString(),
-    weekDate: String(entry.weekDate || '').trim(),
-    mileage: String(entry.mileage || '').trim(),
-    longRun: String(entry.longRun || '').trim(),
-    elevation: String(entry.elevation || '').trim(),
-    keyWorkout: String(entry.keyWorkout || '').trim(),
-    recoverySignal: String(entry.recoverySignal || '').trim(),
-    lessonLearned: String(entry.lessonLearned || '').trim(),
-    notes: String(entry.notes || '').trim()
-  });
-
-  const readOperatorEntries = () => safeParseOperatorEntries(localStorage.getItem(OPERATOR_ENTRIES_KEY))
-    .filter((entry) => entry && typeof entry === 'object')
-    .map(normalizeOperatorEntry)
-    .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
-
-  const writeOperatorEntries = (entries) => {
-    const normalizedEntries = entries.map(normalizeOperatorEntry);
-    localStorage.setItem(OPERATOR_ENTRIES_KEY, JSON.stringify(normalizedEntries));
-    const records = safeParseOperatorRecords();
-    records.kenny = {
-      operatorId: 'kenny',
-      profile: 'Kenny Schrader',
-      mission: readOperatorMission('kenny'),
-      evidenceEntries: normalizedEntries,
-      updatedAt: new Date().toISOString()
-    };
-    records.vudi = records.vudi || {
-      operatorId: 'vudi',
-      profile: 'Vudi',
-      mission: readOperatorMission('vudi'),
-      evidenceEntries: [],
-      updatedAt: new Date().toISOString()
-    };
-    localStorage.setItem(OPERATOR_RECORDS_KEY, JSON.stringify(records));
-  };
-
-  const parseOperatorNumber = (value) => {
-    const match = String(value || '').replace(/,/g, '').match(/-?\d+(\.\d+)?/);
-    return match ? Number(match[0]) : 0;
-  };
-
-  const formatOperatorNumber = (value) => {
-    if (!Number.isFinite(value)) return '0';
-    return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '');
-  };
-
-  const fillOperatorMissionForm = (form, mission) => {
-    Object.entries(mission).forEach(([key, value]) => {
-      if (form.elements[key]) form.elements[key].value = value;
+  const renderTimeline = (profile) => {
+    const timeline = document.querySelector('[data-training-timeline]');
+    if (!timeline) return;
+    timeline.innerHTML = '';
+    profile.trainingBlocks.forEach((block) => {
+      const card = document.createElement('article');
+      card.className = `training-block ${block.state}`;
+      const indicator = block.state === 'completed' ? '✓' : block.state === 'active' ? '●' : '○';
+      const status = block.state === 'completed' ? 'Completed' : block.state === 'active' ? 'Active' : 'Upcoming';
+      card.innerHTML = `<div class="training-indicator">${indicator}</div><span>${escapeHtml(block.week)}</span><strong>${escapeHtml(block.title)}</strong><p>${escapeHtml(block.miles)}</p><em>${status}</em>`;
+      timeline.appendChild(card);
     });
   };
 
-  const fillOperatorEntryForm = (form, entry) => {
-    ['entryId', 'weekDate', 'mileage', 'longRun', 'elevation', 'keyWorkout', 'recoverySignal', 'lessonLearned', 'notes'].forEach((key) => {
-      if (!form.elements[key]) return;
-      const sourceKey = key === 'entryId' ? 'id' : key;
-      form.elements[key].value = entry ? entry[sourceKey] || '' : '';
+  const renderFutureArc = (profile) => {
+    const arc = document.querySelector('[data-future-timeline]');
+    if (!arc) return;
+    arc.innerHTML = '';
+    profile.futureArc.forEach((mission, index) => {
+      const node = document.createElement('div');
+      node.className = `timeline-node ${index === 0 ? 'active' : index === profile.futureArc.length - 1 ? 'moonshot' : 'support'}`;
+      node.innerHTML = `<span>${escapeHtml(mission)}</span><strong>${index === 0 ? 'Active' : index === profile.futureArc.length - 1 ? 'Long-term moonshot' : 'Future mission'}</strong>`;
+      arc.appendChild(node);
     });
-    const button = document.querySelector('[data-operator-save-entry]');
-    if (button) button.textContent = entry ? 'Update Entry' : 'Save Entry';
   };
 
-  const renderOperatorSummary = () => {
-    const summary = document.querySelector('[data-operator-summary]');
-    if (!summary) return;
-    const mission = readOperatorMission('kenny');
-    const entries = readOperatorEntries();
-    const totalMiles = entries.reduce((sum, entry) => sum + parseOperatorNumber(entry.mileage), 0);
-    const peak = entries.reduce((best, entry) => parseOperatorNumber(entry.mileage) > parseOperatorNumber(best.mileage) ? entry : best, { mileage: 0, weekDate: '' });
-    const longest = entries.reduce((best, entry) => Math.max(best, parseOperatorNumber(entry.longRun)), 0);
-    const recentLesson = entries.find((entry) => entry.lessonLearned)?.lessonLearned || 'No lessons logged yet.';
-
-    const setText = (selector, value) => {
-      const element = summary.querySelector(selector);
-      if (element) element.textContent = value;
-    };
-    setText('[data-summary-total-miles]', formatOperatorNumber(totalMiles));
-    setText('[data-summary-peak-week]', peak.weekDate ? `${peak.weekDate} — ${formatOperatorNumber(parseOperatorNumber(peak.mileage))} mi` : 'None logged');
-    setText('[data-summary-longest-run]', `${formatOperatorNumber(longest)} mi`);
-    setText('[data-summary-recent-lesson]', recentLesson);
-    setText('[data-summary-current-status]', mission.status || 'Active');
-  };
-
-  const renderOperatorEntries = () => {
-    const list = document.querySelector('[data-operator-entry-list]');
+  const renderRecordList = (selector, records, fields, emptyText) => {
+    const list = document.querySelector(selector);
     if (!list) return;
-    const entries = readOperatorEntries();
     list.innerHTML = '';
-    if (!entries.length) {
-      const empty = document.createElement('div');
-      empty.className = 'archive-card operator-entry-card';
-      empty.textContent = 'No operator evidence logged yet. Save the first entry to begin the dossier.';
+    if (!records.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-record-note';
+      empty.textContent = emptyText;
       list.appendChild(empty);
-      renderOperatorSummary();
       return;
     }
-
-    entries.forEach((entry) => {
+    records.forEach((record) => {
       const card = document.createElement('article');
-      card.className = 'archive-card operator-entry-card';
-      const header = document.createElement('div');
-      header.className = 'archive-card-header';
-      const titleBlock = document.createElement('div');
-      const title = document.createElement('h3');
-      title.textContent = entry.weekDate || 'Untitled evidence entry';
-      const saved = document.createElement('p');
-      saved.className = 'light-note';
-      saved.textContent = entry.savedAt ? `Saved ${new Date(entry.savedAt).toLocaleString()}` : 'Saved locally';
-      titleBlock.append(title, saved);
-      const status = document.createElement('span');
-      status.className = 'report-status';
-      status.textContent = `${displayText(entry.mileage, '0')} mi`;
-      header.append(titleBlock, status);
-
-      const body = document.createElement('div');
-      body.className = 'archive-card-body';
-      [
-        ['Long run', entry.longRun],
-        ['Elevation', entry.elevation],
-        ['Key workout', entry.keyWorkout],
-        ['Recovery signal', entry.recoverySignal],
-        ['Lesson learned', entry.lessonLearned],
-        ['Notes', entry.notes]
-      ].forEach(([label, value]) => {
-        const field = document.createElement('div');
-        field.className = 'operator-entry-field';
-        const fieldLabel = document.createElement('span');
-        const fieldValue = document.createElement('p');
-        fieldLabel.textContent = label;
-        fieldValue.textContent = displayText(value);
-        field.append(fieldLabel, fieldValue);
-        body.appendChild(field);
-      });
-
-      const actions = document.createElement('div');
-      actions.className = 'archive-card-actions';
-      const edit = document.createElement('button');
-      edit.className = 'button secondary';
-      edit.type = 'button';
-      edit.textContent = 'Edit Entry';
-      edit.addEventListener('click', () => {
-        const form = document.querySelector('[data-operator-entry-form]');
-        if (form) {
-          fillOperatorEntryForm(form, entry);
-          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-      const remove = document.createElement('button');
-      remove.className = 'button danger';
-      remove.type = 'button';
-      remove.textContent = 'Delete Entry';
-      remove.addEventListener('click', () => {
-        writeOperatorEntries(readOperatorEntries().filter((item) => item.id !== entry.id));
-        renderOperatorEntries();
-        renderOperatorJournalRecords();
-      });
-      actions.append(edit, remove);
-      card.append(header, body, actions);
+      card.className = 'operator-record-card';
+      const body = fields.map(([label, key]) => `<div class="operator-record-field"><span>${escapeHtml(label)}</span><p>${escapeHtml(record[key] || 'TBD')}</p></div>`).join('');
+      card.innerHTML = `<div class="operator-record-date">${escapeHtml(shortDate(record.savedAt))}</div>${body}`;
       list.appendChild(card);
     });
-    renderOperatorSummary();
   };
 
-  const operatorDisplayName = (operatorId) => operatorId === 'vudi' ? 'Vudi' : 'Kenny Schrader';
+  const renderOperatorDashboard = (operatorId) => {
+    const id = normalizeOperator(operatorId);
+    const profile = readOperatorProfile(id);
+    localStorage.setItem(OPERATOR_CURRENT_KEY, id);
 
-  const latestOperatorLesson = (operatorId, entries) => {
-    if (operatorId !== 'kenny') return '';
-    return entries.find((entry) => entry.lessonLearned)?.lessonLearned || '';
-  };
+    const selector = document.querySelector('[data-operator-selector]');
+    if (selector) selector.value = id;
 
-  const checkpointRows = (mission) => [
-    ['Checkpoint 01: Baseline', mission.checkpoint01Date, mission.checkpoint01Evidence, mission.checkpoint01Lesson, mission.checkpoint01NextOrder],
-    ['Checkpoint 02: Long Run Confidence', mission.checkpoint02Date, mission.checkpoint02Evidence, mission.checkpoint02Lesson, mission.checkpoint02NextOrder],
-    ['Checkpoint 03: Fueling Test', mission.checkpoint03Date, mission.checkpoint03Evidence, mission.checkpoint03Lesson, mission.checkpoint03NextOrder],
-    ['Checkpoint 04: Final Taper', mission.checkpoint04Date, mission.checkpoint04Evidence, mission.checkpoint04Lesson, mission.checkpoint04NextOrder],
-    ['Checkpoint 05: Race Reflection', mission.checkpoint05Date, mission.checkpoint05Evidence, mission.checkpoint05Lesson, mission.checkpoint05NextOrder]
-  ];
+    setText('[data-hero-eyebrow]', `Operator File // ${profile.status || 'Active'}`);
+    setText('[data-operator-name]', formatOperatorName(profile.name).toUpperCase());
+    setText('[data-hero-mission]', profile.missionName || 'New Mission');
+    setText('[data-hero-subtitle]', profile.heroSubtitle || ' A private mission dashboard.');
+    setText('[data-hero-current-mission]', profile.missionName || 'New Mission');
+    setText('[data-hero-current-challenge]', profile.currentChallenge || 'TBD');
+    setText('[data-hero-target-date]', profile.raceDate || 'TBD');
+    setText('[data-hero-status]', profile.status || 'Draft');
+    setText('[data-hero-future]', profile.futureMissions || 'TBD');
 
-  const checkpointSummary = (mission) => checkpointRows(mission)
-    .map(([title, date, evidence, lesson, nextOrder]) => `${title}\nDate: ${displayText(date)}\nEvidence: ${displayText(evidence)}\nLesson: ${displayText(lesson)}\nNext Order: ${displayText(nextOrder)}`)
-    .join('\n\n');
+    const percent = clampPercent(profile.progressPercent);
+    setText('[data-progress-percent]', `${percent}%`);
+    setText('[data-progress-week]', `Week ${profile.currentWeek} / ${profile.totalWeeks}`);
+    setText('[data-progress-miles]', `${profile.currentMiles} of ${profile.targetMiles} target miles`);
+    setText('[data-progress-longest]', profile.longestRun || 'TBD');
+    setText('[data-progress-race]', profile.raceDate || 'TBD');
+    const bar = document.querySelector('[data-progress-bar]');
+    if (bar) bar.style.width = `${percent}%`;
 
-  const operatorJournalFields = (operatorId, mission, entries = []) => {
-    if (operatorId !== 'kenny') {
-      const currentMission = [mission.missionName, mission.subtitle, mission.raceDate, mission.route, mission.elevation]
-        .map((value) => String(value || '').trim())
-        .filter(Boolean)
-        .join(' // ');
-      const lessons = [mission.lessonsLearned, latestOperatorLesson(operatorId, entries)]
-        .map((value) => String(value || '').trim())
-        .filter(Boolean)
-        .join('\n\n');
-      const evidence = [mission.evidenceNotes, ...entries.slice(0, 3).map((entry) => [entry.weekDate, entry.keyWorkout, entry.notes].filter(Boolean).join(' — '))]
-        .map((value) => String(value || '').trim())
-        .filter(Boolean)
-        .join('\n\n');
-      return [
-        ['Why This Mission', mission.why],
-        ['Current Mission', currentMission || mission.targetOutcome],
-        ['Preparation Plan', mission.preparationPlan],
-        ['Checkpoints', mission.checkpoints || mission.nextCheck],
-        ['Evidence Notes', evidence],
-        ['Lessons Learned', lessons]
-      ];
-    }
-
-    return [
-      ['Hero Info', `Operator: Kenny Schrader\nMission: ${displayText(mission.missionName)}\nTarget Date: ${displayText(mission.raceDate)}\nStatus: ${displayText(mission.status)}\nFuture Missions: ${displayText(mission.biggerArc)}`],
-      ['Why This Mission', mission.why],
-      ['Why I Started', mission.whyStarted],
-      ['What I’m Trying To Prove To Myself', mission.proveToMyself],
-      ['What I Want To Remember', mission.wantToRemember],
-      ['What I’m Afraid Of', mission.afraidOf],
-      ['What Finishing Would Mean', mission.finishingMeaning],
-      ['Mission Brief', `Challenge: ${displayText(mission.missionName)}\nDate: ${displayText(mission.raceDate)}\nTerrain: ${displayText(mission.terrain)}\nSuccess Criteria: ${displayText(mission.successCriteria)}\nConstraint: ${displayText(mission.constraint)}\nBigger Arc: ${displayText(mission.biggerArc)}`],
-      ['Preparation Plan', `Long Run Build: ${displayText(mission.longRunBuild)}\n\nWeekly Mileage: ${displayText(mission.weeklyMileage)}\n\nElevation / Terrain: ${displayText(mission.elevationTerrain)}\n\nFueling Practice: ${displayText(mission.fuelingPractice)}\n\nRecovery Discipline: ${displayText(mission.recoveryDiscipline)}\n\nMental Checkpoints: ${displayText(mission.mentalCheckpoints)}`],
-      ['Checkpoints', checkpointSummary(mission)],
-      ['Evidence Log', `Key runs: ${displayText(mission.keyRuns)}\n\nLongest run: ${displayText(mission.longestRun)}\n\nWeekly volume: ${displayText(mission.weeklyVolume)}\n\nTerrain notes: ${displayText(mission.terrainNotes)}\n\nRecovery notes: ${displayText(mission.recoveryNotes)}\n\nLinks / screenshots: ${displayText(mission.linksScreenshots)}\n\nRed flags: ${displayText(mission.redFlags)}`],
-      ['Lessons Learned', `Body: ${displayText(mission.lessonBody)}\n\nMind: ${displayText(mission.lessonMind)}\n\nPacing: ${displayText(mission.lessonPacing)}\n\nFueling: ${displayText(mission.lessonFueling)}\n\nFear: ${displayText(mission.lessonFear)}\n\nConfidence: ${displayText(mission.lessonConfidence)}`]
-    ];
-  };
-
-  const exportOperatorRecord = (operatorId) => {
-    const mission = readOperatorMission(operatorId);
-    const entries = operatorId === 'kenny' ? readOperatorEntries() : [];
-    const fields = operatorJournalFields(operatorId, mission, entries);
-    const fieldHtml = fields.map(([label, value]) => `<div class="field${['Hero Info', 'Why This Mission', 'Mission Brief', 'Preparation Plan', 'Checkpoints', 'Evidence Log', 'Evidence Notes', 'Lessons Learned'].includes(label) ? ' wide' : ''}"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(value)}</div></div>`).join('');
-    const evidenceSummary = entries.length
-      ? `${entries.length} evidence entr${entries.length === 1 ? 'y' : 'ies'} stored locally. Latest: ${entries[0].weekDate || 'date TBD'}.`
-      : 'No separate evidence entries stored for this operator yet.';
-    openPrintableRecord(
-      `Project Moonshot Operator Record - ${operatorDisplayName(operatorId)}`,
-      'operator-record-print',
-      `<main class="record">
-        <header class="record-top"><div><div class="eyebrow">Project Moonshot // Operator Journal Record</div><h1>${escapeHtml(operatorDisplayName(operatorId))}</h1></div><div class="mission-seal">Mission: ${escapeHtml(mission.missionName)}<br>Status: ${escapeHtml(mission.status || 'Active')}<br>Generated ${escapeHtml(printDate())}</div></header>
-        <section class="record-body">
-          <div class="grid">${fieldHtml}</div>
-          <div class="mission-seal">Current Status: ${escapeHtml(mission.status || 'Active')} // ${escapeHtml(evidenceSummary)}</div>
-        </section>
-      </main>`
-    );
-  };
-
-  const renderOperatorJournalRecords = () => {
-    const grid = document.querySelector('[data-operator-journal-records]');
-    if (!grid) return;
-    const entries = readOperatorEntries();
-    grid.innerHTML = '';
-    ['kenny', 'vudi'].forEach((operatorId) => {
-      const mission = readOperatorMission(operatorId);
-      const card = document.createElement('article');
-      card.className = 'operator-journal-card archive-card';
-      const header = document.createElement('div');
-      header.className = 'archive-card-header';
-      const titleBlock = document.createElement('div');
-      const eyebrow = document.createElement('div');
-      eyebrow.className = 'eyebrow';
-      eyebrow.textContent = 'Journal Record // Local';
-      const title = document.createElement('h3');
-      title.textContent = operatorDisplayName(operatorId);
-      titleBlock.append(eyebrow, title);
-      const exportButton = document.createElement('button');
-      exportButton.className = 'button export-button';
-      exportButton.type = 'button';
-      exportButton.textContent = operatorId === 'kenny' ? 'Export Kenny Record' : 'Export Operator Record';
-      exportButton.addEventListener('click', () => exportOperatorRecord(operatorId));
-      header.append(titleBlock, exportButton);
-
-      const body = document.createElement('div');
-      body.className = 'archive-card-body operator-journal-body';
-      operatorJournalFields(operatorId, mission, operatorId === 'kenny' ? entries : []).forEach(([label, value]) => {
-        const field = document.createElement('div');
-        field.className = `operator-entry-field${label === 'Evidence Notes' || label === 'Lessons Learned' ? ' wide' : ''}`;
-        const fieldLabel = document.createElement('span');
-        const fieldValue = document.createElement('p');
-        fieldLabel.textContent = label;
-        fieldValue.textContent = displayText(value);
-        field.append(fieldLabel, fieldValue);
-        body.appendChild(field);
-      });
-      card.append(header, body);
-      grid.appendChild(card);
-    });
+    fillNamedFields(document.querySelector('[data-mission-brief-form]'), profile);
+    renderTimeline(profile);
+    renderFutureArc(profile);
+    renderRecordList('[data-mission-log-list]', readOperatorList(OPERATOR_LOG_PREFIX, id), [['Mission Entry', 'entry']], 'No mission log entries yet. Record the next meaningful signal.');
+    renderRecordList('[data-insight-list]', readOperatorList(OPERATOR_INSIGHT_PREFIX, id), [['What Happened?', 'whatHappened'], ['What Happened For Me?', 'whatHappenedForMe'], ['What Did I Learn?', 'whatLearned']], 'No insights yet. Capture what the work is turning into.');
+    renderRecordList('[data-decision-list]', readOperatorList(OPERATOR_DECISION_PREFIX, id), [['Decision', 'decision'], ['Reason', 'reason'], ['Result', 'result']], 'No decisions logged yet. Save the first meaningful call.');
   };
 
   const initializeOperatorPage = () => {
-    const missionForms = document.querySelectorAll('[data-operator-mission-form]');
-    const entryForm = document.querySelector('[data-operator-entry-form]');
-    if (!missionForms.length && !entryForm) return;
+    const app = document.querySelector('[data-operator-app]');
+    if (!app) return;
+    let currentOperator = normalizeOperator(localStorage.getItem(OPERATOR_CURRENT_KEY) || 'kenny');
 
-    missionForms.forEach((missionForm) => {
-      const operatorId = normalizeOperatorId(missionForm.dataset.operatorId);
-      fillOperatorMissionForm(missionForm, readOperatorMission(operatorId));
-      missionForm.addEventListener('submit', (event) => {
+    const selector = document.querySelector('[data-operator-selector]');
+    if (selector) {
+      selector.value = currentOperator;
+      selector.addEventListener('change', () => {
+        currentOperator = normalizeOperator(selector.value);
+        renderOperatorDashboard(currentOperator);
+      });
+    }
+
+    const missionBriefForm = document.querySelector('[data-mission-brief-form]');
+    if (missionBriefForm) {
+      missionBriefForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        const mission = Object.fromEntries(new FormData(missionForm).entries());
-        writeOperatorMission(operatorId, mission);
-        renderOperatorSummary();
-        renderOperatorJournalRecords();
-        const note = missionForm.querySelector('[data-operator-mission-note]');
-        if (note) note.textContent = `${operatorId === 'vudi' ? 'Vudi' : 'Kenny'} mission card saved locally.`;
+        const existing = readOperatorProfile(currentOperator);
+        writeOperatorProfile(currentOperator, { ...existing, ...collectForm(missionBriefForm) });
+        renderOperatorDashboard(currentOperator);
+        const note = document.querySelector('[data-mission-brief-note]');
+        if (note) note.textContent = 'Mission brief saved locally.';
       });
-    });
+    }
 
-    if (entryForm) {
-      entryForm.addEventListener('submit', (event) => {
+    const saveRecord = (formSelector, prefix, noteSelector, message) => {
+      const form = document.querySelector(formSelector);
+      if (!form) return;
+      form.addEventListener('submit', (event) => {
         event.preventDefault();
-        const data = Object.fromEntries(new FormData(entryForm).entries());
-        const entries = readOperatorEntries();
-        const existingId = data.entryId;
-        const savedEntry = normalizeOperatorEntry({ ...data, id: existingId || undefined, savedAt: new Date().toISOString() });
-        const nextEntries = existingId
-          ? entries.map((entry) => entry.id === existingId ? savedEntry : entry)
-          : [savedEntry, ...entries];
-        writeOperatorEntries(nextEntries);
-        fillOperatorEntryForm(entryForm, null);
-        renderOperatorEntries();
-        renderOperatorJournalRecords();
-        const note = document.querySelector('[data-operator-entry-note]');
-        if (note) note.textContent = existingId ? 'Entry updated locally.' : 'Entry saved locally.';
+        const data = collectForm(form);
+        const hasValue = Object.values(data).some((value) => String(value || '').trim());
+        if (!hasValue) return;
+        const records = readOperatorList(prefix, currentOperator);
+        writeOperatorList(prefix, currentOperator, [{ ...data, id: createLocalRecordId(), savedAt: new Date().toISOString() }, ...records]);
+        clearForm(form);
+        renderOperatorDashboard(currentOperator);
+        const note = document.querySelector(noteSelector);
+        if (note) note.textContent = message;
       });
-    }
+    };
 
-    const resetEntry = document.querySelector('[data-operator-reset-entry]');
-    if (resetEntry && entryForm) {
-      resetEntry.addEventListener('click', () => fillOperatorEntryForm(entryForm, null));
-    }
+    saveRecord('[data-mission-log-form]', OPERATOR_LOG_PREFIX, '[data-mission-log-note]', 'Mission log entry saved locally.');
+    saveRecord('[data-insight-form]', OPERATOR_INSIGHT_PREFIX, '[data-insight-note]', 'Operator insight saved locally.');
+    saveRecord('[data-decision-form]', OPERATOR_DECISION_PREFIX, '[data-decision-note]', 'Decision saved locally.');
 
-    document.querySelectorAll('[data-operator-export]').forEach((exportButton) => {
-      exportButton.addEventListener('click', () => {
-        const operatorId = normalizeOperatorId(exportButton.dataset.operatorExport);
-        const missionForm = exportButton.closest('[data-operator-mission-form]');
-        if (missionForm) {
-          writeOperatorMission(operatorId, Object.fromEntries(new FormData(missionForm).entries()));
-          const note = missionForm.querySelector('[data-operator-mission-note]');
-          if (note) note.textContent = 'Kenny record saved locally and opened for export.';
-        }
-        exportOperatorRecord(operatorId);
-      });
-    });
-
-    const clear = document.querySelector('[data-operator-clear]');
-    if (clear) {
-      clear.addEventListener('click', () => {
-        Object.values(OPERATOR_MISSION_KEYS).forEach((key) => localStorage.removeItem(key));
-        localStorage.removeItem(OPERATOR_ENTRIES_KEY);
-        localStorage.removeItem(OPERATOR_RECORDS_KEY);
-        missionForms.forEach((missionForm) => {
-          const operatorId = normalizeOperatorId(missionForm.dataset.operatorId);
-          fillOperatorMissionForm(missionForm, readOperatorMission(operatorId));
-        });
-        if (entryForm) fillOperatorEntryForm(entryForm, null);
-        renderOperatorEntries();
-        renderOperatorJournalRecords();
-        const note = document.querySelector('[data-operator-entry-note]');
-        if (note) note.textContent = 'Local operator data cleared. Defaults restored.';
-      });
-    }
-
-    renderOperatorEntries();
-    renderOperatorJournalRecords();
+    renderOperatorDashboard(currentOperator);
   };
 
   initializeOperatorPage();
