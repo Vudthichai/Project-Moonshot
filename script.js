@@ -478,46 +478,144 @@
 
   const textNumber = (value) => Number(String(value).replace(/,/g, ''));
 
-  const sumMatches = (text, pattern, unitMultiplier = 1) => {
-    let total = 0;
-    let matched = false;
-    let match;
-    pattern.lastIndex = 0;
-    while ((match = pattern.exec(text)) !== null) {
-      const value = textNumber(match[1]);
-      if (Number.isFinite(value)) {
-        total += value * unitMultiplier;
-        matched = true;
-      }
-    }
-    return matched ? total : null;
+  const numericPattern = String.raw`(\d+(?:,\d{3})*(?:\.\d+)?)`;
+  const unitJoinerPattern = String.raw`(?:\s*(?:of|total|for|in|across|during|this|the|team|weekly|week|logged|covered|completed|climbed|gain)?\s*){0,5}`;
+  const mileUnitPattern = String.raw`(?:miles?|mi\b)`;
+  const elevationUnitPattern = String.raw`(?:ft|feet)`;
+
+  const makeRegex = (pattern, flags = 'gi') => new RegExp(pattern, flags);
+
+  const structuredProgressFields = {
+    miles: ['miles', 'mile', 'mi', 'mileage', 'runningMileage', 'weeklyMileage', 'teamMiles'],
+    elevation: ['elevation', 'vert', 'vertical', 'feet', 'ft', 'gain', 'elevationGain'],
+    stations: ['stations', 'stationSessions', 'hyroxStations'],
+    simulations: ['simulations', 'simulation']
   };
 
-  const reportSearchText = (report) => [
-    report.week,
-    report.status,
-    report.headline,
-    report.completedWork,
-    report.decisionCheckpoint,
-    report.nextOrders
-  ].map((value) => String(value || '')).join(' ');
+  const stationDetectors = [
+    { key: 'skiErg', label: 'SkiErg', pattern: /\b(?:ski\s*erg|skierg|erg)\b/i },
+    { key: 'sledPush', label: 'Sled Push', pattern: /\b(?:sled\s+push(?:es)?|push\s+sled)\b/i },
+    { key: 'sledPull', label: 'Sled Pull', pattern: /\b(?:sled\s+pull(?:s)?|pull\s+sled)\b/i },
+    { key: 'burpeeBroadJumps', label: 'Burpee Broad Jumps', pattern: /\b(?:burpee\s+broad\s+jumps?|burpees?)\b/i },
+    { key: 'row', label: 'Row', pattern: /\b(?:row(?:ing|er)?|rowed)\b/i },
+    { key: 'farmersCarry', label: 'Farmers Carry', pattern: /\b(?:(?:farmer'?s?|farmers)\s+carr(?:y|ies)|carries)\b/i },
+    { key: 'sandbagLunges', label: 'Sandbag Lunges', pattern: /\b(?:sandbag\s+lunges?|lunges?|sandbag)\b/i },
+    { key: 'wallBalls', label: 'Wall Balls', pattern: /\b(?:wall\s*balls?|wallballs?)\b/i }
+  ];
 
-  const hasSimulationMention = (text) => /\b(?:full\s+simulation|partial\s+simulation|simulations?|sims?)\b/i.test(text);
+  const genericSledPattern = /\bsled\b/i;
+
+  const missionTextFields = ['week', 'status', 'headline', 'completedWork', 'decisionCheckpoint', 'nextOrders', 'generatedSummary'];
+
+  const sumPatternSet = (text, patterns) => {
+    const matches = [];
+    patterns.forEach((pattern) => {
+      let match;
+      pattern.lastIndex = 0;
+      while ((match = pattern.exec(text)) !== null) {
+        const value = textNumber(match[1]);
+        if (Number.isFinite(value)) {
+          matches.push({ index: match.index, end: match.index + match[0].length, value });
+        }
+      }
+    });
+    if (!matches.length) return null;
+
+    return matches
+      .sort((a, b) => a.index - b.index || (b.end - b.index) - (a.end - a.index))
+      .reduce((state, match) => {
+        const overlaps = state.ranges.some(([start, end]) => match.index < end && match.end > start);
+        if (!overlaps) {
+          state.total += match.value;
+          state.ranges.push([match.index, match.end]);
+        }
+        return state;
+      }, { total: 0, ranges: [] }).total;
+  };
+
+  const firstStructuredNumber = (report, keys) => {
+    for (const key of keys) {
+      if (!Object.prototype.hasOwnProperty.call(report, key)) continue;
+      const value = textNumber(report[key]);
+      if (Number.isFinite(value)) return value;
+    }
+    return null;
+  };
+
+  const reportSearchText = (report) => missionTextFields
+    .map((value) => String(report[value] || ''))
+    .join(' ');
+
+  const buildPatterns = (templates) => templates.map((template) => makeRegex(template));
+
+  const mileageAggregatePatterns = buildPatterns([
+    String.raw`\b(?:running\s+)?(?:mileage|weekly\s+mileage|team\s+miles|total\s+(?:runs?|miles?|mileage))\b\s*[:=\-]\s*${numericPattern}(?!\s*(?:x|/))`,
+    String.raw`\b(?:running\s+)?(?:mileage|weekly\s+mileage|team\s+miles|total\s+(?:runs?|miles?|mileage))\b${unitJoinerPattern}[:=\-]?\s*${numericPattern}\s*${mileUnitPattern}`,
+    String.raw`\b(?:logged|covered|completed)\b${unitJoinerPattern}${numericPattern}\s*${mileUnitPattern}\b(?:${unitJoinerPattern}(?:week|weekly|total|across\s+the\s+week))?`,
+    String.raw`${numericPattern}\s*${mileUnitPattern}\b${unitJoinerPattern}\b(?:total|weekly|mileage|across\s+the\s+week|this\s+week)\b`
+  ]);
+
+  const mileageNaturalPatterns = buildPatterns([
+    String.raw`\b(?:ran|run|long\s+run|runs?|mileage|miles?|mi)\b${unitJoinerPattern}[:=\-]?\s*${numericPattern}\s*${mileUnitPattern}`,
+    String.raw`${numericPattern}\s*${mileUnitPattern}\b${unitJoinerPattern}\b(?:run|runs?|running|long\s+run|mileage)\b`,
+    String.raw`\b(?:ran|run)\s+${numericPattern}\s*${mileUnitPattern}`
+  ]);
+
+  const elevationAggregatePatterns = buildPatterns([
+    String.raw`\b(?:elevation|vert(?:ical)?|gain|elevation\s+gain)\b\s*[:=\-]\s*${numericPattern}(?!\s*(?:x|/))`,
+    String.raw`\b(?:elevation|vert(?:ical)?|gain|elevation\s+gain)\b${unitJoinerPattern}[:=\-]?\s*${numericPattern}\s*${elevationUnitPattern}`,
+    String.raw`${numericPattern}\s*${elevationUnitPattern}\b${unitJoinerPattern}\b(?:elevation|vert(?:ical)?|gain|climbed|across\s+the\s+week)\b`,
+    String.raw`\b(?:logged|covered|completed|climbed)\b${unitJoinerPattern}${numericPattern}\s*${elevationUnitPattern}\b${unitJoinerPattern}\b(?:elevation|vert(?:ical)?|gain|climbed|across\s+the\s+week)?\b`
+  ]);
+
+  const elevationNaturalPatterns = buildPatterns([
+    String.raw`\b(?:elevation|vert(?:ical)?|gain)\b${unitJoinerPattern}[:=\-]?\s*${numericPattern}\s*${elevationUnitPattern}`,
+    String.raw`${numericPattern}\s*${elevationUnitPattern}\b${unitJoinerPattern}\b(?:elevation|vert(?:ical)?|gain|feet\s+of\s+gain|climbed)\b`
+  ]);
+
+  const stationCountPatterns = buildPatterns([
+    String.raw`\b(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?|work)?\s*[:=\-]?\s*${numericPattern}`,
+    String.raw`${numericPattern}\s*(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?)\b`
+  ]);
+
+  const simulationCountPatterns = buildPatterns([
+    String.raw`\b(?:hyrox\s*)?(?:simulations?|sims?)\s*[:=\-]?\s*${numericPattern}`,
+    String.raw`${numericPattern}\s*(?:hyrox\s*)?(?:simulations?|sims?)\b`
+  ]);
+
+  const detectStationLabels = (text) => {
+    const detected = stationDetectors.filter(({ pattern }) => pattern.test(text));
+    const hasSpecificSled = detected.some(({ key }) => key === 'sledPush' || key === 'sledPull');
+    if (!hasSpecificSled && genericSledPattern.test(text)) {
+      detected.push({ key: 'sledGeneric', label: 'Sled Work' });
+    }
+    return [...new Map(detected.map((station) => [station.key, station.label])).values()];
+  };
+
+  const simulationMentionPattern = /\b(?:hyrox\s+simulation|simulation|simulations?|sims?|compromised\s+run|race\s+rehearsal|full\s+hyrox|partial\s+hyrox)\b/i;
+  const hasSimulationMention = (text) => simulationMentionPattern.test(text);
+
+  const detectedTotal = (text, aggregatePatterns, naturalPatterns) => {
+    const aggregate = sumPatternSet(text, aggregatePatterns);
+    return aggregate ?? sumPatternSet(text, naturalPatterns);
+  };
 
   const extractReportProgress = (report) => {
     const text = reportSearchText(report).replace(/\s+/g, ' ');
-    const miles = sumMatches(text, /(?:mileage|miles?|mi)\s*(?:\/\s*elevation)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:team\s*)?(?:miles?|mi\b))/gi)
-      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:team\s*)?(?:miles?|mi\b)/gi);
-    const elevation = sumMatches(text, /(?:elevation|vert(?:ical)?|climb(?:ed|ing)?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)(?=\s*(?:ft|feet|feet\s+climbed))/gi)
-      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:ft|feet)\s*(?:climbed|elevation|vert(?:ical)?)?/gi);
-    const stations = sumMatches(text, /(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?|work)?\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
-      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:hyrox\s*)?(?:station|stations|station-specific)\s*(?:sessions?|workouts?)/gi);
-    const explicitSimulations = sumMatches(text, /(?:full\s+simulation|partial\s+simulation|simulations?|sims?)\s*[:=\-]?\s*(\d+(?:,\d{3})*(?:\.\d+)?)/gi)
-      ?? sumMatches(text, /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:full\s+simulation|partial\s+simulation|simulations?|sims?)/gi);
+    const structuredMiles = firstStructuredNumber(report, structuredProgressFields.miles);
+    const structuredElevation = firstStructuredNumber(report, structuredProgressFields.elevation);
+    const structuredStations = firstStructuredNumber(report, structuredProgressFields.stations);
+    const structuredSimulations = firstStructuredNumber(report, structuredProgressFields.simulations);
+    const stationLabels = detectStationLabels(text);
+    const explicitStationCount = structuredStations ?? sumPatternSet(text, stationCountPatterns);
+    const explicitSimulationCount = structuredSimulations ?? sumPatternSet(text, simulationCountPatterns);
     const simulationMentioned = hasSimulationMention(text);
-    const simulations = explicitSimulations ?? (simulationMentioned ? 1 : null);
+    const miles = structuredMiles ?? detectedTotal(text, mileageAggregatePatterns, mileageNaturalPatterns);
+    const elevation = structuredElevation ?? detectedTotal(text, elevationAggregatePatterns, elevationNaturalPatterns);
+    const stations = explicitStationCount ?? (stationLabels.length ? stationLabels.length : null);
+    const simulations = explicitSimulationCount ?? (simulationMentioned ? 1 : null);
 
-    return { report, miles, elevation, stations, simulations, simulationMentioned };
+    return { report, miles, elevation, stations, simulations, stationLabels, simulationMentioned };
   };
 
   const extractMissionProgress = (reports) => reports.reduce((totals, report) => {
@@ -571,8 +669,8 @@
       [
         ['Miles detected', formatLogValue('miles', parsed.miles)],
         ['Elevation detected', formatLogValue('elevation', parsed.elevation)],
-        ['Station sessions detected', formatLogValue('stations', parsed.stations)],
-        ['Simulation detected', parsed.simulationMentioned ? `yes (${formatLogValue('simulations', parsed.simulations)})` : 'no']
+        ['Stations detected', parsed.stationLabels?.length ? `${formatLogValue('stations', parsed.stations)} (${parsed.stationLabels.join(', ')})` : formatLogValue('stations', parsed.stations)],
+        ['Simulations detected', formatLogValue('simulations', parsed.simulations)]
       ].forEach(([label, value]) => {
         const dt = document.createElement('dt');
         const dd = document.createElement('dd');
