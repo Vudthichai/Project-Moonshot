@@ -914,63 +914,13 @@ ${contentHtml}
         { title: 'RUN-STATION RHYTHM', date: 'TBD', evidence: 'First clean compromised session.', takeaway: 'Recover while moving.' },
         { title: 'BENCHMARK WEEK', date: 'TBD', evidence: 'Repeatable race markers.', takeaway: 'Let proof set the next target.' }
       ]
-    },
-    ryan: {
-      id: 'ryan',
-      name: 'Ryan Smith',
-      missionName: 'Operator Build',
-      raceDate: 'TBD',
-      status: 'Planning',
-      missionHealth: '🟡 WATCH',
-      currentChallenge: 'Define the first measurable mission and weekly rhythm.',
-      futureMissions: 'Base / Strength / Endurance Event',
-      progressPercent: 8,
-      currentWeek: 0,
-      totalWeeks: 6,
-      currentMiles: 0,
-      targetMiles: 30,
-      longestRun: 'TBD',
-      heroSubtitle: ' A private operator record for turning intent into visible progress and decisions.',
-      trainingBlocks: [
-        { week: 'Week 1', title: 'Mission Definition', miles: 'Planning', state: 'active' },
-        { week: 'Week 2', title: 'Baseline Week', miles: 'Upcoming', state: 'upcoming' },
-        { week: 'Week 3', title: 'First Build', miles: 'Upcoming', state: 'upcoming' }
-      ],
-      checkpoints: [
-        { title: 'BASELINE', date: 'TBD', evidence: 'Mission definition.', takeaway: 'Pick the standard before chasing volume.' },
-        { title: 'FIRST BUILD', date: 'TBD', evidence: 'First consistent training week.', takeaway: 'Create repeatable momentum.' },
-        { title: 'TEST STANDARD', date: 'TBD', evidence: 'First measurable challenge.', takeaway: 'Make progress visible.' }
-      ]
-    },
-    new: {
-      id: 'new',
-      name: 'New Operator',
-      missionName: 'New Mission',
-      raceDate: 'TBD',
-      status: 'Draft',
-      missionHealth: '🟡 WATCH',
-      currentChallenge: 'Define the mission that deserves a private record.',
-      futureMissions: 'TBD',
-      progressPercent: 0,
-      currentWeek: 0,
-      totalWeeks: 1,
-      currentMiles: 0,
-      targetMiles: 0,
-      longestRun: 'TBD',
-      heroSubtitle: ' Start a new private mission dossier with only the decisions and reflections that matter.',
-      trainingBlocks: [
-        { week: 'Week 1', title: 'Define Mission', miles: 'Draft', state: 'active' }
-      ],
-      checkpoints: [
-        { title: 'BASELINE', date: 'TBD', evidence: 'Mission drafted.', takeaway: 'Name the challenge first.' }
-      ]
     }
   };
 
   const operatorIds = Object.keys(operatorProfiles);
   const normalizeOperator = (operatorId) => operatorIds.includes(operatorId) ? operatorId : 'kenny';
   const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
-  const formatOperatorName = (name) => String(name || 'New Operator').trim();
+  const formatOperatorName = (name) => String(name || 'Operator').trim();
   const safeJsonArray = (value) => {
     try {
       const parsed = JSON.parse(value || '[]');
@@ -982,8 +932,18 @@ ${contentHtml}
   const createLocalRecordId = () => `operator-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const shortDate = (iso) => {
     const date = iso ? new Date(iso) : new Date();
-    if (Number.isNaN(date.getTime())) return 'Saved locally';
+    if (Number.isNaN(date.getTime())) return 'TBD';
     return date.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  };
+  const longRecordDate = (iso) => {
+    const date = iso ? new Date(iso) : new Date();
+    if (Number.isNaN(date.getTime())) return 'TBD';
+    return date.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase();
+  };
+  const recordTime = (iso) => {
+    const date = iso ? new Date(iso) : new Date();
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }).toUpperCase();
   };
   const readOperatorsStore = () => {
     try {
@@ -1013,7 +973,12 @@ ${contentHtml}
     store[id] = { ...readOperatorData(id), ...data, id };
     writeOperatorsStore(store);
   };
-  const legacyEntryToMissionLog = (record) => record && record.entry ? { ...record, whatHappened: record.entry } : record;
+  const legacyEntryToMissionLog = (record) => {
+    if (!record) return record;
+    if (record.entry) return record;
+    const parts = [record.whatHappened, record.whatChanged, record.decision, record.nextAction].filter((value) => String(value || '').trim());
+    return { ...record, entry: parts.join('\n\n') };
+  };
 
   const setText = (selector, value) => {
     const node = document.querySelector(selector);
@@ -1090,6 +1055,75 @@ ${contentHtml}
     });
   };
 
+  const renderMissionLog = (profile) => {
+    const list = document.querySelector('[data-mission-log-list]');
+    if (!list) return;
+    const records = (profile.missionLog || []).map(legacyEntryToMissionLog);
+    list.innerHTML = '';
+    if (!records.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-record-note';
+      empty.textContent = 'No captain\'s log entries yet. Add the next meaningful signal to the permanent record.';
+      list.appendChild(empty);
+      return;
+    }
+    records.forEach((record) => {
+      const card = document.createElement('article');
+      card.className = 'operator-record-card captain-log-card';
+      card.innerHTML = `<div class="operator-record-date"><span>${escapeHtml(longRecordDate(record.savedAt))}</span><strong>${escapeHtml(recordTime(record.savedAt))}</strong></div><p class="captain-log-entry">${escapeHtml(record.entry || 'TBD')}</p>`;
+      list.appendChild(card);
+    });
+  };
+
+  const buildDossierPrintHtml = (profile) => {
+    const generated = new Date();
+    const timelineRows = (profile.trainingBlocks || []).map((block) => `<tr><td>${escapeHtml(block.week || '')}</td><td>${escapeHtml(block.title || '')}</td><td>${escapeHtml(block.miles || '')}</td><td>${escapeHtml(block.state || '')}</td></tr>`).join('');
+    const logRows = (profile.missionLog || []).map(legacyEntryToMissionLog).map((record) => `<article class="log-entry"><h3>${escapeHtml(longRecordDate(record.savedAt))}</h3><time>${escapeHtml(recordTime(record.savedAt))}</time><p>${escapeHtml(record.entry || 'TBD')}</p></article>`).join('') || '<p>No captain\'s log entries recorded.</p>';
+    return `<!DOCTYPE html><html><head><title>Operator Dossier // ${escapeHtml(profile.name)}</title><style>
+      body{margin:0;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;line-height:1.45;}
+      main{max-width:820px;margin:0 auto;padding:48px 40px;}
+      h1{margin:0;font-size:18px;letter-spacing:.18em;text-transform:uppercase;}
+      h2{margin:6px 0 28px;font-size:42px;letter-spacing:-.04em;text-transform:uppercase;}
+      section{break-inside:avoid;margin:26px 0;padding-top:18px;border-top:2px solid #111;}
+      h3{margin:0 0 10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+      .field{border:1px solid #111;padding:12px;min-height:54px;}
+      .label{display:block;margin-bottom:4px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#444;}
+      strong{font-size:16px;}
+      table{width:100%;border-collapse:collapse;}
+      th,td{border:1px solid #111;padding:9px;text-align:left;vertical-align:top;}
+      th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
+      .log-entry{margin:0 0 16px;padding:12px;border:1px solid #111;break-inside:avoid;}
+      .log-entry h3{margin:0;font-size:16px;letter-spacing:.08em;}
+      .log-entry time{display:block;margin:2px 0 10px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#444;}
+      .log-entry p{white-space:pre-wrap;margin:0;}
+      .generated{margin-top:34px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#444;}
+      @media print{main{padding:28px 20px;}button{display:none;}}
+    </style></head><body><main>
+      <h1>Project Moonshot</h1><h2>Operator Dossier</h2>
+      <section><h3>Mission</h3><div class="grid">
+        <div class="field"><span class="label">Operator Name</span><strong>${escapeHtml(profile.name)}</strong></div>
+        <div class="field"><span class="label">Mission</span><strong>${escapeHtml(profile.missionName)}</strong></div>
+        <div class="field"><span class="label">Current Status</span><strong>${escapeHtml(profile.status)}</strong></div>
+        <div class="field"><span class="label">Mission Health</span><strong>${escapeHtml(profile.missionHealth)}</strong></div>
+        <div class="field"><span class="label">Progress %</span><strong>${escapeHtml(String(clampPercent(profile.progressPercent)))}%</strong></div>
+        <div class="field"><span class="label">Future Missions</span><strong>${escapeHtml(profile.futureMissions)}</strong></div>
+      </div></section>
+      <section><h3>Timeline</h3><table><thead><tr><th>Phase</th><th>Mission Focus</th><th>Target</th><th>Status</th></tr></thead><tbody>${timelineRows}</tbody></table></section>
+      <section><h3>Captain's Log Entries</h3>${logRows}</section>
+      <div class="generated">Generation Date: ${escapeHtml(generated.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }))}</div>
+    </main><script>window.addEventListener('load',()=>{window.print();});<\/script></body></html>`;
+  };
+
+  const exportDossier = (operatorId) => {
+    const profile = readOperatorData(operatorId);
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    printWindow.document.open();
+    printWindow.document.write(buildDossierPrintHtml(profile));
+    printWindow.document.close();
+  };
+
   const renderOperatorDashboard = (operatorId) => {
     const id = normalizeOperator(operatorId);
     const profile = readOperatorData(id);
@@ -1121,8 +1155,7 @@ ${contentHtml}
     fillNamedFields(document.querySelector('[data-mission-brief-form]'), profile);
     renderWeekProgressRow(profile);
     renderTimeline(profile);
-    renderCheckpointTimeline(profile);
-    renderRecordList('[data-mission-log-list]', (profile.missionLog || []).map(legacyEntryToMissionLog), [['What Happened?', 'whatHappened'], ['What Changed?', 'whatChanged'], ['Decision', 'decision'], ['Next Action', 'nextAction']], 'No mission log entries yet. Record the next meaningful signal.');
+    renderMissionLog(profile);
   };
 
   const initializeOperatorPage = () => {
@@ -1147,8 +1180,13 @@ ${contentHtml}
         writeOperatorData(currentOperator, { ...existing, ...collectForm(missionBriefForm) });
         renderOperatorDashboard(currentOperator);
         const note = document.querySelector('[data-mission-brief-note]');
-        if (note) note.textContent = 'Mission brief saved locally.';
+        if (note) note.textContent = 'Mission brief updated.';
       });
+    }
+
+    const exportButton = document.querySelector('[data-export-dossier]');
+    if (exportButton) {
+      exportButton.addEventListener('click', () => exportDossier(currentOperator));
     }
 
     const saveMissionLog = () => {
@@ -1164,7 +1202,7 @@ ${contentHtml}
         clearForm(form);
         renderOperatorDashboard(currentOperator);
         const note = document.querySelector('[data-mission-log-note]');
-        if (note) note.textContent = 'Mission log entry saved locally.';
+        if (note) note.textContent = 'Entry added to the record.';
       });
     };
 

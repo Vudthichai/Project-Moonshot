@@ -469,9 +469,12 @@ body.page-operators{--page-bg-image:url("assets/ultra-1.jpg");--page-bg-position
 @media (max-width:850px){.operator-nav{grid-template-columns:auto minmax(0,1fr);}.operator-nav .operator-selector-shell{grid-column:1 / -1;width:100%;justify-self:stretch;}.operator-nav .nav-links{grid-column:1 / -1;}.operator-selector-shell{min-width:0;}.mission-progress-topline{flex-direction:column;}.mission-progress-stats,.compact-brief-grid{grid-template-columns:1fr;}.training-timeline{grid-template-columns:1fr;overflow:visible;}.brief-save-actions{align-items:flex-start;justify-content:flex-start;flex-direction:column;}}
 
 /* Operators mission dossier refinements */
-.operator-selector-shell{position:relative;align-items:flex-start;flex-direction:column;gap:3px;min-width:245px;border-radius:18px;padding:10px 38px 10px 14px;background:linear-gradient(135deg,rgba(12,13,15,.92),rgba(225,25,55,.16) 54%,rgba(255,176,0,.10));}
+.operator-selector-shell{position:relative;align-items:flex-start;flex-direction:column;gap:3px;min-width:245px;border-radius:18px;padding:10px 38px 10px 14px;background:linear-gradient(135deg,rgba(12,13,15,.92),rgba(225,25,55,.16) 54%,rgba(255,176,0,.10));transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;}
 .operator-selector-shell:after{content:"⌄";position:absolute;right:14px;bottom:11px;color:#ffcf70;font-size:18px;line-height:1;pointer-events:none;}
+.operator-selector-shell:hover,.operator-selector-shell:focus-within{border-color:rgba(255,176,0,.58);box-shadow:0 0 28px rgba(255,176,0,.14),0 0 22px rgba(225,25,55,.16) inset;transform:translateY(-1px);}
 .operator-selector-shell select{font-size:14px;letter-spacing:.08em;line-height:1.1;}
+.export-dossier-button{background:linear-gradient(135deg,var(--amber),#ffcf70);color:#17110a;border-color:rgba(255,207,112,.72);box-shadow:0 14px 32px rgba(255,176,0,.18);}
+.export-dossier-button:hover{filter:brightness(1.05);box-shadow:0 18px 38px rgba(255,176,0,.26);}
 .operator-brief-tile select{width:100%;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(5,5,5,.42);color:#fff;padding:11px 12px;font:inherit;font-size:15px;font-weight:850;outline:none;}
 .operator-brief-tile select:focus{border-color:rgba(255,176,0,.54);box-shadow:0 0 0 3px rgba(255,176,0,.10);}
 .mission-health-badge{display:inline-flex;align-items:center;width:max-content;border:1px solid rgba(255,176,0,.34);border-radius:999px;background:rgba(255,176,0,.10);padding:6px 10px;color:#ffcf70!important;font-size:12px!important;letter-spacing:.10em;text-transform:uppercase;}
@@ -489,8 +492,10 @@ body.page-operators{--page-bg-image:url("assets/ultra-1.jpg");--page-bg-position
 .checkpoint-compact-field p{margin:0;color:#eef1f5;font-size:13px;line-height:1.35;}
 .mission-log-section{background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(225,25,55,.08) 48%,rgba(255,176,0,.04));border-color:rgba(255,255,255,.12);}
 .mission-log-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-.operator-log-field textarea{min-height:118px;}
-.mission-log-list .operator-record-card{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;}
-.mission-log-list .operator-record-date{grid-column:1 / -1;margin-bottom:0;}
-@media (max-width:1100px){.week-progress-row{grid-template-columns:repeat(5,minmax(54px,1fr));}.mission-log-grid,.mission-log-list .operator-record-card{grid-template-columns:1fr;}}
+.captain-log-field textarea{min-height:180px;}
+.mission-log-list .captain-log-card{display:block;}
+.mission-log-list .operator-record-date{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.mission-log-list .operator-record-date span,.mission-log-list .operator-record-date strong{display:block;}
+.captain-log-entry{margin:0;color:#f2f4f7;font-size:16px;line-height:1.55;white-space:pre-wrap;}
+@media (max-width:1100px){.week-progress-row{grid-template-columns:repeat(5,minmax(54px,1fr));}.mission-log-grid{grid-template-columns:1fr;}}
 @media (max-width:850px){.week-progress-row{grid-template-columns:repeat(3,minmax(54px,1fr));}.operator-selector-shell{align-items:flex-start;}}
