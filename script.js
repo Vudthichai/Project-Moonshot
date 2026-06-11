@@ -230,6 +230,20 @@
   const normalizeStatus = (status) => status || 'Draft';
   const isPendingStatus = (status) => /pending|draft|needs|red flag/i.test(status);
   const displayText = (value, fallback = 'TBD') => String(value || '').trim() || fallback;
+  const escapeHtml = (value, fallback = 'TBD') => String(displayText(value, fallback))
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/\n/g, '<br>');
+  const printDate = () => new Date().toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   const includesAny = (text, terms) => terms.some((term) => text.includes(term));
 
@@ -347,14 +361,14 @@
       header.className = 'archive-card-header';
       const weekWrap = document.createElement('div');
       weekWrap.appendChild(makeArchiveField('Week / Dates', report.week));
-      const status = document.createElement('span');
-      status.className = `report-status${isPendingStatus(statusText) ? ' pending' : ''}`;
-      status.textContent = statusText;
-      header.append(weekWrap, status);
+      const exportButton = makeReportButton('EXPORT', 'button export-button', () => exportWeeklyReport(report));
+      exportButton.setAttribute('aria-label', `Export scorecard for ${displayText(report.week, 'this weekly report')}`);
+      header.append(weekWrap, exportButton);
 
       const body = document.createElement('div');
       body.className = 'archive-card-body';
       body.append(
+        makeArchiveField('Status', statusText),
         makeArchiveField('Headline', displayText(report.headline, 'No headline entered.')),
         makeArchiveField('Completed Work', report.completedWork, 'wide'),
         makeArchiveField('Decision Checkpoint', report.decisionCheckpoint),
@@ -391,6 +405,69 @@
 
       archive.appendChild(card);
     });
+  };
+
+  const openPrintableRecord = (title, bodyClass, contentHtml) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    printWindow.document.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHtml(title)}</title>
+<style>
+  :root{color-scheme:dark;--red:#e11937;--amber:#ffb000;--ink:#f3f4f7;--panel:rgba(255,255,255,.075);--line:rgba(255,255,255,.18)}
+  *{box-sizing:border-box} body{margin:0;padding:32px;background:radial-gradient(circle at 82% 0%,rgba(225,25,55,.28),transparent 34%),linear-gradient(135deg,#050505,#111318 62%,#050505);color:var(--ink);font:14px/1.55 Inter,Arial,sans-serif}
+  .record{max-width:980px;margin:0 auto;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.035));box-shadow:0 26px 80px rgba(0,0,0,.38);overflow:hidden}
+  .record-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:24px 26px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(225,25,55,.20),rgba(255,176,0,.09))}
+  .eyebrow{color:var(--amber);font-size:11px;text-transform:uppercase;letter-spacing:.18em;font-weight:900}.record h1{margin:6px 0 0;font-size:38px;line-height:.95;text-transform:uppercase;letter-spacing:-.05em}.record h2{margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:.14em;color:var(--amber)}
+  .print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;padding:12px;background:rgba(5,5,5,.82);backdrop-filter:blur(14px)}button{border:1px solid rgba(225,25,55,.62);border-radius:999px;background:var(--red);color:white;padding:11px 16px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;cursor:pointer}
+  .record-body{display:grid;gap:16px;padding:22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field,.metric,.progress-card{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:15px}.field.wide{grid-column:1/-1}.field .label,.metric span{display:block;margin-bottom:6px;color:#aeb4bf;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:900}.field .value{font-size:14px;color:#f7f8fa}.metric strong{display:block;color:#fff;font-size:24px;line-height:1}.mission-seal{border:1px solid rgba(255,176,0,.32);border-radius:18px;padding:14px;color:#f7d681;background:rgba(255,176,0,.07);font-weight:800}.progress-row{margin:10px 0}.progress-head{display:flex;justify-content:space-between;font-weight:900}.bar{height:9px;border-radius:999px;background:rgba(255,255,255,.13);overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--amber))}
+  @media (max-width:720px){body{padding:14px}.record-top,.grid{display:block}.field,.metric{margin-bottom:12px}.record h1{font-size:30px}}
+  @media print{body{background:#fff;color:#000;padding:0;font:11pt/1.45 Georgia,serif}.print-actions{display:none}.record{border:0;border-radius:0;box-shadow:none;background:#fff}.record-top{background:#fff;border-bottom:2px solid #000;padding:0 0 14px;margin-bottom:12px}.eyebrow,.record h2{color:#000}.record h1{color:#000;font-size:28pt}.record-body{padding:0}.field,.metric,.progress-card,.mission-seal{break-inside:avoid;background:#fff;border:1px solid #000;color:#000}.field .label,.metric span,.field .value,.metric strong{color:#000}.grid{gap:10px}.bar{border:1px solid #000;background:#fff}.bar span{background:#000!important}}
+</style>
+</head>
+<body class="${bodyClass}">
+<div class="print-actions"><button onclick="window.print()">Print / Save as PDF</button></div>
+${contentHtml}
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.focus();
+  };
+
+  const progressRowsHtml = (parsed) => Object.entries(progressTargets).map(([key, target]) => {
+    const parsedValue = Number.isFinite(parsed[key]) && parsed[key] > 0 ? parsed[key] : manualMeterValues[key];
+    const percent = Math.min(100, Math.max(0, (parsedValue / target) * 100));
+    const labels = { miles: 'Miles', elevation: 'Elevation', stations: 'HYROX Stations', simulations: 'Simulations' };
+    return `<div class="progress-row"><div class="progress-head"><span>${labels[key]}</span><span>${formatProgressValue(key, parsedValue)}</span></div><div class="bar"><span style="width:${percent}%"></span></div></div>`;
+  }).join('');
+
+  const exportWeeklyReport = (report) => {
+    const normalized = normalizeReport(report);
+    const parsed = extractReportProgress(normalized);
+    const summaryText = normalized.generatedSummary || generateReportSummary(normalized);
+    const stations = parsed.stationLabels?.length ? `${formatLogValue('stations', parsed.stations)} (${parsed.stationLabels.join(', ')})` : formatLogValue('stations', parsed.stations);
+    openPrintableRecord(
+      `Project Moonshot Scorecard - ${displayText(normalized.week, 'Weekly Report')}`,
+      'scorecard-print',
+      `<main class="record">
+        <header class="record-top"><div><div class="eyebrow">Project Moonshot // Official Mission Record</div><h1>Weekly Scorecard</h1></div><div class="mission-seal">Generated ${escapeHtml(printDate())}<br>Status: ${escapeHtml(normalizeStatus(normalized.status))}</div></header>
+        <section class="record-body">
+          <div class="grid">
+            <div class="field"><div class="label">Week / Dates</div><div class="value">${escapeHtml(normalized.week)}</div></div>
+            <div class="field"><div class="label">Headline</div><div class="value">${escapeHtml(normalized.headline, 'No headline entered.')}</div></div>
+            <div class="field wide"><div class="label">Completed Work</div><div class="value">${escapeHtml(normalized.completedWork)}</div></div>
+            <div class="field"><div class="label">Decision Checkpoint</div><div class="value">${escapeHtml(normalized.decisionCheckpoint)}</div></div>
+            <div class="field"><div class="label">Next Orders</div><div class="value">${escapeHtml(normalized.nextOrders)}</div></div>
+            <div class="field wide"><div class="label">Generated Summary</div><div class="value">${escapeHtml(summaryText)}</div></div>
+          </div>
+          <div><h2>Detected Signals</h2><div class="grid"><div class="metric"><span>Detected Miles</span><strong>${escapeHtml(formatLogValue('miles', parsed.miles))}</strong></div><div class="metric"><span>Detected Elevation</span><strong>${escapeHtml(formatLogValue('elevation', parsed.elevation))}</strong></div><div class="metric"><span>Detected HYROX Stations</span><strong>${escapeHtml(stations)}</strong></div><div class="metric"><span>Detected Simulations</span><strong>${escapeHtml(formatLogValue('simulations', parsed.simulations))}</strong></div></div></div>
+          <div class="progress-card"><h2>Progress Toward Goals</h2>${progressRowsHtml(parsed)}</div>
+        </section>
+      </main>`
+    );
   };
 
   const form = document.querySelector('[data-report-form]');
@@ -757,6 +834,7 @@
     vudi: 'projectMoonshotOperatorMissionVudi'
   };
   const OPERATOR_ENTRIES_KEY = 'projectMoonshotOperatorEntriesKenny';
+  const OPERATOR_RECORDS_KEY = 'projectMoonshotOperatorRecords';
   const defaultOperatorMissions = {
     kenny: {
       missionName: '50 Mile Ultra',
@@ -765,7 +843,11 @@
       why: 'Finish the 50, learn what breaks, and carry the evidence forward into bigger race targets.',
       targetOutcome: 'Finish controlled, solve problems without panic, and leave with a clear post-race debrief.',
       currentRisk: 'Heat, fueling discipline, feet, pacing pride, and recovery debt.',
-      nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.'
+      nextCheck: 'Confirm long-run durability, nutrition tolerance, and recovery signal after the next key weekend.',
+      preparationPlan: 'Stack long-run durability, fueling practice, heat management, foot care, and post-run debriefs into one repeatable operating rhythm.',
+      checkpoints: 'Long-run durability check; nutrition tolerance check; recovery signal review; final gear and route plan.',
+      evidenceNotes: 'Weekly evidence entries should prove mileage, long-run durability, fueling decisions, recovery status, and problem-solving under fatigue.',
+      lessonsLearned: 'Respect the distance early. Record what breaks without drama, then convert the lesson into the next training order.'
     },
     vudi: {
       missionName: 'ULTRA 1',
@@ -776,7 +858,11 @@
       why: 'Complete a self-supported 30-mile mountain effort.',
       targetOutcome: 'Finish under own power. No pace requirement. No time requirement.',
       currentRisk: 'Route management, mountain footing, fueling discipline, and keeping the effort self-supported.',
-      nextCheck: 'Confirm Cove Run Loop repetition count, Emerging Extension access, and water/fuel carry plan before the next long effort.'
+      nextCheck: 'Confirm Cove Run Loop repetition count, Emerging Extension access, and water/fuel carry plan before the next long effort.',
+      preparationPlan: 'Validate loops, water carries, mountain footing, fueling, and self-supported decision points before extending the effort.',
+      checkpoints: 'Route confirmation; water and fuel carry check; loop-repeat confidence; mountain footing signal; finish-under-own-power review.',
+      evidenceNotes: 'Keep notes on route conditions, elevation, fueling, fatigue, and proof that the mission is becoming more controllable.',
+      lessonsLearned: 'The mountain effort is won by patience, route clarity, and the refusal to turn discomfort into confusion.'
     }
   };
   const safeParseOperatorEntries = (value) => {
@@ -801,12 +887,27 @@
     }
   };
 
+  const safeParseOperatorRecords = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(OPERATOR_RECORDS_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  };
+
   const writeOperatorMission = (operatorId = 'kenny', mission) => {
     const normalizedOperatorId = normalizeOperatorId(operatorId);
-    localStorage.setItem(
-      OPERATOR_MISSION_KEYS[normalizedOperatorId],
-      JSON.stringify({ ...defaultOperatorMissions[normalizedOperatorId], ...mission })
-    );
+    const nextMission = { ...defaultOperatorMissions[normalizedOperatorId], ...mission };
+    localStorage.setItem(OPERATOR_MISSION_KEYS[normalizedOperatorId], JSON.stringify(nextMission));
+    const records = safeParseOperatorRecords();
+    records[normalizedOperatorId] = {
+      operatorId: normalizedOperatorId,
+      profile: normalizedOperatorId === 'vudi' ? 'Vudi' : 'Kenny Schrader',
+      mission: nextMission,
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem(OPERATOR_RECORDS_KEY, JSON.stringify(records));
   };
 
   const normalizeOperatorEntry = (entry = {}) => ({
@@ -828,7 +929,24 @@
     .sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
 
   const writeOperatorEntries = (entries) => {
-    localStorage.setItem(OPERATOR_ENTRIES_KEY, JSON.stringify(entries.map(normalizeOperatorEntry)));
+    const normalizedEntries = entries.map(normalizeOperatorEntry);
+    localStorage.setItem(OPERATOR_ENTRIES_KEY, JSON.stringify(normalizedEntries));
+    const records = safeParseOperatorRecords();
+    records.kenny = {
+      operatorId: 'kenny',
+      profile: 'Kenny Schrader',
+      mission: readOperatorMission('kenny'),
+      evidenceEntries: normalizedEntries,
+      updatedAt: new Date().toISOString()
+    };
+    records.vudi = records.vudi || {
+      operatorId: 'vudi',
+      profile: 'Vudi',
+      mission: readOperatorMission('vudi'),
+      evidenceEntries: [],
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem(OPERATOR_RECORDS_KEY, JSON.stringify(records));
   };
 
   const parseOperatorNumber = (value) => {
@@ -949,12 +1067,106 @@
       remove.addEventListener('click', () => {
         writeOperatorEntries(readOperatorEntries().filter((item) => item.id !== entry.id));
         renderOperatorEntries();
+        renderOperatorJournalRecords();
       });
       actions.append(edit, remove);
       card.append(header, body, actions);
       list.appendChild(card);
     });
     renderOperatorSummary();
+  };
+
+  const operatorDisplayName = (operatorId) => operatorId === 'vudi' ? 'Vudi' : 'Kenny Schrader';
+
+  const latestOperatorLesson = (operatorId, entries) => {
+    if (operatorId !== 'kenny') return '';
+    return entries.find((entry) => entry.lessonLearned)?.lessonLearned || '';
+  };
+
+  const operatorJournalFields = (operatorId, mission, entries = []) => {
+    const currentMission = [mission.missionName, mission.subtitle, mission.raceDate, mission.route, mission.elevation]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean)
+      .join(' // ');
+    const lessons = [mission.lessonsLearned, latestOperatorLesson(operatorId, entries)]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean)
+      .join('\n\n');
+    const evidence = [mission.evidenceNotes, ...entries.slice(0, 3).map((entry) => [entry.weekDate, entry.keyWorkout, entry.notes].filter(Boolean).join(' — '))]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean)
+      .join('\n\n');
+    return [
+      ['Why This Mission', mission.why],
+      ['Current Mission', currentMission || mission.targetOutcome],
+      ['Preparation Plan', mission.preparationPlan],
+      ['Checkpoints', mission.checkpoints || mission.nextCheck],
+      ['Evidence Notes', evidence],
+      ['Lessons Learned', lessons]
+    ];
+  };
+
+  const exportOperatorRecord = (operatorId) => {
+    const mission = readOperatorMission(operatorId);
+    const entries = operatorId === 'kenny' ? readOperatorEntries() : [];
+    const fields = operatorJournalFields(operatorId, mission, entries);
+    const fieldHtml = fields.map(([label, value]) => `<div class="field${label === 'Evidence Notes' || label === 'Lessons Learned' ? ' wide' : ''}"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(value)}</div></div>`).join('');
+    const evidenceSummary = entries.length
+      ? `${entries.length} evidence entr${entries.length === 1 ? 'y' : 'ies'} stored locally. Latest: ${entries[0].weekDate || 'date TBD'}.`
+      : 'No separate evidence entries stored for this operator yet.';
+    openPrintableRecord(
+      `Project Moonshot Operator Record - ${operatorDisplayName(operatorId)}`,
+      'operator-record-print',
+      `<main class="record">
+        <header class="record-top"><div><div class="eyebrow">Project Moonshot // Operator Journal Record</div><h1>${escapeHtml(operatorDisplayName(operatorId))}</h1></div><div class="mission-seal">Mission: ${escapeHtml(mission.missionName)}<br>Status: ${escapeHtml(mission.status || 'Active')}<br>Generated ${escapeHtml(printDate())}</div></header>
+        <section class="record-body">
+          <div class="grid">${fieldHtml}</div>
+          <div class="mission-seal">Current Status: ${escapeHtml(mission.status || 'Active')} // ${escapeHtml(evidenceSummary)}</div>
+        </section>
+      </main>`
+    );
+  };
+
+  const renderOperatorJournalRecords = () => {
+    const grid = document.querySelector('[data-operator-journal-records]');
+    if (!grid) return;
+    const entries = readOperatorEntries();
+    grid.innerHTML = '';
+    ['kenny', 'vudi'].forEach((operatorId) => {
+      const mission = readOperatorMission(operatorId);
+      const card = document.createElement('article');
+      card.className = 'operator-journal-card archive-card';
+      const header = document.createElement('div');
+      header.className = 'archive-card-header';
+      const titleBlock = document.createElement('div');
+      const eyebrow = document.createElement('div');
+      eyebrow.className = 'eyebrow';
+      eyebrow.textContent = 'Journal Record // Local';
+      const title = document.createElement('h3');
+      title.textContent = operatorDisplayName(operatorId);
+      titleBlock.append(eyebrow, title);
+      const exportButton = document.createElement('button');
+      exportButton.className = 'button export-button';
+      exportButton.type = 'button';
+      exportButton.textContent = 'Export Operator Record';
+      exportButton.addEventListener('click', () => exportOperatorRecord(operatorId));
+      header.append(titleBlock, exportButton);
+
+      const body = document.createElement('div');
+      body.className = 'archive-card-body operator-journal-body';
+      operatorJournalFields(operatorId, mission, operatorId === 'kenny' ? entries : []).forEach(([label, value]) => {
+        const field = document.createElement('div');
+        field.className = `operator-entry-field${label === 'Evidence Notes' || label === 'Lessons Learned' ? ' wide' : ''}`;
+        const fieldLabel = document.createElement('span');
+        const fieldValue = document.createElement('p');
+        fieldLabel.textContent = label;
+        fieldValue.textContent = displayText(value);
+        field.append(fieldLabel, fieldValue);
+        body.appendChild(field);
+      });
+      card.append(header, body);
+      grid.appendChild(card);
+    });
   };
 
   const initializeOperatorPage = () => {
@@ -970,6 +1182,7 @@
         const mission = Object.fromEntries(new FormData(missionForm).entries());
         writeOperatorMission(operatorId, mission);
         renderOperatorSummary();
+        renderOperatorJournalRecords();
         const note = missionForm.querySelector('[data-operator-mission-note]');
         if (note) note.textContent = `${operatorId === 'vudi' ? 'Vudi' : 'Kenny'} mission card saved locally.`;
       });
@@ -988,6 +1201,7 @@
         writeOperatorEntries(nextEntries);
         fillOperatorEntryForm(entryForm, null);
         renderOperatorEntries();
+        renderOperatorJournalRecords();
         const note = document.querySelector('[data-operator-entry-note]');
         if (note) note.textContent = existingId ? 'Entry updated locally.' : 'Entry saved locally.';
       });
@@ -1003,18 +1217,21 @@
       clear.addEventListener('click', () => {
         Object.values(OPERATOR_MISSION_KEYS).forEach((key) => localStorage.removeItem(key));
         localStorage.removeItem(OPERATOR_ENTRIES_KEY);
+        localStorage.removeItem(OPERATOR_RECORDS_KEY);
         missionForms.forEach((missionForm) => {
           const operatorId = normalizeOperatorId(missionForm.dataset.operatorId);
           fillOperatorMissionForm(missionForm, readOperatorMission(operatorId));
         });
         if (entryForm) fillOperatorEntryForm(entryForm, null);
         renderOperatorEntries();
+        renderOperatorJournalRecords();
         const note = document.querySelector('[data-operator-entry-note]');
         if (note) note.textContent = 'Local operator data cleared. Defaults restored.';
       });
     }
 
     renderOperatorEntries();
+    renderOperatorJournalRecords();
   };
 
   initializeOperatorPage();
