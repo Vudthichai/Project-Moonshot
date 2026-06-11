@@ -4,6 +4,34 @@
   const REPORT_STORAGE_KEY = 'moonshotWeeklyReports';
   const LEGACY_DRAFT_KEY = 'moonshotReportDrafts';
   const DEFAULT_SUMMARY = 'This week built running accumulation, maintained strength, and identified station efficiency as the next limiter.';
+  const mobileNavToggle = document.querySelector('[data-mobile-nav-toggle]');
+  const mobileNavMenu = document.querySelector('[data-mobile-menu]');
+
+  if (mobileNavToggle && mobileNavMenu) {
+    const siteNav = mobileNavToggle.closest('.site-nav');
+    const setMobileNavOpen = (isOpen) => {
+      mobileNavToggle.setAttribute('aria-expanded', String(isOpen));
+      mobileNavToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      siteNav?.classList.toggle('nav-open', isOpen);
+    };
+
+    mobileNavToggle.addEventListener('click', () => {
+      setMobileNavOpen(mobileNavToggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    mobileNavMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMobileNavOpen(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMobileNavOpen(false);
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(min-width: 851px)').matches) setMobileNavOpen(false);
+    });
+  }
+
 
   const dailyQuotes = [
     'If you pray to win a marathon, expect shoes, not a medal.',
