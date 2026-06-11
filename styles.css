@@ -18,7 +18,7 @@ a{color:inherit;}
 .site-nav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 auto 16px;padding:9px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(7,7,7,.68);backdrop-filter:blur(12px);box-shadow:0 16px 48px rgba(0,0,0,.24);}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:950;text-transform:uppercase;letter-spacing:-.03em;white-space:nowrap;}
 .brand-mark{display:inline-grid;place-items:center;width:36px;height:36px;min-width:36px;border-radius:50%;background:rgba(7,7,7,.78);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 0 1px rgba(225,25,55,.18) inset,0 0 18px rgba(225,25,55,.24);overflow:hidden;}
-.brand-mark-img{width:28px;height:28px;object-fit:contain;display:block;}
+.brand-mark-img{width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;}
 .mobile-menu-toggle{display:none;appearance:none;border:0;background:transparent;color:inherit;font:inherit;}
 .nav-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
 .nav-links a{padding:8px 11px;border:1px solid transparent;border-radius:999px;color:#d9dbe0;text-decoration:none;font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;}
