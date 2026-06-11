@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Project Moonshot three-ring mark</title>
+  <defs>
+    <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.05" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#soft-glow)">
+    <circle cx="32" cy="32" r="19.5" stroke="#ffffff" stroke-width="4.6"/>
+    <circle cx="32" cy="32" r="12.3" stroke="#ffb000" stroke-width="4.2"/>
+    <circle cx="32" cy="32" r="5.3" stroke="#e11937" stroke-width="4"/>
+  </g>
+</svg>

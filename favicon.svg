@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="badge" cx="35%" cy="25%" r="72%">
+      <stop offset="0%" stop-color="#2a0a10"/>
+      <stop offset="58%" stop-color="#0a0a0b"/>
+      <stop offset="100%" stop-color="#e11937"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="url(#badge)"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#ff3852" stroke-opacity=".78" stroke-width="2"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="32" r="19.2" stroke="#ffffff" stroke-width="4.8"/>
+    <circle cx="32" cy="32" r="12.1" stroke="#ffb000" stroke-width="4.4"/>
+    <circle cx="32" cy="32" r="5.2" stroke="#e11937" stroke-width="4.1"/>
+  </g>
+</svg>
