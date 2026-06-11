@@ -497,5 +497,7 @@ body.page-operators{--page-bg-image:url("assets/ultra-1.jpg");--page-bg-position
 .mission-log-list .operator-record-date{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
 .mission-log-list .operator-record-date span,.mission-log-list .operator-record-date strong{display:block;}
 .captain-log-entry{margin:0;color:#f2f4f7;font-size:16px;line-height:1.55;white-space:pre-wrap;}
+.mission-log-success-note{min-height:18px;opacity:0;transform:translateY(3px);transition:opacity .35s ease,transform .35s ease;color:#9ff4c1!important;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
+.mission-log-success-note.is-visible{opacity:1;transform:translateY(0);}
 @media (max-width:1100px){.week-progress-row{grid-template-columns:repeat(5,minmax(54px,1fr));}.mission-log-grid{grid-template-columns:1fr;}}
 @media (max-width:850px){.week-progress-row{grid-template-columns:repeat(3,minmax(54px,1fr));}.operator-selector-shell{align-items:flex-start;}}

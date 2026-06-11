@@ -38,7 +38,7 @@
     <div class="subtitle"><strong data-hero-mission>50 Mile Ultra</strong><span data-hero-subtitle> A private mission record for the current challenge and the bigger endurance arc beyond it.</span></div>
     <div class="meta operator-hero-tiles">
       <div class="meta-card"><div class="label">Current Mission</div><div class="value" data-hero-current-mission>50 Mile Ultra</div></div>
-      <div class="meta-card"><div class="label">Current Challenge</div><div class="value" data-hero-current-challenge>Week 5 complete. Building toward peak fatigue.</div></div>
+      <div class="meta-card"><div class="label">Objective</div><div class="value" data-hero-current-challenge>Week 5 complete. Building toward peak fatigue.</div></div>
       <div class="meta-card"><div class="label">Target Date</div><div class="value" data-hero-target-date>July 4, 2026</div></div>
       <div class="meta-card"><div class="label">Status</div><div class="value" data-hero-status>Active</div></div>
       <div class="meta-card health-meta-card"><div class="label">Mission Health</div><div class="value mission-health-badge" data-hero-health>🟢 ON TRACK</div></div>
@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="operator-brief-grid compact-brief-grid">
-          <label class="operator-brief-tile"><span>Challenge</span><input name="missionName" /></label>
+          <label class="operator-brief-tile"><span>Mission Name</span><input name="missionName" /></label>
           <label class="operator-brief-tile"><span>Date</span><input name="raceDate" /></label>
           <label class="operator-brief-tile"><span>Status</span><input name="status" /></label>
           <label class="operator-brief-tile health-field"><span>Mission Health</span><select name="missionHealth">
@@ -75,7 +75,7 @@
             <option value="🟡 WATCH">🟡 WATCH</option>
             <option value="🔴 RECOVER">🔴 RECOVER</option>
           </select></label>
-          <label class="operator-brief-tile"><span>Current Challenge</span><input name="currentChallenge" /></label>
+          <label class="operator-brief-tile"><span>Current Mission</span><input name="currentMission" /></label>
           <label class="operator-brief-tile wide"><span>Future Missions</span><input name="futureMissions" /></label>
         </div>
       </div>
@@ -94,16 +94,14 @@
 
 
   <section class="section mission-log-section">
-    <div class="section-header"><h2>CAPTAIN'S LOG</h2><span class="tag">Mission record // Newest first</span></div>
+    <div class="section-header"><h2>OPERATOR INSIGHTS</h2><span class="tag">Mission journal // Newest first</span></div>
     <form class="operator-log-form" data-mission-log-form>
-      <label class="operator-log-field captain-log-field"><span>Captain's Log Entry</span><textarea name="entry" placeholder="Completed first 18 mile run.
+      <label class="operator-log-field captain-log-field"><span>Journal Entry</span><textarea name="entry" placeholder="What happened today?
 
-Started tired.
+What did you learn?
 
-Felt strong after mile 8.
-
-Need to fuel earlier."></textarea></label>
-      <div class="mock-actions"><button class="button" type="submit">Add To Record</button><span class="light-note" data-mission-log-note>Entries appear newest first.</span></div>
+What is next?"></textarea></label>
+      <div class="mock-actions"><button class="button" type="submit">Add To Record</button><span class="light-note mission-log-success-note" data-mission-log-note aria-live="polite"></span></div>
     </form>
     <div class="record-card-list mission-log-list" data-mission-log-list></div>
   </section>
