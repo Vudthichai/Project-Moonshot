@@ -847,10 +847,7 @@ ${contentHtml}
   renderMissionProgress();
 
   const OPERATOR_CURRENT_KEY = 'projectMoonshotCurrentOperator';
-  const OPERATOR_PROFILE_PREFIX = 'projectMoonshotOperatorProfile:';
-  const OPERATOR_LOG_PREFIX = 'projectMoonshotMissionLog:';
-  const OPERATOR_INSIGHT_PREFIX = 'projectMoonshotOperatorInsights:';
-  const OPERATOR_DECISION_PREFIX = 'projectMoonshotDecisions:';
+  const OPERATORS_STORAGE_KEY = 'operators';
 
   const operatorProfiles = {
     kenny: {
@@ -859,6 +856,7 @@ ${contentHtml}
       missionName: '50 Mile Ultra',
       raceDate: 'July 4, 2026',
       status: 'Active',
+      missionHealth: '🟢 ON TRACK',
       currentChallenge: 'Week 5 complete. Building toward peak fatigue and race-specific durability.',
       futureMissions: 'HYROX / 70.3 / Full Ironman / Moab',
       progressPercent: 52,
@@ -879,7 +877,15 @@ ${contentHtml}
         { week: 'Week 8', title: 'Taper Begins', miles: '~40 miles planned', state: 'upcoming' },
         { week: 'Week 9', title: 'Race Week', miles: '50 Mile Ultra', state: 'upcoming' }
       ],
-      futureArc: ['50 Mile Ultra', 'HYROX', '70.3', 'Full Ironman', 'Moab']
+      checkpoints: [
+        { title: 'BASELINE', date: 'June 1, 2026', evidence: 'Training rhythm established.', takeaway: 'The mission has a visible starting line.' },
+        { title: 'LONG RUN CONFIDENCE', date: 'June 11, 2026', evidence: 'First 18-mile long run completed.', takeaway: 'Distance is becoming familiar, not intimidating.' },
+        { title: 'PEAK FATIGUE', date: 'June 15, 2026', evidence: 'Week 6 load and durability test.', takeaway: 'Hold form when accumulated fatigue arrives.' },
+        { title: 'PEAK LONG RUN', date: 'June 20, 2026', evidence: 'Final high-confidence long run.', takeaway: 'Prove fueling, pacing, and patience.' },
+        { title: 'TAPER', date: 'June 24, 2026', evidence: 'Volume drops while sharpness stays.', takeaway: 'Recover without losing intent.' },
+        { title: 'RACE DAY', date: 'July 4, 2026', evidence: '50 Mile Ultra.', takeaway: 'Execute the mission one segment at a time.' },
+        { title: 'POST RACE', date: 'July 5, 2026', evidence: 'Debrief the result.', takeaway: 'Archive what changed and choose the next mission.' }
+      ]
     },
     vudi: {
       id: 'vudi',
@@ -887,6 +893,7 @@ ${contentHtml}
       missionName: 'HYROX Build',
       raceDate: 'TBD',
       status: 'Active',
+      missionHealth: '🟢 ON TRACK',
       currentChallenge: 'Build run durability while keeping station power repeatable.',
       futureMissions: 'HYROX / Endurance Base / Strength Standard',
       progressPercent: 18,
@@ -895,14 +902,18 @@ ${contentHtml}
       currentMiles: 34,
       targetMiles: 45,
       longestRun: 'TBD',
-      heroSubtitle: ' A private operator record for converting training evidence into sharper race decisions.',
+      heroSubtitle: ' A private mission dossier for converting training proof into sharper race choices.',
       trainingBlocks: [
-        { week: 'Week 1', title: 'Baseline Capture', miles: 'Run + station evidence', state: 'active' },
+        { week: 'Week 1', title: 'Baseline Capture', miles: 'Run + station proof', state: 'active' },
         { week: 'Week 2', title: 'Run-Station Rhythm', miles: 'Planned', state: 'upcoming' },
         { week: 'Week 3', title: 'Compromised Running', miles: 'Planned', state: 'upcoming' },
         { week: 'Week 4', title: 'Benchmark Week', miles: 'Planned', state: 'upcoming' }
       ],
-      futureArc: ['HYROX', 'Run Base', 'Station Power', 'Race Simulation']
+      checkpoints: [
+        { title: 'BASELINE', date: 'TBD', evidence: 'Initial run and station markers.', takeaway: 'Know the starting standard.' },
+        { title: 'RUN-STATION RHYTHM', date: 'TBD', evidence: 'First clean compromised session.', takeaway: 'Recover while moving.' },
+        { title: 'BENCHMARK WEEK', date: 'TBD', evidence: 'Repeatable race markers.', takeaway: 'Let proof set the next target.' }
+      ]
     },
     ryan: {
       id: 'ryan',
@@ -910,6 +921,7 @@ ${contentHtml}
       missionName: 'Operator Build',
       raceDate: 'TBD',
       status: 'Planning',
+      missionHealth: '🟡 WATCH',
       currentChallenge: 'Define the first measurable mission and weekly rhythm.',
       futureMissions: 'Base / Strength / Endurance Event',
       progressPercent: 8,
@@ -924,7 +936,11 @@ ${contentHtml}
         { week: 'Week 2', title: 'Baseline Week', miles: 'Upcoming', state: 'upcoming' },
         { week: 'Week 3', title: 'First Build', miles: 'Upcoming', state: 'upcoming' }
       ],
-      futureArc: ['Define Mission', 'Build Base', 'Test Standard']
+      checkpoints: [
+        { title: 'BASELINE', date: 'TBD', evidence: 'Mission definition.', takeaway: 'Pick the standard before chasing volume.' },
+        { title: 'FIRST BUILD', date: 'TBD', evidence: 'First consistent training week.', takeaway: 'Create repeatable momentum.' },
+        { title: 'TEST STANDARD', date: 'TBD', evidence: 'First measurable challenge.', takeaway: 'Make progress visible.' }
+      ]
     },
     new: {
       id: 'new',
@@ -932,6 +948,7 @@ ${contentHtml}
       missionName: 'New Mission',
       raceDate: 'TBD',
       status: 'Draft',
+      missionHealth: '🟡 WATCH',
       currentChallenge: 'Define the mission that deserves a private record.',
       futureMissions: 'TBD',
       progressPercent: 0,
@@ -944,14 +961,14 @@ ${contentHtml}
       trainingBlocks: [
         { week: 'Week 1', title: 'Define Mission', miles: 'Draft', state: 'active' }
       ],
-      futureArc: ['New Mission']
+      checkpoints: [
+        { title: 'BASELINE', date: 'TBD', evidence: 'Mission drafted.', takeaway: 'Name the challenge first.' }
+      ]
     }
   };
 
   const operatorIds = Object.keys(operatorProfiles);
   const normalizeOperator = (operatorId) => operatorIds.includes(operatorId) ? operatorId : 'kenny';
-  const profileKey = (operatorId) => `${OPERATOR_PROFILE_PREFIX}${operatorId}`;
-  const listKey = (prefix, operatorId) => `${prefix}${operatorId}`;
   const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
   const formatOperatorName = (name) => String(name || 'New Operator').trim();
   const safeJsonArray = (value) => {
@@ -968,23 +985,35 @@ ${contentHtml}
     if (Number.isNaN(date.getTime())) return 'Saved locally';
     return date.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   };
-  const readOperatorProfile = (operatorId) => {
-    const id = normalizeOperator(operatorId);
-    const fallback = operatorProfiles[id];
+  const readOperatorsStore = () => {
     try {
-      const saved = JSON.parse(localStorage.getItem(profileKey(id)) || '{}');
-      return { ...fallback, ...saved, id, trainingBlocks: fallback.trainingBlocks, futureArc: fallback.futureArc };
+      const parsed = JSON.parse(localStorage.getItem(OPERATORS_STORAGE_KEY) || '{}');
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
     } catch (error) {
-      return fallback;
+      return {};
     }
   };
-  const writeOperatorProfile = (operatorId, profile) => {
+  const writeOperatorsStore = (store) => localStorage.setItem(OPERATORS_STORAGE_KEY, JSON.stringify(store));
+  const readOperatorData = (operatorId) => {
     const id = normalizeOperator(operatorId);
-    const keep = (({ missionName, raceDate, status, currentChallenge, futureMissions, progressPercent, currentWeek, totalWeeks, currentMiles, targetMiles, longestRun }) => ({ missionName, raceDate, status, currentChallenge, futureMissions, progressPercent, currentWeek, totalWeeks, currentMiles, targetMiles, longestRun }))(profile);
-    localStorage.setItem(profileKey(id), JSON.stringify(keep));
+    const fallback = operatorProfiles[id];
+    const saved = readOperatorsStore()[id] || {};
+    return {
+      ...fallback,
+      ...saved,
+      id,
+      trainingBlocks: saved.trainingBlocks || fallback.trainingBlocks,
+      checkpoints: saved.checkpoints || fallback.checkpoints,
+      missionLog: Array.isArray(saved.missionLog) ? saved.missionLog : []
+    };
   };
-  const readOperatorList = (prefix, operatorId) => safeJsonArray(localStorage.getItem(listKey(prefix, operatorId)));
-  const writeOperatorList = (prefix, operatorId, records) => localStorage.setItem(listKey(prefix, operatorId), JSON.stringify(records));
+  const writeOperatorData = (operatorId, data) => {
+    const id = normalizeOperator(operatorId);
+    const store = readOperatorsStore();
+    store[id] = { ...readOperatorData(id), ...data, id };
+    writeOperatorsStore(store);
+  };
+  const legacyEntryToMissionLog = (record) => record && record.entry ? { ...record, whatHappened: record.entry } : record;
 
   const setText = (selector, value) => {
     const node = document.querySelector(selector);
@@ -1002,6 +1031,19 @@ ${contentHtml}
     if (form) form.reset();
   };
 
+  const renderWeekProgressRow = (profile) => {
+    const row = document.querySelector('[data-week-progress-row]');
+    if (!row) return;
+    row.innerHTML = '';
+    profile.trainingBlocks.forEach((block) => {
+      const node = document.createElement('div');
+      node.className = `week-chip ${block.state}`;
+      const mark = block.state === 'completed' ? '✓' : block.state === 'active' ? 'ACTIVE' : '';
+      node.innerHTML = `<span>${escapeHtml(block.week)}</span><strong>${mark}</strong>`;
+      row.appendChild(node);
+    });
+  };
+
   const renderTimeline = (profile) => {
     const timeline = document.querySelector('[data-training-timeline]');
     if (!timeline) return;
@@ -1016,15 +1058,15 @@ ${contentHtml}
     });
   };
 
-  const renderFutureArc = (profile) => {
-    const arc = document.querySelector('[data-future-timeline]');
-    if (!arc) return;
-    arc.innerHTML = '';
-    profile.futureArc.forEach((mission, index) => {
-      const node = document.createElement('div');
-      node.className = `timeline-node ${index === 0 ? 'active' : index === profile.futureArc.length - 1 ? 'moonshot' : 'support'}`;
-      node.innerHTML = `<span>${escapeHtml(mission)}</span><strong>${index === 0 ? 'Active' : index === profile.futureArc.length - 1 ? 'Long-term moonshot' : 'Future mission'}</strong>`;
-      arc.appendChild(node);
+  const renderCheckpointTimeline = (profile) => {
+    const timeline = document.querySelector('[data-checkpoint-timeline]');
+    if (!timeline) return;
+    timeline.innerHTML = '';
+    (profile.checkpoints || []).forEach((checkpoint) => {
+      const card = document.createElement('article');
+      card.className = 'checkpoint-card';
+      card.innerHTML = `<div class="checkpoint-title"><span>${escapeHtml(checkpoint.date || 'TBD')}</span><strong>${escapeHtml(checkpoint.title || 'Checkpoint')}</strong></div><div class="checkpoint-compact-field"><span>Evidence</span><p>${escapeHtml(checkpoint.evidence || 'TBD')}</p></div><div class="checkpoint-compact-field"><span>Key Takeaway</span><p>${escapeHtml(checkpoint.takeaway || 'TBD')}</p></div>`;
+      timeline.appendChild(card);
     });
   };
 
@@ -1050,7 +1092,7 @@ ${contentHtml}
 
   const renderOperatorDashboard = (operatorId) => {
     const id = normalizeOperator(operatorId);
-    const profile = readOperatorProfile(id);
+    const profile = readOperatorData(id);
     localStorage.setItem(OPERATOR_CURRENT_KEY, id);
 
     const selector = document.querySelector('[data-operator-selector]');
@@ -1064,6 +1106,7 @@ ${contentHtml}
     setText('[data-hero-current-challenge]', profile.currentChallenge || 'TBD');
     setText('[data-hero-target-date]', profile.raceDate || 'TBD');
     setText('[data-hero-status]', profile.status || 'Draft');
+    setText('[data-hero-health]', profile.missionHealth || '🟡 WATCH');
     setText('[data-hero-future]', profile.futureMissions || 'TBD');
 
     const percent = clampPercent(profile.progressPercent);
@@ -1076,11 +1119,10 @@ ${contentHtml}
     if (bar) bar.style.width = `${percent}%`;
 
     fillNamedFields(document.querySelector('[data-mission-brief-form]'), profile);
+    renderWeekProgressRow(profile);
     renderTimeline(profile);
-    renderFutureArc(profile);
-    renderRecordList('[data-mission-log-list]', readOperatorList(OPERATOR_LOG_PREFIX, id), [['Mission Entry', 'entry']], 'No mission log entries yet. Record the next meaningful signal.');
-    renderRecordList('[data-insight-list]', readOperatorList(OPERATOR_INSIGHT_PREFIX, id), [['What Happened?', 'whatHappened'], ['What Happened For Me?', 'whatHappenedForMe'], ['What Did I Learn?', 'whatLearned']], 'No insights yet. Capture what the work is turning into.');
-    renderRecordList('[data-decision-list]', readOperatorList(OPERATOR_DECISION_PREFIX, id), [['Decision', 'decision'], ['Reason', 'reason'], ['Result', 'result']], 'No decisions logged yet. Save the first meaningful call.');
+    renderCheckpointTimeline(profile);
+    renderRecordList('[data-mission-log-list]', (profile.missionLog || []).map(legacyEntryToMissionLog), [['What Happened?', 'whatHappened'], ['What Changed?', 'whatChanged'], ['Decision', 'decision'], ['Next Action', 'nextAction']], 'No mission log entries yet. Record the next meaningful signal.');
   };
 
   const initializeOperatorPage = () => {
@@ -1101,34 +1143,32 @@ ${contentHtml}
     if (missionBriefForm) {
       missionBriefForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        const existing = readOperatorProfile(currentOperator);
-        writeOperatorProfile(currentOperator, { ...existing, ...collectForm(missionBriefForm) });
+        const existing = readOperatorData(currentOperator);
+        writeOperatorData(currentOperator, { ...existing, ...collectForm(missionBriefForm) });
         renderOperatorDashboard(currentOperator);
         const note = document.querySelector('[data-mission-brief-note]');
         if (note) note.textContent = 'Mission brief saved locally.';
       });
     }
 
-    const saveRecord = (formSelector, prefix, noteSelector, message) => {
-      const form = document.querySelector(formSelector);
+    const saveMissionLog = () => {
+      const form = document.querySelector('[data-mission-log-form]');
       if (!form) return;
       form.addEventListener('submit', (event) => {
         event.preventDefault();
         const data = collectForm(form);
         const hasValue = Object.values(data).some((value) => String(value || '').trim());
         if (!hasValue) return;
-        const records = readOperatorList(prefix, currentOperator);
-        writeOperatorList(prefix, currentOperator, [{ ...data, id: createLocalRecordId(), savedAt: new Date().toISOString() }, ...records]);
+        const profile = readOperatorData(currentOperator);
+        writeOperatorData(currentOperator, { missionLog: [{ ...data, id: createLocalRecordId(), savedAt: new Date().toISOString() }, ...(profile.missionLog || [])] });
         clearForm(form);
         renderOperatorDashboard(currentOperator);
-        const note = document.querySelector(noteSelector);
-        if (note) note.textContent = message;
+        const note = document.querySelector('[data-mission-log-note]');
+        if (note) note.textContent = 'Mission log entry saved locally.';
       });
     };
 
-    saveRecord('[data-mission-log-form]', OPERATOR_LOG_PREFIX, '[data-mission-log-note]', 'Mission log entry saved locally.');
-    saveRecord('[data-insight-form]', OPERATOR_INSIGHT_PREFIX, '[data-insight-note]', 'Operator insight saved locally.');
-    saveRecord('[data-decision-form]', OPERATOR_DECISION_PREFIX, '[data-decision-note]', 'Decision saved locally.');
+    saveMissionLog();
 
     renderOperatorDashboard(currentOperator);
   };

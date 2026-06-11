@@ -23,7 +23,7 @@
       <a href="resources.html">Resources</a>
       <a class="active" href="operators.html">OPERATORS</a>
     </div>
-    <label class="operator-selector-shell" aria-label="Current operator">
+    <label class="operator-selector-shell" aria-label="Current operator dossier">
       <span>Operator</span>
       <select data-operator-selector>
         <option value="kenny">KENNY SCHRADER</option>
@@ -43,6 +43,7 @@
       <div class="meta-card"><div class="label">Current Challenge</div><div class="value" data-hero-current-challenge>Week 5 complete. Building toward peak fatigue.</div></div>
       <div class="meta-card"><div class="label">Target Date</div><div class="value" data-hero-target-date>July 4, 2026</div></div>
       <div class="meta-card"><div class="label">Status</div><div class="value" data-hero-status>Active</div></div>
+      <div class="meta-card health-meta-card"><div class="label">Mission Health</div><div class="value mission-health-badge" data-hero-health>🟢 ON TRACK</div></div>
       <div class="meta-card"><div class="label">Future Missions</div><div class="value" data-hero-future>HYROX / 70.3 / Full Ironman / Moab</div></div>
     </div>
   </section>
@@ -60,6 +61,7 @@
             <span data-progress-week>Week 5 / 9</span>
           </div>
           <div class="mission-progress-track" aria-label="Mission progress"><span data-progress-bar style="width:52%"></span></div>
+          <div class="week-progress-row" data-week-progress-row aria-label="Week-by-week mission timeline"></div>
           <div class="mission-progress-stats">
             <div><span>Target Miles</span><strong data-progress-miles>31 of 60 target miles</strong></div>
             <div><span>Longest Run</span><strong data-progress-longest>18 miles</strong></div>
@@ -70,6 +72,11 @@
           <label class="operator-brief-tile"><span>Challenge</span><input name="missionName" /></label>
           <label class="operator-brief-tile"><span>Date</span><input name="raceDate" /></label>
           <label class="operator-brief-tile"><span>Status</span><input name="status" /></label>
+          <label class="operator-brief-tile health-field"><span>Mission Health</span><select name="missionHealth">
+            <option value="🟢 ON TRACK">🟢 ON TRACK</option>
+            <option value="🟡 WATCH">🟡 WATCH</option>
+            <option value="🔴 RECOVER">🔴 RECOVER</option>
+          </select></label>
           <label class="operator-brief-tile"><span>Current Challenge</span><input name="currentChallenge" /></label>
           <label class="operator-brief-tile wide"><span>Future Missions</span><input name="futureMissions" /></label>
         </div>
@@ -82,48 +89,27 @@
   </form>
 
   <section class="section mission-timeline-section">
-    <div class="section-header"><h2>MISSION TIMELINE</h2><span class="tag">Generated from training blocks</span></div>
+    <div class="section-header"><h2>MISSION TIMELINE</h2><span class="tag">Week-by-week view</span></div>
     <div class="training-timeline" data-training-timeline></div>
   </section>
 
+  <section class="section checkpoint-section">
+    <div class="section-header"><h2>CHECKPOINT TIMELINE</h2><span class="tag">Milestones and takeaways</span></div>
+    <div class="checkpoint-timeline" data-checkpoint-timeline></div>
+  </section>
+
   <section class="section mission-log-section">
-    <div class="section-header"><h2>MISSION LOG</h2><span class="tag">Captain's log</span></div>
+    <div class="section-header"><h2>MISSION LOG</h2><span class="tag">Progress → Reflection → Decisions</span></div>
     <form class="operator-log-form" data-mission-log-form>
-      <label class="operator-log-field"><span>Record what happened</span><textarea name="entry" placeholder="June 11&#10;&#10;Completed 18 mile run.&#10;&#10;Started tired. Felt strong after mile 8. Need better fueling before mile 10."></textarea></label>
+      <div class="mission-log-grid">
+        <label class="operator-log-field"><span>What Happened?</span><textarea name="whatHappened" placeholder="Completed first 18-mile long run."></textarea></label>
+        <label class="operator-log-field"><span>What Changed?</span><textarea name="whatChanged" placeholder="Distance no longer feels intimidating."></textarea></label>
+        <label class="operator-log-field"><span>Decision</span><textarea name="decision" placeholder="Move long runs to Fridays."></textarea></label>
+        <label class="operator-log-field"><span>Next Action</span><textarea name="nextAction" placeholder="Practice fueling every 30 minutes."></textarea></label>
+      </div>
       <div class="mock-actions"><button class="button" type="submit">Save Entry</button><span class="light-note" data-mission-log-note>Entries appear newest first.</span></div>
     </form>
-    <div class="record-card-list" data-mission-log-list></div>
-  </section>
-
-  <section class="section operator-insights-section">
-    <div class="section-header"><h2>OPERATOR INSIGHTS</h2><span class="tag">Reflection</span></div>
-    <form class="insight-form" data-insight-form>
-      <div class="three-field-grid">
-        <label class="operator-edit-card"><span>What Happened?</span><textarea name="whatHappened" placeholder="Completed first 18 mile long run."></textarea></label>
-        <label class="operator-edit-card"><span>What Happened For Me?</span><textarea name="whatHappenedForMe" placeholder="Built confidence that distance is no longer intimidating."></textarea></label>
-        <label class="operator-edit-card"><span>What Did I Learn?</span><textarea name="whatLearned" placeholder="I need fuel earlier than I think."></textarea></label>
-      </div>
-      <div class="mock-actions"><button class="button" type="submit">Save Insight</button><span class="light-note" data-insight-note>Insights become the transformation record.</span></div>
-    </form>
-    <div class="record-card-list three-card-list" data-insight-list></div>
-  </section>
-
-  <section class="section decisions-section">
-    <div class="section-header"><h2>DECISIONS MADE</h2><span class="tag">D-NAV signal</span></div>
-    <form class="decision-form" data-decision-form>
-      <div class="three-field-grid">
-        <label class="operator-edit-card"><span>Decision</span><textarea name="decision" placeholder="Move long runs to Fridays."></textarea></label>
-        <label class="operator-edit-card"><span>Reason</span><textarea name="reason" placeholder="Improves weekend recovery."></textarea></label>
-        <label class="operator-edit-card"><span>Result</span><textarea name="result" placeholder="Positive / Testing / Needs review."></textarea></label>
-      </div>
-      <div class="mock-actions"><button class="button" type="submit">Save Decision</button><span class="light-note" data-decision-note>Track meaningful calls and their outcomes.</span></div>
-    </form>
-    <div class="record-card-list three-card-list" data-decision-list></div>
-  </section>
-
-  <section class="section future-arc-section">
-    <div class="section-header"><h2>FUTURE MISSION ARC</h2><span class="tag">Now / next / moonshot</span></div>
-    <div class="operator-timeline" data-future-timeline></div>
+    <div class="record-card-list mission-log-list" data-mission-log-list></div>
   </section>
 
   <div class="footer">Project Moonshot // Operators // Private Mission Dashboard</div>
