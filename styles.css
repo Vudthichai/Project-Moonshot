@@ -20,7 +20,7 @@ a{color:inherit;}
 .brand-mark{display:inline-grid;place-items:center;width:36px;height:36px;min-width:36px;border-radius:50%;background:rgba(7,7,7,.78);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 0 1px rgba(225,25,55,.18) inset,0 0 18px rgba(225,25,55,.24);overflow:hidden;}
 .brand-mark-img{width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;}
 .mobile-menu-toggle{display:none;appearance:none;border:0;background:transparent;color:inherit;font:inherit;}
-.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+.nav-links{display:flex;align-items:center;justify-self:center;justify-content:center;gap:12px;width:max-content;flex-wrap:nowrap;}
 .nav-links a{padding:8px 11px;border:1px solid transparent;border-radius:999px;color:#d9dbe0;text-decoration:none;font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;}
 .nav-links a:hover,.nav-links a.active{border-color:rgba(225,25,55,.55);background:rgba(225,25,55,.12);color:#ff6b7d;}
 .hero{position:relative;overflow:hidden;border:1px solid #31343a;border-radius:28px;padding:42px 44px 34px;background:
