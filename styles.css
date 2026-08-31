@@ -65,7 +65,13 @@ p{font-size:14px;color:var(--muted);margin:0 0 10px;}
 .divider{height:1px;background:var(--line);margin:14px 0;}.redline{height:6px;background:linear-gradient(90deg,var(--red),transparent);border-radius:999px;margin:10px 0 0;}
 ul{margin:8px 0 0;padding-left:18px;}li{font-size:13px;color:var(--muted);margin:4px 0;}
 table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}th,td{padding:9px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}th{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8f939a;background:rgba(255,255,255,.03);font-weight:900;}.section.light th{background:#f0f1f3;border-bottom-color:#d9dde4;}.section.light td{border-bottom-color:#e3e5e9;}
-.course-row{display:grid;grid-template-columns:64px 1fr 1fr 1fr;gap:10px;align-items:stretch;margin-bottom:10px;}.num{display:flex;align-items:center;justify-content:center;background:var(--red);border-radius:16px;font-weight:950;font-size:22px;}.course-row .card{padding:13px;}.course-mission-text{color:#f5b942;}
+.course-row{display:grid;grid-template-columns:64px 1fr 1fr;gap:10px;align-items:stretch;margin-bottom:10px;}.num{display:flex;align-items:center;justify-content:center;background:var(--red);border-radius:16px;font-weight:950;font-size:22px;}
+.target-card{display:flex;flex-direction:column;min-height:178px;}.target-card .metric{margin:9px 0 13px;text-transform:uppercase;}.target-card p{margin:auto 0 0;}.target-victory{border-color:rgba(225,25,55,.58);background:linear-gradient(150deg,rgba(225,25,55,.18),var(--card2));box-shadow:0 0 28px rgba(225,25,55,.08) inset;}
+.race-map-section{background:linear-gradient(145deg,rgba(11,12,14,.96),rgba(25,15,18,.91));border-color:rgba(225,25,55,.35);}.race-map-section .section-header>div{min-width:0;}.race-map-section h2{margin-top:4px;}.race-map-frame{position:relative;width:100%;height:clamp(420px,65vw,720px);overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:18px;background:#202124;box-shadow:0 20px 48px rgba(0,0,0,.3);}.race-map-frame iframe{display:block;width:100%;height:100%;border:0;background:#fff;}.race-map-open{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:flex-end;padding:14px;text-decoration:none;}.race-map-open span{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(7,7,7,.82);color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 20px rgba(0,0,0,.3);}.map-help{margin:10px 0 0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+.pacing-brief{display:grid;grid-template-columns:1fr 1.2fr;gap:12px;margin-bottom:16px;padding:15px;border:1px solid #d8dbe0;border-radius:18px;background:#fff;}.pacing-brief>div{border-right:1px solid #e3e5e9;padding-right:14px;}.pacing-brief strong{display:block;margin:3px 0;font-size:18px;color:#111;}.pacing-brief p{margin:0;color:#4d525a !important;}.pacing-brief>p{align-self:center;font-weight:800;}
+.stage{position:relative;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:12px;align-content:center;min-width:0;padding:13px 15px;border:1px solid #d8dbe0;border-radius:16px;background:#fff;}.stage span{font-weight:900;color:#16171a;}.stage small{color:#676c74;font-size:12px;}.stage strong{grid-column:2;grid-row:1 / 3;align-self:center;color:#b7132a;font-size:16px;white-space:nowrap;}.stage strong:before{content:"Target";display:block;margin-bottom:1px;color:#8a8f97;font-size:8px;letter-spacing:.12em;text-transform:uppercase;text-align:right;}
+.roxzone-note{display:grid;grid-template-columns:1fr auto;gap:3px 16px;margin-top:14px;padding:14px 16px;border:1px dashed rgba(225,25,55,.48);border-radius:16px;background:rgba(225,25,55,.06);}.roxzone-note span{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#9f1326;}.roxzone-note strong{grid-row:1 / 3;grid-column:2;align-self:center;color:#9f1326;}.roxzone-note p{margin:0;}
+.weights-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}.weight-chip{display:flex;flex-direction:column;gap:5px;min-width:0;padding:14px 15px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.05);}.weight-chip span{color:#aeb2b9;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}.weight-chip strong{font-size:15px;color:#fff;}
 .pill{display:inline-block;border:1px solid #3a3d43;border-radius:999px;padding:4px 9px;font-size:11px;color:#d8dce3;margin:2px 4px 2px 0;}.section.light .pill{border-color:#d4d8dd;color:#39404a;background:#f7f7f7;}
 .status-green{color:var(--green);font-weight:900;}.status-amber{color:var(--amber);font-weight:900;}.status-red{color:#ff5368;font-weight:900;}.avg{color:var(--amber);font-weight:900;}
 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}.phase{position:relative;overflow:hidden;background:linear-gradient(180deg,#1b1d21,#101114);border:1px solid var(--line);border-radius:18px;padding:16px;min-height:190px;}.phase:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--red);}.phase .week{font-weight:950;color:var(--red2);font-size:13px;text-transform:uppercase;letter-spacing:.12em;}.phase h3{margin-top:8px;color:#fff !important;}.phase li,.phase p{color:#f3f4f6 !important;}.phase ul{color:#f3f4f6;}
@@ -501,3 +507,29 @@ body.page-operators{--page-bg-image:url("assets/ultra-1.jpg");--page-bg-position
 .mission-log-success-note.is-visible{opacity:1;transform:translateY(0);}
 @media (max-width:1100px){.week-progress-row{grid-template-columns:repeat(5,minmax(54px,1fr));}.mission-log-grid{grid-template-columns:1fr;}}
 @media (max-width:850px){.week-progress-row{grid-template-columns:repeat(3,minmax(54px,1fr));}.operator-selector-shell{align-items:flex-start;}}
+
+/* Race-week command center */
+@media (max-width:850px){
+  .target-card{min-height:0;}
+  .pacing-brief{grid-template-columns:1fr;}
+  .pacing-brief>div{border-right:0;border-bottom:1px solid #e3e5e9;padding:0 0 12px;}
+  .course-section .course-row{grid-template-columns:46px 1fr 1fr;}
+  .weights-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:768px){
+  .race-map-frame{height:clamp(430px,140vw,620px);border-radius:14px;}
+  .race-map-open{padding:10px;}
+  .race-map-open span{padding:8px 10px;font-size:9px;}
+  .course-section .course-row{grid-template-columns:1fr;border-color:#d8dbe0;}
+  .course-section .num{width:42px;height:32px;}
+  .stage{grid-template-columns:minmax(0,1fr) auto;padding:12px;}
+  .stage strong{font-size:15px;white-space:normal;text-align:right;}
+  .roxzone-note{grid-template-columns:1fr;}
+  .roxzone-note strong{grid-column:1;grid-row:auto;}
+  .weights-grid{grid-template-columns:1fr;}
+  .weight-chip{padding:13px 14px;}
+}
+@media (max-width:430px){
+  .race-map-frame{height:500px;}
+  .target-card .metric{font-size:31px;}
+}
